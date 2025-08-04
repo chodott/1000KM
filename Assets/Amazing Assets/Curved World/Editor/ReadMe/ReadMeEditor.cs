@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace AmazingAssets.CurvedWorld.Editor
 {
-    [CustomEditor(typeof(ReadMe))]
+    //[CustomEditor(typeof(ReadMe))]
     [InitializeOnLoad]
     public class ReadMeEditor : UnityEditor.Editor
     {
