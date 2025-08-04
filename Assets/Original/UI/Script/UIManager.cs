@@ -6,11 +6,18 @@ public class UIManager : MonoBehaviour
     SliderUI _gasSlider;
     [SerializeField]
     SliderUI _hpSlider;
+    [SerializeField]
+    SliderUI _toiletSlider;
+    [SerializeField]
+    SliderUI _speedSlider;
 
-    public void Init(PlayerStatus playerStatus)
+    public void Init(PlayerStatus playerStatus, PlayerMovement playerMovement)
     {
         playerStatus.OnGasPointChanged += UpdateGasUI;
         playerStatus.OnHPChanged += UpdateHpUI;
+        playerStatus.OnToiletPointChanged += UpdateToiletUI;
+        playerMovement.OnSpeedChanged += UpdateSpeedUI;
+        
     }
 
     private void UpdateGasUI(float value)
@@ -21,5 +28,14 @@ public class UIManager : MonoBehaviour
     private void UpdateHpUI(float value)
     {
         _hpSlider.UpdateValue(value);
+    }
+
+    private void UpdateToiletUI(float value)
+    {
+        _toiletSlider.UpdateValue(value);
+    }
+    private void UpdateSpeedUI(float value)
+    {
+        _speedSlider.UpdateValue(value);
     }
 }

@@ -547,6 +547,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1216084642 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5763700765462912614, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+  m_PrefabInstance: {fileID: 9221257073810026719}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1216084644 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8993968886464323316, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+  m_PrefabInstance: {fileID: 9221257073810026719}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216084642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1216084645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216084642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c5a8b570d1ea0469c68a8f6c074eec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 1216084644}
+  _maxValue: 100
 --- !u!1 &1401985362
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,7 +807,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxGasPoint: 100
   _maxHealthPoint: 100
+  _maxToiletPoint: 0
   _gasUsagePerSec: 10
+  _toiletGainPerSec: 0
 --- !u!1001 &9221257073810026719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -881,7 +913,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5763700765462912614, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1216084645}
   m_SourcePrefab: {fileID: 100100000, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         PlayerStatus playerStatus = _player.GetComponent<PlayerStatus>();
-        _uiManager.Init(playerStatus);
+        PlayerMovement playerMovement = _player.GetComponent<PlayerMovement>();
+        _uiManager.Init(playerStatus, playerMovement);
     }
 
 }
