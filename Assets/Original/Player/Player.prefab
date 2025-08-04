@@ -11,10 +11,12 @@ GameObject:
   - component: {fileID: 4288067339566298541}
   - component: {fileID: 3297008412826060533}
   - component: {fileID: 5397311792204066390}
+  - component: {fileID: -7957718307248363624}
   - component: {fileID: 3684722196037006511}
   - component: {fileID: 7245896829844107551}
   - component: {fileID: 1756929093973688092}
-  - component: {fileID: -7957718307248363624}
+  - component: {fileID: 2846672660739862426}
+  - component: {fileID: 2924355754974614267}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -90,6 +92,33 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &-7957718307248363624
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829403507848857476}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &3684722196037006511
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -170,35 +199,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 7245896829844107551}
-  _boxCollider: {fileID: 3684722196037006511}
-  _acceleration: 5
-  _moveStepSize: 10
-  _moveStepSpeed: 10
-  _parryCooldownTime: 0.1
---- !u!54 &-7957718307248363624
-Rigidbody:
+  _playerMovement: {fileID: 2846672660739862426}
+  _playerParrySystem: {fileID: 2924355754974614267}
+--- !u!114 &2846672660739862426
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 829403507848857476}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be7e65cc34dce474f91c786dbc926aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _boxCollider: {fileID: 3684722196037006511}
+  _acceleration: 5
+  _moveStepSize: 10
+  _moveStepSpeed: 10
+--- !u!114 &2924355754974614267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829403507848857476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81092d3d01fb37e46a717495629f8e99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _boxCollider: {fileID: 3684722196037006511}
+  _parryCooldownTime: 0.1
