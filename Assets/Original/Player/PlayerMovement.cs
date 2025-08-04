@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -5,20 +6,30 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float _acceleration = 5.0f;
     [SerializeField]
-    private float _moveStepSize = 10.0f;
+    private float _moveStepSize = 5.0f;
     [SerializeField]
     private float _moveStepSpeed = 10.0f;
+    [SerializeField]
+    private float _stopDistance = 0.03f;
+    [SerializeField]
+    private int _laneRange = 1;
 
     private Vector3 _nextPosition;
     private float _speed;
     private float _keyValue;
-
+    private int _currentLaneIndex = 0;
+    private bool _isMoving = false;
 
     private void Update()
     {
         Accelerate();
-        transform.position = Vector3.Lerp(transform.position, _nextPosition, Time.deltaTime * _moveStepSpeed);
 
+        transform.position = Vector3.Lerp(transform.position, _nextPosition, Time.deltaTime * _moveStepSpeed);
+        if(Vector3.Distance(transform.position, _nextPosition) <= _stopDistance)
+        {
+            transform.position = _nextPosition;
+            _isMoving = false;
+        }
     }
 
     private void Accelerate()
@@ -34,6 +45,22 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private bool GetCanMove(int direction)
+    {
+        if (_isMoving)
+        {
+            return false;
+        }
+
+        int maxLaneIndex = direction * _laneRange;
+        if (_currentLaneIndex == maxLaneIndex)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public void SetMoveDirection(float value)
     {
         _keyValue = value;
@@ -41,7 +68,14 @@ public class PlayerMovement : MonoBehaviour
 
     public void MoveHorizon(float isRight)
     {
-        _nextPosition = transform.position + (transform.right * isRight * _moveStepSize);
 
+        int direction = Math.Sign(isRight);
+        if(GetCanMove(direction) == false)
+        {
+            return;
+        }
+        _currentLaneIndex += direction;
+        _nextPosition = transform.position + (transform.right * isRight * _moveStepSize);
+        _isMoving = true;
     }
 }
