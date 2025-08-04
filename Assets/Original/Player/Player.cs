@@ -12,15 +12,14 @@ public class Player : MonoBehaviour
     private PlayerMovement _playerMovement;
     [SerializeField]
     private PlayerParrySystem _playerParrySystem;
+    [SerializeField]
+    private PlayerStatus _playerStatus;
     #endregion
 
     private InputAction _thorottleAction;
     private InputAction _moveLeftAction;
     private InputAction _moveRightAction;
     private InputAction _parryAction;
-
-    private float _gasPoint;
-    private int _healthPoint;
 
     private void OnEnable()
     {

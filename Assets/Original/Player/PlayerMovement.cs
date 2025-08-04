@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     private int _currentLaneIndex = 0;
     private bool _isMoving = false;
 
+    public event Action<float> OnSpeedChanged;
+
     private void Update()
     {
         Accelerate();
@@ -43,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _speed -= _acceleration * Time.deltaTime;
         }
+        OnSpeedChanged?.Invoke(_speed);
     }
 
     private bool GetCanMove(int direction)
