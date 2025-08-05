@@ -12,6 +12,7 @@ public class PlayerParrySystem : MonoBehaviour
     private int _spinCount = 3;
 
     private Quaternion _baseRotation;
+    private float _parryPower = 30f;
     private bool _isParry = false;
 
     private void Start()
@@ -24,7 +25,11 @@ public class PlayerParrySystem : MonoBehaviour
     {
         if (other.TryGetComponent<IParryable>(out var parryable))
         {
-            parryable.OnParried();
+            Vector3 parryDirection = (other.transform.position - transform.position).normalized;
+            Vector3 force = parryDirection * _parryPower;
+            parryable.OnParried(force);
+            _boxCollider.enabled = false;
+
         }
     }
     #endregion
@@ -44,9 +49,7 @@ public class PlayerParrySystem : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         _isParry = false;
-        _boxCollider.enabled = false;
         transform.rotation = _baseRotation;
     }
 

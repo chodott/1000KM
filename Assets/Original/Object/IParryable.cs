@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IParryable
 {
-    public void OnParried();
+    public void OnParried(Vector3 force);
 }
