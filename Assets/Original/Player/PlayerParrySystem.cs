@@ -22,7 +22,6 @@ public class PlayerParrySystem : MonoBehaviour
     #region Collider Callbacks
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("Parry Success");
         if (other.TryGetComponent<IParryable>(out var parryable))
         {
             parryable.OnParried();

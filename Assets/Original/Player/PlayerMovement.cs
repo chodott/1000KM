@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Accelerate()
     {
-        if (_keyValue < 0f)
+        if (_keyValue > 0f)
         {
             _speed += _acceleration * Time.deltaTime;
         }
@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
     public void SetMoveDirection(float value)
     {
         _keyValue = value;
-    }
+;    }
 
     public void MoveHorizon(float isRight)
     {

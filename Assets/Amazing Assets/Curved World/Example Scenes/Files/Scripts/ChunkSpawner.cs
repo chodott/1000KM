@@ -26,7 +26,10 @@ namespace AmazingAssets.CurvedWorld.Examples
         public float chunkSize = 60;        
         GameObject lastChunk;
 
-
+        private void Update()
+        {
+           
+        }
         void Awake()
         {
             initialSpawnCount = initialSpawnCount > chunks.Length ? initialSpawnCount : chunks.Length;
