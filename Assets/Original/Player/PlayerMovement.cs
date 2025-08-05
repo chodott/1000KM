@@ -26,12 +26,15 @@ public class PlayerMovement : MonoBehaviour
     {
         Accelerate();
 
-        transform.position = Vector3.Lerp(transform.position, _nextPosition, Time.deltaTime * _moveStepSpeed);
-        if(Vector3.Distance(transform.position, _nextPosition) <= _stopDistance)
+        if (_isMoving)
         {
-            transform.position = _nextPosition;
-            _isMoving = false;
-        }
+            transform.position = Vector3.Lerp(transform.position, _nextPosition, Time.deltaTime * _moveStepSpeed);
+            if (Vector3.Distance(transform.position, _nextPosition) <= _stopDistance)
+            {
+                transform.position = _nextPosition;
+                _isMoving = false;
+            }
+        }  
     }
 
     private void Accelerate()
