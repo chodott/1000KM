@@ -725,6 +725,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7957718307248363624, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 829403507848857476, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: m_Name
       value: Player
@@ -733,6 +737,14 @@ PrefabInstance:
       propertyPath: _playerStatus
       value: 
       objectReference: {fileID: 7442486382378378235}
+    - target: {fileID: 2924355754974614267, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: _spinCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2924355754974614267, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: _parryCooldownTime
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4288067339566298541, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5

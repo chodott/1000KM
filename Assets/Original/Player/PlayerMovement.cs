@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     private int _laneRange = 1;
 
     private Vector3 _nextPosition;
+    private Vector3 _rightVector = new Vector3(0,0,1);
     private float _speed;
     private float _keyValue;
     private int _currentLaneIndex = 0;
@@ -81,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         _currentLaneIndex += direction;
-        _nextPosition = transform.position + (transform.right * isRight * _moveStepSize);
+        _nextPosition = transform.position + (_rightVector * isRight * _moveStepSize);
         _isMoving = true;
     }
 }
