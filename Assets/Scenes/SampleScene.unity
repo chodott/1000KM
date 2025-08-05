@@ -898,7 +898,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbab7d9f357ca7343abd739d40b12a52, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
 --- !u!1001 &2210103915028649267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -968,6 +968,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2136855065665745899, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 799
+      objectReference: {fileID: 0}
+    - target: {fileID: 2136855065665745899, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -373
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170227433348923479, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3096036493526454378, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -1056,6 +1068,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4226584777519835561, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: _speedSlider
+      value: 
+      objectReference: {fileID: 6832768846287568104, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
+    - target: {fileID: 5326000390211107439, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6648305071810932303, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1064,13 +1084,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7096483247265952909, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7135653276571123967, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4230119468729991255, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3201423767648135022, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1186978285}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5763700765462912614, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       insertIndex: -1
