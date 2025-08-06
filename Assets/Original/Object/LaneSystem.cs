@@ -8,7 +8,9 @@ public class LaneSystem : MonoBehaviour
     [SerializeField]
     private int _laneRange = 1;
 
+
     public float LaneWidth { get { return _laneWidth; } }
+    public int LaneCount { get { return _laneRange * 2 + 1; } }
 
     public static LaneSystem Instance { get; private set; }
     private void Awake()
@@ -30,6 +32,12 @@ public class LaneSystem : MonoBehaviour
         }
 
         return true;
+    }
+
+    public float GetLanePositionZ(int index)
+    {
+        index -= _laneRange;
+        return index * _laneWidth;
     }
 
 }
