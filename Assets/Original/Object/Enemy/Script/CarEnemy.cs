@@ -7,6 +7,10 @@ public class CarEnemy : MonoBehaviour,IParryable
     private Rigidbody _rigidbody;
     [SerializeField]
     private LaneMover _laneMover;
+    [SerializeField]
+    private MeshFilter _meshFilter;
+    [SerializeField]
+    private MeshRenderer _meshRenderer;
 
 
     private EnemyColor _color;
@@ -71,10 +75,11 @@ public class CarEnemy : MonoBehaviour,IParryable
     {
         _statData = statData;
         _color = color;
+        _meshFilter.mesh = statData.Mesh;
+        _meshRenderer.material = _statData.materialVariants[(int)color];
     }
     public void OnParried(Vector3 force)
     {
-        Debug.Log($"Parry!!!! :  {force}");
         _isParried = true;
         _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;

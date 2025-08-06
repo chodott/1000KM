@@ -150,10 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613cfd6524bd74f43aa7126f96826e69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _statData: {fileID: 11400000, guid: 80bbd1741c316f4408d7cb2425767381, type: 2}
-  _laneMover: {fileID: -8618501305589520936}
   _rigidbody: {fileID: 1806386740557594688}
-  _color: 0
+  _laneMover: {fileID: -8618501305589520936}
+  _meshFilter: {fileID: 407504389598896300}
+  _meshRenderer: {fileID: 1789332861490712944}
 --- !u!114 &-8618501305589520936
 MonoBehaviour:
   m_ObjectHideFlags: 0

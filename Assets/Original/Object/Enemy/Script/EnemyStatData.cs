@@ -1,9 +1,18 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyStatData", menuName = "Scriptable Objects/EnemyStatData")]
 public class EnemyStatData : ScriptableObject
 {
+    [SerializeField]
+    private List<Material> _materials;
+    public List<Material> materialVariants { get { return _materials; } }
+
+    [SerializeField]
+    private Mesh _mesh;
+    public Mesh Mesh { get { return _mesh; } }
+
     [SerializeField]
     private string _name;
     public string Name { get { return _name; } }
