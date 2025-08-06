@@ -19,4 +19,14 @@ public class SliderUI : MonoBehaviour
         _curValue = value;
         slider.value = _curValue;
     }
+
+    public float GetMaxValue()
+    {
+        return _maxValue;
+    }
+
+    public float GetCurValue()
+    {
+        return _curValue;
+    }
 }

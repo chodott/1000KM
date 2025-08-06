@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5864045138692888852}
   - component: {fileID: 3215117686736387105}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: speedvalue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 15}
-  m_SizeDelta: {x: 120, y: 60}
+  m_SizeDelta: {x: 120, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5864045138692888852
 CanvasRenderer:
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.74509805}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.167027, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 1323721181436878277}
   - component: {fileID: 5837237917042166486}
   m_Layer: 5
-  m_Name: Image
+  m_Name: pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 7897516162856114730}
   - component: {fileID: 7935356961865066902}
   - component: {fileID: 6832768846287568104}
+  - component: {fileID: 3486817277073692724}
   m_Layer: 5
   m_Name: SpeedSliderUI
   m_TagString: Untagged
@@ -382,7 +383,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 1316734087024467276}
   m_HandleRect: {fileID: 0}
@@ -408,6 +409,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 7935356961865066902}
   _maxValue: 100
+--- !u!114 &3486817277073692724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5371202784461613462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1674ae69c9c9174d95fd0174f5c1bf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  needle: {fileID: 6416477537767314645}
+  speedValue: {fileID: 4753440668127234852}
 --- !u!1 &6416477537767314645
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,7 +435,7 @@ GameObject:
   - component: {fileID: 1721222191277420067}
   - component: {fileID: 2521558267032339956}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: needle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -531,7 +546,7 @@ GameObject:
   - component: {fileID: 118507932289103772}
   - component: {fileID: 4753440668127234852}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Text_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -554,7 +569,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &118507932289103772
 CanvasRenderer:
@@ -588,9 +603,9 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 30
     m_FontStyle: 1
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
-    m_MaxSize: 40
+    m_MaxSize: 30
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
