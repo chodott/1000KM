@@ -897,7 +897,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbab7d9f357ca7343abd739d40b12a52, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier:
 --- !u!1001 &2210103915028649267
 PrefabInstance:
@@ -1070,7 +1070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4226584777519835561, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: _speedSlider
-      value: 
+      value:
       objectReference: {fileID: 6832768846287568104, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
     - target: {fileID: 5326000390211107439, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: m_FillAmount
