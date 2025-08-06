@@ -445,6 +445,22 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!114 &538898719 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -8618501305589520936, guid: 918123295119ecb4a829142dbb500f76, type: 3}
+  m_PrefabInstance: {fileID: 611043247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b3b8edbc9c93a4494891f436ba091c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &538898722 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 1806386740557594688, guid: 918123295119ecb4a829142dbb500f76, type: 3}
+  m_PrefabInstance: {fileID: 611043247}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &545243887
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,7 +490,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8d6f4053771d04fae660c385f3583a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rightVector: {x: 0, y: 0, z: 1}
   _laneWidth: 3
   _laneRange: 1
 --- !u!4 &545243889
@@ -601,6 +616,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DefaultEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3205625711696671415, guid: 918123295119ecb4a829142dbb500f76, type: 3}
+      propertyPath: _laneMover
+      value: 
+      objectReference: {fileID: 538898719}
+    - target: {fileID: 3205625711696671415, guid: 918123295119ecb4a829142dbb500f76, type: 3}
+      propertyPath: _rigidbody
+      value: 
+      objectReference: {fileID: 538898722}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

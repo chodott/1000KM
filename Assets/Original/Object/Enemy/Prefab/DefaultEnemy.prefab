@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1806386740557594688}
   - component: {fileID: 7093453293601517522}
   - component: {fileID: 3205625711696671415}
+  - component: {fileID: -8618501305589520936}
   m_Layer: 0
   m_Name: DefaultEnemy
   m_TagString: Untagged
@@ -150,3 +151,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _statData: {fileID: 11400000, guid: 80bbd1741c316f4408d7cb2425767381, type: 2}
+  _laneMover: {fileID: -8618501305589520936}
+  _rigidbody: {fileID: 1806386740557594688}
+  _color: 0
+--- !u!114 &-8618501305589520936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899611395792235350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b3b8edbc9c93a4494891f436ba091c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveLaneSpeed: 10
+  _stopDistance: 0.05

@@ -6,6 +6,7 @@ public class LaneMover : MonoBehaviour
     static private Vector3 _rightVector = new Vector3(0, 0, 1);
     [SerializeField]
     private float _moveLaneSpeed;
+    [SerializeField]
     private float _stopDistance = 0.05f;
 
     private Vector3 _nextPosition;
