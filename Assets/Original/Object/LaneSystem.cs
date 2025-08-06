@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class LaneSystem : MonoBehaviour
+{
+
+    [SerializeField]
+    private float _laneWidth = 3.0f;
+    [SerializeField]
+    private int _laneRange = 1;
+
+    public float LaneWidth { get { return _laneWidth; } }
+
+    public static LaneSystem Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        Instance = this;
+    }
+
+    public bool GetCanMove(int direction, int curLaneIndex)
+    {
+        int maxLaneIndex = direction * _laneRange;
+        if (curLaneIndex == maxLaneIndex)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+}

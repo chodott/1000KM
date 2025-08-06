@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private PlayerParrySystem _playerParrySystem;
     [SerializeField]
     private PlayerStatus _playerStatus;
+    [SerializeField]
+    private LaneMover _laneMover;
     #endregion
 
     private InputAction _thorottleAction;
@@ -46,12 +48,12 @@ public class Player : MonoBehaviour
 
     private void OnMoveLeft(InputAction.CallbackContext context)
     {
-        _playerMovement.MoveHorizon(-1);
+        _laneMover.MoveLane(-1);
     }
 
     private void OnMoveRight(InputAction.CallbackContext context)
     {
-        _playerMovement.MoveHorizon(1);
+        _laneMover.MoveLane(1);
     }
     #endregion
 }

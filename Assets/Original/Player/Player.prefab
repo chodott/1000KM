@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 1756929093973688092}
   - component: {fileID: 2846672660739862426}
   - component: {fileID: 2924355754974614267}
+  - component: {fileID: 1790319375485075123}
+  - component: {fileID: 3718525976865496762}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -32,13 +34,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 829403507848857476}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.35, z: 0.5}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!33 &3297008412826060533
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -201,7 +203,8 @@ MonoBehaviour:
   _playerInput: {fileID: 7245896829844107551}
   _playerMovement: {fileID: 2846672660739862426}
   _playerParrySystem: {fileID: 2924355754974614267}
-  _playerStatus: {fileID: 0}
+  _playerStatus: {fileID: 1790319375485075123}
+  _laneMover: {fileID: 3718525976865496762}
 --- !u!114 &2846672660739862426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,10 +218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _acceleration: 5
-  _moveStepSize: 3
-  _moveStepSpeed: 10
-  _stopDistance: 0.1
-  _laneRange: 1
 --- !u!114 &2924355754974614267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,3 +232,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boxCollider: {fileID: 3684722196037006511}
   _parryCooldownTime: 0.1
+  _spinCount: 3
+--- !u!114 &1790319375485075123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829403507848857476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df66ab998fd921d46b2a97434cd3cb4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxGasPoint: 100
+  _maxHealthPoint: 100
+  _maxToiletPoint: 100
+  _gasUsagePerSec: 1
+  _toiletGainPerSec: 1
+--- !u!114 &3718525976865496762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829403507848857476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b3b8edbc9c93a4494891f436ba091c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveLaneSpeed: 3
