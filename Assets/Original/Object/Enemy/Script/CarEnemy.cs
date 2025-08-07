@@ -71,12 +71,13 @@ public class CarEnemy : MonoBehaviour,IParryable
 
     }
 
-    public void Init(EnemyColor color, EnemyStatData statData)
+    public void Init(EnemyColor color, EnemyStatData statData, int laneIndex)
     {
         _statData = statData;
         _color = color;
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
+        _laneMover.Init(laneIndex);
     }
     public void OnParried(Vector3 force)
     {

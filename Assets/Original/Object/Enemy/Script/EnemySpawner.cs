@@ -35,12 +35,13 @@ public class EnemySpawner : MonoBehaviour
     private float _spawnTimer;
     private float _spawnPositionX = -100f;
     private int _laneCount;
-
+    private int _laneRange;
 
 
     private void Start()
     {
         _laneCount = LaneSystem.Instance.LaneCount;
+        _laneRange = LaneSystem.Instance.LaneRange;
     }
 
 
@@ -51,7 +52,7 @@ public class EnemySpawner : MonoBehaviour
         if(_spawnTimer > _spawnRate)
         {
             _spawnTimer = 0;
-            int spawnLaneIndex = Random.Range(0, _laneCount);
+            int spawnLaneIndex = Random.Range(0, _laneCount) - _laneRange;
             float spawnPositonZ = LaneSystem.Instance.GetLanePositionZ(spawnLaneIndex);
             Vector3 spawnPosition = new Vector3(_spawnPositionX, 0.2f, spawnPositonZ);
 
@@ -60,7 +61,7 @@ public class EnemySpawner : MonoBehaviour
 
             var randomColor = _enemyColors.GetRandom();
             var randomStat = _enemyStatDatas.GetRandom();
-            carEnemy.Init(randomColor, randomStat);
+            carEnemy.Init(randomColor, randomStat, spawnLaneIndex);
         }
     }
 

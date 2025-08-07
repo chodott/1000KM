@@ -14,6 +14,7 @@ public class LaneMover : MonoBehaviour
     private int _currentLaneIndex = 0;
     private bool _isMoving = false;
 
+
     private void Update()
     {
         if (_isMoving)
@@ -27,6 +28,10 @@ public class LaneMover : MonoBehaviour
                 _isMoving = false;
             }
         }
+    }
+    public void Init(int laneIndex)
+    {
+        _currentLaneIndex = laneIndex;
     }
     public void MoveLane(float isRight)
     {

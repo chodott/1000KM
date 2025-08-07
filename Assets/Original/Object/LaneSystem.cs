@@ -10,6 +10,7 @@ public class LaneSystem : MonoBehaviour
 
 
     public float LaneWidth { get { return _laneWidth; } }
+    public int LaneRange {  get { return _laneRange; } }
     public int LaneCount { get { return _laneRange * 2 + 1; } }
 
     public static LaneSystem Instance { get; private set; }
@@ -36,7 +37,6 @@ public class LaneSystem : MonoBehaviour
 
     public float GetLanePositionZ(int index)
     {
-        index -= _laneRange;
         return index * _laneWidth;
     }
 
