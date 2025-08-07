@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LaneMover : MonoBehaviour
@@ -9,21 +10,28 @@ public class LaneMover : MonoBehaviour
     [SerializeField]
     private float _stopDistance = 0.05f;
 
-    private Vector3 _nextPosition;
+    private float _nextPositionZ;
     private int _currentLaneIndex = 0;
     private bool _isMoving = false;
+
 
     private void Update()
     {
         if (_isMoving)
         {
-            transform.position = Vector3.Lerp(transform.position, _nextPosition, Time.deltaTime * _moveLaneSpeed);
-            if (Vector3.Distance(transform.position, _nextPosition) <= _stopDistance)
+            
+            float curPositionZ = Mathf.Lerp(transform.position.z, _nextPositionZ, Time.deltaTime * _moveLaneSpeed);
+            transform.position = new Vector3(transform.position.x, transform.position.y, curPositionZ);
+            if (Mathf.Abs(curPositionZ - _nextPositionZ)  <= _stopDistance)
             {
-                transform.position = _nextPosition;
+                transform.position = new Vector3(transform.position.x, transform.position.y, _nextPositionZ);
                 _isMoving = false;
             }
         }
+    }
+    public void Init(int laneIndex)
+    {
+        _currentLaneIndex = laneIndex;
     }
     public void MoveLane(float isRight)
     {
@@ -38,7 +46,7 @@ public class LaneMover : MonoBehaviour
         {
             return;
         }
-        _nextPosition = transform.position + (_rightVector * LaneSystem.Instance.LaneWidth * isRight);
+        _nextPositionZ = transform.position.z + (LaneSystem.Instance.LaneWidth * isRight);
         _currentLaneIndex += direction;
         _isMoving = true;
     }

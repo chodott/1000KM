@@ -2,27 +2,32 @@ using UnityEngine;
 
 public class CarEnemy : MonoBehaviour,IParryable
 {
-    enum EnemyColor
+
+    [SerializeField]
+    private Rigidbody _rigidbody;
+    [SerializeField]
+    private LaneMover _laneMover;
+    [SerializeField]
+    private MeshFilter _meshFilter;
+    [SerializeField]
+    private MeshRenderer _meshRenderer;
+    [SerializeField]
+    private BoxCollider _collider;
+
+
+    private EnemyColor _color;
+    private EnemyStatData _statData;
+    private float _patternCooldownTime = 1;
+    private float _patternCooldownTimer;
+    private bool _isParried;
+
+    public enum EnemyColor
     {
         White,
         Grey,
         Black,
         Yellow
     }
-
-    //Temp Show Inspector
-    [SerializeField]
-    private EnemyStatData _statData;
-    [SerializeField]
-    private LaneMover _laneMover;
-    [SerializeField]
-    private Rigidbody _rigidbody;
-    [SerializeField]
-    private EnemyColor _color;
-
-    private float _patternCooldownTime = 1;
-    private float _patternCooldownTimer;
-    private bool _isParried;
 
     void Update()
     {
@@ -68,9 +73,18 @@ public class CarEnemy : MonoBehaviour,IParryable
 
     }
 
+    public void Init(EnemyColor color, EnemyStatData statData, int laneIndex)
+    {
+        _statData = statData;
+        _color = color;
+        _meshFilter.mesh = statData.Mesh;
+        _meshRenderer.material = _statData.materialVariants[(int)color];
+        _collider.size = statData.ColliderSize;
+        _collider.center = statData.ColliderCenter;
+        _laneMover.Init(laneIndex);
+    }
     public void OnParried(Vector3 force)
     {
-        Debug.Log($"Parry!!!! :  {force}");
         _isParried = true;
         _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;

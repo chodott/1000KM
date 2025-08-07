@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1bf8d0feec80d946b35e1685a6cd099, type: 3}
+  m_Name: TaxiStatData
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: e7e3a72408d0b314987c112ae1ecaec3, type: 2}
+  - {fileID: 2100000, guid: 5d964f763f8152440a07c6923ce9f588, type: 2}
+  - {fileID: 2100000, guid: 52d9ee1afefab134c805ff33ef5bf1e3, type: 2}
+  - {fileID: 2100000, guid: 36cea93fa9ce4bd41a399b4b84d2747a, type: 2}
+  _mesh: {fileID: -2432090755550338912, guid: 9e28c9f3fd1857143bef93a2dc42b542, type: 3}
+  _name: Bus
+  _healthPoint: 3
+  _velocity: 3
