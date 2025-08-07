@@ -11,6 +11,8 @@ public class CarEnemy : MonoBehaviour,IParryable
     private MeshFilter _meshFilter;
     [SerializeField]
     private MeshRenderer _meshRenderer;
+    [SerializeField]
+    private BoxCollider _collider;
 
 
     private EnemyColor _color;
@@ -77,6 +79,8 @@ public class CarEnemy : MonoBehaviour,IParryable
         _color = color;
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
+        _collider.size = statData.ColliderSize;
+        _collider.center = statData.ColliderCenter;
         _laneMover.Init(laneIndex);
     }
     public void OnParried(Vector3 force)
