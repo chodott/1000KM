@@ -716,6 +716,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 602325618245892931, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: hideOffset.x
+      value: -500
+      objectReference: {fileID: 0}
     - target: {fileID: 3096036493526454378, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: m_Name
       value: MainUI
@@ -815,6 +819,18 @@ PrefabInstance:
     - target: {fileID: 3799345081470498065, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5530075630502532905, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e4febed69f1ae5f48a03198044621199, type: 3}
+    - target: {fileID: 5631567663995283765, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5631567663995283765, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1200
       objectReference: {fileID: 0}
     - target: {fileID: 6172591566265154211, guid: 779f2d735a973544b9c9d88edc9686ed, type: 3}
       propertyPath: m_AnchorMax.x
