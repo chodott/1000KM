@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
@@ -20,7 +21,14 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private GameObject _originalPrefab;
     private float _patternCooldownTime = 1;
     private float _patternCooldownTimer;
+    private float _healthPoint;
+
+    private float _knockbackEndVelocity = 0f;
+    private float _knockbackTimer = 0f;
+    private float _knockbackTime = 0.2f;
+    private float _velocitySmoothless = 0.3f;
     private bool _isParried;
+    private bool _isKnockback;
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
@@ -34,12 +42,21 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         Yellow
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (_isParried == false)
         {
-            float curVelocity = _statData.Velocity - GlobalMovementController.Instance.globalVelocity ;
-            transform.position += (transform.forward * curVelocity * Time.deltaTime);
+            float velocity = _statData.Velocity;
+            if(_knockbackEndVelocity > velocity)
+            {
+                velocity = Mathf.Lerp(_knockbackEndVelocity, _statData.Velocity, _velocitySmoothless * Time.fixedDeltaTime);
+                float gap = Mathf.Abs(velocity - _statData.Velocity);
+                velocity = gap <= 0.05f ? _statData.Velocity : velocity;
+            }
+
+            float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity ;
+            Vector3 targetPosition = transform.position + (transform.forward * curVelocity * Time.fixedDeltaTime);
+            _rigidbody.MovePosition(targetPosition);
 
             if (_patternCooldownTimer > _patternCooldownTime)
             {
@@ -49,6 +66,33 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             else
             {
                 _patternCooldownTimer += Time.deltaTime;
+            }
+        }
+        else
+        {
+            CheckKnockback();
+        }
+    }
+
+    private void CheckKnockback()
+    {
+        if (_isKnockback == false)
+        {
+            float curVelocity = _rigidbody.linearVelocity.magnitude;
+            if (curVelocity <= 0.1f)
+            {
+                _rigidbody.linearDamping = 0f;
+                _isParried = false;
+                _knockbackEndVelocity = GlobalMovementController.Instance.globalVelocity;
+            }
+        }
+        else
+        {
+            _knockbackTimer += Time.fixedDeltaTime;
+            if (_knockbackTimer > +_knockbackTime)
+            {
+                _isKnockback = false;
+                _knockbackTimer = 0;
             }
         }
     }
@@ -81,6 +125,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     public void Init(EnemyColor color, EnemyStatData statData, int laneIndex)
     {
         _statData = statData;
+        _healthPoint = statData.HealthPoint;
         _color = color;
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
@@ -88,15 +133,27 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _collider.center = statData.ColliderCenter;
         _laneMover.Init(laneIndex);
     }
-    public void OnParried(Vector3 force)
+    public void OnParried(Vector3 direction, float force, float damage)
     {
-        Deactivate();
-        return;
 
+        _healthPoint -= damage;
         _isParried = true;
-        _rigidbody.isKinematic = false;
-        _rigidbody.useGravity = true;
-        _rigidbody.AddTorque(force, ForceMode.Impulse);
+
+        if (_healthPoint <= 0f)
+        {
+            Deactivate();
+            return;
+
+            _rigidbody.useGravity = true;
+            _rigidbody.AddTorque(direction * force, ForceMode.Impulse);
+        }
+        else
+        {   //Knockback
+            _rigidbody.linearDamping = 2.0f;
+            _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
+            _isKnockback = true;
+
+        }
     }
 
     #region PoolingObject Callbacks
