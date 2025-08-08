@@ -51,11 +51,11 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             {
                 velocity = Mathf.Lerp(_knockbackEndVelocity, _statData.Velocity, _velocitySmoothless * Time.fixedDeltaTime);
                 float gap = Mathf.Abs(velocity - _statData.Velocity);
-                velocity = gap <= 0.05f ? _statData.Velocity : velocity;
+                velocity = (gap <= 0.05f) ? _statData.Velocity : velocity;
             }
 
             float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity ;
-            Vector3 targetPosition = transform.position + (transform.forward * curVelocity * Time.fixedDeltaTime);
+            Vector3 targetPosition = _rigidbody.position + (transform.forward * curVelocity * Time.fixedDeltaTime);
             _rigidbody.MovePosition(targetPosition);
 
             if (_patternCooldownTimer > _patternCooldownTime)

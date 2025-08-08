@@ -10,21 +10,29 @@ public class LaneMover : MonoBehaviour
     [SerializeField]
     private float _stopDistance = 0.05f;
 
+    private Rigidbody _rigidbody;
     private float _nextPositionZ;
     private int _currentLaneIndex = 0;
     private bool _isMoving = false;
 
+    private void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
+    }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_isMoving)
         {
-            
-            float curPositionZ = Mathf.Lerp(transform.position.z, _nextPositionZ, Time.deltaTime * _moveLaneSpeed);
-            transform.position = new Vector3(transform.position.x, transform.position.y, curPositionZ);
-            if (Mathf.Abs(curPositionZ - _nextPositionZ)  <= _stopDistance)
+            float curPositionZ = Mathf.Lerp(_rigidbody.position.z, _nextPositionZ, Time.deltaTime * _moveLaneSpeed);
+            Vector3 newPosition = new Vector3(_rigidbody.position.x, _rigidbody.position.y, curPositionZ);
+
+            _rigidbody.MovePosition(newPosition);
+
+            if (Mathf.Abs(curPositionZ - _nextPositionZ) <= _stopDistance)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y, _nextPositionZ);
+                Vector3 finalPosition = new Vector3(_rigidbody.position.x, _rigidbody.position.y, _nextPositionZ);
+                _rigidbody.MovePosition(finalPosition);
                 _isMoving = false;
             }
         }
