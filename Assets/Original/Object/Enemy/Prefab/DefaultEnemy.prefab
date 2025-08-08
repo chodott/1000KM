@@ -154,6 +154,7 @@ MonoBehaviour:
   _laneMover: {fileID: -8618501305589520936}
   _meshFilter: {fileID: 407504389598896300}
   _meshRenderer: {fileID: 1789332861490712944}
+  _collider: {fileID: 7093453293601517522}
 --- !u!114 &-8618501305589520936
 MonoBehaviour:
   m_ObjectHideFlags: 0

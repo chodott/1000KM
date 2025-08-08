@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CarEnemy : MonoBehaviour,IParryable
+public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 {
 
     [SerializeField]
@@ -17,9 +17,14 @@ public class CarEnemy : MonoBehaviour,IParryable
 
     private EnemyColor _color;
     private EnemyStatData _statData;
+    private GameObject _originalPrefab;
     private float _patternCooldownTime = 1;
     private float _patternCooldownTimer;
     private bool _isParried;
+
+    public GameObject OriginalPrefab { get { return _originalPrefab; }}
+
+    public event System.Action<GameObject, GameObject> OnReturned;
 
     public enum EnemyColor
     {
@@ -85,9 +90,24 @@ public class CarEnemy : MonoBehaviour,IParryable
     }
     public void OnParried(Vector3 force)
     {
+        Deactivate();
+        return;
+
         _isParried = true;
         _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;
         _rigidbody.AddTorque(force, ForceMode.Impulse);
     }
+
+    #region PoolingObject Callbacks
+    public void Activate(GameObject originalPrefab)
+    {
+        _originalPrefab = originalPrefab;
+    }
+
+    public void Deactivate()
+    {
+        OnReturned?.Invoke(OriginalPrefab,gameObject);
+    }
+    #endregion
 }
