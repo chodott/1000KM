@@ -60,13 +60,11 @@ public class EnemySpawner : MonoBehaviour
             Vector3 spawnPosition = new Vector3(_spawnPositionX, 0.2f, spawnPositonZ);
 
             GameObject carObject = _objectPool.GetObject(_enemyPrefab);
-            carObject.transform.position = spawnPosition;
-            carObject.transform.rotation = _enemyDefaultRotation;
 
             CarEnemy carEnemy = carObject.GetComponent<CarEnemy>();
             var randomColor = _enemyColors.GetRandom();
             var randomStat = _enemyStatDatas.GetRandom();
-            carEnemy.Init(randomColor, randomStat, spawnLaneIndex);
+            carEnemy.Init(randomColor, randomStat, spawnPosition, _enemyDefaultRotation, spawnLaneIndex);
         }
     }
 

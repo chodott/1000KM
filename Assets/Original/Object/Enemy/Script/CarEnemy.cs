@@ -154,7 +154,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     }
 
-    public void Init(EnemyColor color, EnemyStatData statData, int laneIndex)
+    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, Quaternion rotation, int laneIndex)
     {
         _statData = statData;
         _healthPoint = statData.HealthPoint;
@@ -163,6 +163,17 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _meshRenderer.material = _statData.materialVariants[(int)color];
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
+
+        _rigidbody.useGravity = false;
+        _rigidbody.position = position;
+        _rigidbody.rotation = rotation;
+        _rigidbody.linearVelocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.linearDamping = 0f;
+        _rigidbody.WakeUp();
+
+        _enemyState = EnemyState.Drive;
+
         _laneMover.Init(laneIndex);
     }
     public void OnParried(Vector3 direction, float force, float damage)
@@ -193,6 +204,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     public void Deactivate()
     {
+        _rigidbody.Sleep();
         OnReturned?.Invoke(OriginalPrefab,gameObject);
     }
     #endregion
