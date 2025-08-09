@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,9 +17,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private BoxCollider _collider;
 
 
+    private EnemyState _enemyState;
     private EnemyColor _color;
     private EnemyStatData _statData;
     private GameObject _originalPrefab;
+    private Vector3 _forwardVector = new Vector3(-1, 0, 0);
+    private float _returnPositionX = 5f;
     private float _patternCooldownTime = 1;
     private float _patternCooldownTimer;
     private float _healthPoint;
@@ -27,8 +31,6 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private float _knockbackTimer = 0f;
     private float _knockbackTime = 0.2f;
     private float _velocitySmoothless = 0.3f;
-    private bool _isParried;
-    private bool _isKnockback;
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
@@ -42,57 +44,87 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         Yellow
     }
 
+    public enum EnemyState
+    {
+        Drive,
+        Knockback,
+        Parried
+    }
+
+    void Update()
+    {
+        if(transform.position.x >=_returnPositionX)
+        {
+            Deactivate();
+        }
+    }
+
     void FixedUpdate()
     {
-        if (_isParried == false)
+
+        switch(_enemyState)
         {
-            float velocity = _statData.Velocity;
-            if(_knockbackEndVelocity > velocity)
-            {
-                velocity = Mathf.Lerp(_knockbackEndVelocity, _statData.Velocity, _velocitySmoothless * Time.fixedDeltaTime);
-                float gap = Mathf.Abs(velocity - _statData.Velocity);
-                velocity = (gap <= 0.05f) ? _statData.Velocity : velocity;
-            }
+            case EnemyState.Drive:
+                float velocity = RecoverVelocity(_statData.Velocity);
+                MoveForward(velocity);
+                CheckPattern();
+                break;
 
-            float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity ;
-            Vector3 targetPosition = _rigidbody.position + (transform.forward * curVelocity * Time.fixedDeltaTime);
-            _rigidbody.MovePosition(targetPosition);
+             case EnemyState.Knockback:
+                CheckKnockback();
+                break;
 
-            if (_patternCooldownTimer > _patternCooldownTime)
-            {
-                DoPattern();
-                _patternCooldownTimer = 0;
-            }
-            else
-            {
-                _patternCooldownTimer += Time.deltaTime;
-            }
+             case EnemyState.Parried:
+                MoveForward(0f);
+                break;
+        }
+
+        
+    }
+
+    private float RecoverVelocity(float velocity)
+    {
+        if (_knockbackEndVelocity > velocity)
+        {
+            velocity = Mathf.Lerp(_knockbackEndVelocity, _statData.Velocity, _velocitySmoothless * Time.fixedDeltaTime);
+            float gap = Mathf.Abs(velocity - _statData.Velocity);
+            velocity = (gap <= 0.05f) ? _statData.Velocity : velocity;
+        }
+        return velocity;
+    }
+
+    private void MoveForward(float velocity)
+    {
+        float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity;
+        Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
+        _rigidbody.MovePosition(targetPosition);
+    }
+
+    private void CheckPattern()
+    {
+        if (_patternCooldownTimer > _patternCooldownTime)
+        {
+            DoPattern();
+            _patternCooldownTimer = 0;
         }
         else
         {
-            CheckKnockback();
+            _patternCooldownTimer += Time.deltaTime;
         }
     }
 
     private void CheckKnockback()
     {
-        if (_isKnockback == false)
+        _knockbackTimer += Time.fixedDeltaTime;
+        if (_knockbackTimer > +_knockbackTime)
         {
+            _enemyState = EnemyState.Drive;
+            _knockbackTimer = 0;
             float curVelocity = _rigidbody.linearVelocity.magnitude;
             if (curVelocity <= 0.1f)
             {
                 _rigidbody.linearDamping = 0f;
-                _isParried = false;
                 _knockbackEndVelocity = GlobalMovementController.Instance.globalVelocity;
-            }
-        }
-        else
-        {
-            _knockbackTimer += Time.fixedDeltaTime;
-            if (_knockbackTimer > +_knockbackTime)
-            {
-                _isKnockback = false;
-                _knockbackTimer = 0;
             }
         }
     }
@@ -137,21 +169,18 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     {
 
         _healthPoint -= damage;
-        _isParried = true;
 
         if (_healthPoint <= 0f)
         {
-            Deactivate();
-            return;
-
             _rigidbody.useGravity = true;
             _rigidbody.AddTorque(direction * force, ForceMode.Impulse);
+            _enemyState = EnemyState.Parried;
         }
         else
         {   //Knockback
             _rigidbody.linearDamping = 2.0f;
             _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
-            _isKnockback = true;
+            _enemyState = EnemyState.Knockback;
 
         }
     }

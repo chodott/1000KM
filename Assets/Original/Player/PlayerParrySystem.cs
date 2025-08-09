@@ -12,7 +12,7 @@ public class PlayerParrySystem : MonoBehaviour
     private int _spinCount = 3;
 
     private Quaternion _baseRotation;
-    private float _parryForce = 30f;
+    private float _parryForce = 50f;
     private float _parryPower = 1f;
     private bool _isParry = false;
 
