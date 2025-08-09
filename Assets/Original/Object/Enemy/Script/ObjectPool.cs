@@ -8,6 +8,8 @@ public class ObjectPool : MonoBehaviour
 
     private void HandleReturn(GameObject prefab, GameObject gameObject)
     {
+        IPoolingObject poolingObject = gameObject.GetComponent<IPoolingObject>();
+        poolingObject.OnReturned -= HandleReturn;
         gameObject.SetActive(false);
         _objectPoolMap[prefab].Enqueue(gameObject);
     }
@@ -35,8 +37,8 @@ public class ObjectPool : MonoBehaviour
         }
         else
         {
+
             GameObject newObject = _objectPoolMap[prefab].Dequeue();
-            newObject.SetActive(true);
             IPoolingObject poolingObject = newObject.GetComponent<IPoolingObject>();
             poolingObject.OnReturned += HandleReturn;
             poolingObject.Activate(prefab);

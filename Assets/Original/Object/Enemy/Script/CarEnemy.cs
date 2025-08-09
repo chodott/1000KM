@@ -48,11 +48,17 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     {
         Drive,
         Knockback,
-        Parried
+        Parried,
+        NotUse
     }
 
     void Update()
     {
+        if(_enemyState == EnemyState.NotUse)
+        {
+            return;
+        }
+
         if(transform.position.x >=_returnPositionX)
         {
             Deactivate();
@@ -154,27 +160,31 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     }
 
-    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, Quaternion rotation, int laneIndex)
+    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, int laneIndex)
     {
+        gameObject.SetActive(true);
+
         _statData = statData;
         _healthPoint = statData.HealthPoint;
         _color = color;
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
+        transform.localScale = statData.Scale;
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
 
         _rigidbody.useGravity = false;
+        transform.position = position;
         _rigidbody.position = position;
-        _rigidbody.rotation = rotation;
+        _rigidbody.rotation = statData.SpawnRotation;
         _rigidbody.linearVelocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.linearDamping = 0f;
         _rigidbody.WakeUp();
 
         _enemyState = EnemyState.Drive;
-
         _laneMover.Init(laneIndex);
+
     }
     public void OnParried(Vector3 direction, float force, float damage)
     {
@@ -190,7 +200,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         else
         {   //Knockback
             _rigidbody.linearDamping = 2.0f;
-            _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
+            _rigidbody.AddForce(_forwardVector * force, ForceMode.Impulse);
             _enemyState = EnemyState.Knockback;
 
         }
@@ -200,10 +210,13 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     public void Activate(GameObject originalPrefab)
     {
         _originalPrefab = originalPrefab;
+        _rigidbody.Sleep();
+
     }
 
     public void Deactivate()
     {
+        _enemyState = EnemyState.NotUse;
         _rigidbody.Sleep();
         OnReturned?.Invoke(OriginalPrefab,gameObject);
     }
