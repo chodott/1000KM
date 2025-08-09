@@ -26,11 +26,10 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private float _patternCooldownTime = 1;
     private float _patternCooldownTimer;
     private float _healthPoint;
+    private float _curVelocity;
 
-    private float _knockbackEndVelocity = 0f;
-    private float _knockbackTimer = 0f;
-    private float _knockbackTime = 0.2f;
-    private float _velocitySmoothless = 0.3f;
+    private float _friction = 1f;
+    private float _knockbackPower = 0.5f;
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
@@ -48,7 +47,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     {
         Drive,
         Knockback,
-        Parried,
+        Destroyed,
         NotUse
     }
 
@@ -71,8 +70,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         switch(_enemyState)
         {
             case EnemyState.Drive:
-                float velocity = RecoverVelocity(_statData.Velocity);
-                MoveForward(velocity);
+                MoveForward(_statData.Velocity);
                 CheckPattern();
                 break;
 
@@ -80,23 +78,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
                 CheckKnockback();
                 break;
 
-             case EnemyState.Parried:
+             case EnemyState.Destroyed:
                 MoveForward(0f);
                 break;
         }
 
         
-    }
-
-    private float RecoverVelocity(float velocity)
-    {
-        if (_knockbackEndVelocity > velocity)
-        {
-            velocity = Mathf.Lerp(_knockbackEndVelocity, _statData.Velocity, _velocitySmoothless * Time.fixedDeltaTime);
-            float gap = Mathf.Abs(velocity - _statData.Velocity);
-            velocity = (gap <= 0.05f) ? _statData.Velocity : velocity;
-        }
-        return velocity;
     }
 
     private void MoveForward(float velocity)
@@ -121,17 +108,15 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     private void CheckKnockback()
     {
-        _knockbackTimer += Time.fixedDeltaTime;
-        if (_knockbackTimer > +_knockbackTime)
+        float curVelocity = _curVelocity - GlobalMovementController.Instance.globalVelocity;
+        Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
+        _rigidbody.MovePosition(targetPosition);
+
+        _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
+        if(_curVelocity <= _statData.Velocity)
         {
+            _curVelocity = _statData.Velocity;
             _enemyState = EnemyState.Drive;
-            _knockbackTimer = 0;
-            float curVelocity = _rigidbody.linearVelocity.magnitude;
-            if (curVelocity <= 0.1f)
-            {
-                _rigidbody.linearDamping = 0f;
-                _knockbackEndVelocity = GlobalMovementController.Instance.globalVelocity;
-            }
         }
     }
 
@@ -165,6 +150,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         gameObject.SetActive(true);
 
         _statData = statData;
+        _curVelocity = statData.Velocity;
         _healthPoint = statData.HealthPoint;
         _color = color;
         _meshFilter.mesh = statData.Mesh;
@@ -173,34 +159,27 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
 
-        _rigidbody.useGravity = false;
         transform.position = position;
-        _rigidbody.position = position;
-        _rigidbody.rotation = statData.SpawnRotation;
-        _rigidbody.linearVelocity = Vector3.zero;
-        _rigidbody.angularVelocity = Vector3.zero;
-        _rigidbody.linearDamping = 0f;
+        transform.rotation = statData.SpawnRotation;
         _rigidbody.WakeUp();
 
         _enemyState = EnemyState.Drive;
         _laneMover.Init(laneIndex);
 
     }
-    public void OnParried(Vector3 direction, float force, float damage)
+    public void OnParried(Vector3 direction, float damage)
     {
 
         _healthPoint -= damage;
-
         if (_healthPoint <= 0f)
-        {
+        {   //Destroy
             _rigidbody.useGravity = true;
-            _rigidbody.AddTorque(direction * force, ForceMode.Impulse);
-            _enemyState = EnemyState.Parried;
+            _rigidbody.AddTorque(direction * 30f, ForceMode.Impulse);
+            _enemyState = EnemyState.Destroyed;
         }
         else
         {   //Knockback
-            _rigidbody.linearDamping = 2.0f;
-            _rigidbody.AddForce(_forwardVector * force, ForceMode.Impulse);
+            _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.globalVelocity * (1+_knockbackPower));
             _enemyState = EnemyState.Knockback;
 
         }

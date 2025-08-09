@@ -12,7 +12,6 @@ public class PlayerParrySystem : MonoBehaviour
     private int _spinCount = 3;
 
     private Quaternion _baseRotation;
-    private float _parryForce = 50f;
     private float _parryPower = 1f;
     private bool _isParry = false;
 
@@ -27,7 +26,7 @@ public class PlayerParrySystem : MonoBehaviour
         if (other.TryGetComponent<IParryable>(out var parryable))
         {
             Vector3 parryDirection = (other.transform.position - transform.position).normalized;
-            parryable.OnParried(parryDirection, _parryForce, _parryPower);
+            parryable.OnParried(parryDirection, _parryPower);
             _boxCollider.enabled = false;
 
         }
