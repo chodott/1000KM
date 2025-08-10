@@ -71,12 +71,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         switch(_enemyState)
         {
             case EnemyState.Drive:
-                MoveForward(_statData.Velocity);
+                MoveForward(_curVelocity);
                 CheckPattern();
                 break;
 
              case EnemyState.Knockback:
-                CheckKnockback();
+                MoveForward(_curVelocity);
                 break;
 
              case EnemyState.Destroyed:
@@ -92,6 +92,8 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity;
         Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
         _rigidbody.MovePosition(targetPosition);
+
+        RecoverVelocity();
     }
 
     private void CheckPattern()
@@ -107,18 +109,24 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         }
     }
 
-    private void CheckKnockback()
+    private void RecoverVelocity()
     {
-        float curVelocity = _curVelocity - GlobalMovementController.Instance.globalVelocity;
-        Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
-        _rigidbody.MovePosition(targetPosition);
-
-        _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
-        if(_curVelocity <= _statData.Velocity)
+        
+        if (_curVelocity <= _statData.Velocity)
         {
             _curVelocity = _statData.Velocity;
+        }
+        else
+        {
+            _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
+        }
+
+        if (_curVelocity <= GlobalMovementController.Instance.globalVelocity)
+        {
             _enemyState = EnemyState.Drive;
         }
+
+
     }
 
     private void DoPattern()
@@ -146,6 +154,13 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     }
 
+    private void Destroy(Vector3 direction)
+    {
+        _collider.enabled = false;
+        _rigidbody.AddTorque(direction * 50f, ForceMode.Impulse);
+        _enemyState = EnemyState.Destroyed;
+    }
+
     public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, int laneIndex)
     {
         gameObject.SetActive(true);
@@ -170,17 +185,19 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     }
     public void OnParried(Vector3 direction, float damage)
     {
+        if (_enemyState != EnemyState.Drive)
+        {
+            return;
+        }
+
         _healthPoint -= damage;
         if (_healthPoint <= 0f)
         {   //Destroy
-
-            _collider.enabled = false;
-            gameObject.tag = "Parried";
-            _rigidbody.AddTorque(direction * 30f, ForceMode.Impulse);
-            _enemyState = EnemyState.Destroyed;
+            Destroy(direction);
         }
         else
         {   //Knockback
+            gameObject.tag = "Parried";
             _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.globalVelocity * (1+_knockbackPower));
             _enemyState = EnemyState.Knockback;
 
@@ -190,6 +207,16 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     public void OnAttack()
     {
         _rigidbody.Sleep();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Parried"))
+        {
+            Vector3 forceDirection = _rigidbody.position - collision.rigidbody.position;
+            forceDirection.Normalize();
+            Destroy(forceDirection);
+        }
     }
 
     #region PoolingObject Callbacks
