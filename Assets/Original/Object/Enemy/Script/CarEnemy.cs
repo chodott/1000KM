@@ -15,6 +15,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private MeshRenderer _meshRenderer;
     [SerializeField]
     private BoxCollider _collider;
+    [SerializeField]
 
 
     private EnemyState _enemyState;
@@ -169,11 +170,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     }
     public void OnParried(Vector3 direction, float damage)
     {
-
         _healthPoint -= damage;
         if (_healthPoint <= 0f)
         {   //Destroy
-            _rigidbody.useGravity = true;
+
+            _collider.enabled = false;
+            gameObject.tag = "Parried";
             _rigidbody.AddTorque(direction * 30f, ForceMode.Impulse);
             _enemyState = EnemyState.Destroyed;
         }
@@ -183,6 +185,11 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             _enemyState = EnemyState.Knockback;
 
         }
+    }
+
+    public void OnAttack()
+    {
+        _rigidbody.Sleep();
     }
 
     #region PoolingObject Callbacks

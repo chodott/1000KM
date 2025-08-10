@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerParrySystem : MonoBehaviour
 {
     [SerializeField]
-    private BoxCollider _boxCollider;
+    private ParryCollider _parryCollider;
     [SerializeField]
     private float _parryCooldownTime = 0.3f;
     [SerializeField]
@@ -18,16 +18,16 @@ public class PlayerParrySystem : MonoBehaviour
     private void Start()
     {
        _baseRotation = transform.rotation;
+        _parryCollider.InParryRangeEvent += ParrySuccess;
     }
 
     #region Collider Callbacks
-    private void OnTriggerStay(Collider other)
+    private void ParrySuccess(Collider other)
     {
         if (other.TryGetComponent<IParryable>(out var parryable))
         {
             Vector3 parryDirection = (other.transform.position - transform.position).normalized;
             parryable.OnParried(parryDirection, _parryPower);
-            _boxCollider.enabled = false;
 
         }
     }
@@ -36,7 +36,8 @@ public class PlayerParrySystem : MonoBehaviour
     private IEnumerator Spin()
     {
         _isParry = true;
-        _boxCollider.enabled = true;
+        _parryCollider.SetActive(true);
+
 
         float elapsedTime = 0f;
         float totalSpinAmount = 360f * _spinCount;
@@ -50,6 +51,8 @@ public class PlayerParrySystem : MonoBehaviour
         }
         _isParry = false;
         transform.rotation = _baseRotation;
+        _parryCollider.SetActive(false);
+
     }
 
     public void Parry()
