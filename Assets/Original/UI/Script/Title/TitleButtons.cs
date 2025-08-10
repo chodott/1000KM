@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TitleButtons : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class TitleButtons : MonoBehaviour
 
     void Play()
     {
-        //씬넘어가는코드넣기
+        SceneManager.LoadScene(1);
     }
 
     void Option()

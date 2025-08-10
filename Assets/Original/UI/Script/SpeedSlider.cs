@@ -57,7 +57,7 @@ public class SpeedSlider : MonoBehaviour
     {
         if (sliderUI.GetCurValue() >= maxValue - 0.001f)
         {
-            float t = (Mathf.Sin(Time.time * effectSpeed) + 1f) / 2f;
+            float t = (Mathf.Sin(Time.time * (effectSpeed + (sliderUI.GetCurValue() - maxValue) * 0.1f)) + 1f) / 2f;
             float angle = Mathf.Lerp(-182f, -202f, t);
             needle.transform.localRotation = Quaternion.Euler(0, 0, angle);
         }
