@@ -14,6 +14,14 @@ public class EnemyStatData : ScriptableObject
     public Mesh Mesh { get { return _mesh; } }
 
     [SerializeField]
+    private Quaternion _rotation;
+    public Quaternion SpawnRotation { get { return _rotation; } }
+
+    [SerializeField]
+    private Vector3 _scale;
+    public Vector3 Scale { get { return _scale; } }
+
+    [SerializeField]
     private Vector3 _colliderSize;
     public Vector3 ColliderSize { get { return _colliderSize; } }
 

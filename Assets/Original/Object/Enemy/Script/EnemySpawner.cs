@@ -26,12 +26,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
-    private Quaternion _enemyDefaultRotation = Quaternion.Euler(0, -90f, 0);
-    [SerializeField]
     private float _spawnRate = 1;
     [SerializeField]
     private int _defaultSpawnCount = 30;
 
+
+    private ObjectPool _objectPool = new ObjectPool();
     private float _spawnTimer;
     private float _spawnPositionX = -100f;
     private int _laneCount;
@@ -42,6 +42,7 @@ public class EnemySpawner : MonoBehaviour
     {
         _laneCount = LaneSystem.Instance.LaneCount;
         _laneRange = LaneSystem.Instance.LaneRange;
+        _objectPool.CreateDefaultObjects(_enemyPrefab, _defaultSpawnCount);
     }
 
 
@@ -54,14 +55,14 @@ public class EnemySpawner : MonoBehaviour
             _spawnTimer = 0;
             int spawnLaneIndex = Random.Range(0, _laneCount) - _laneRange;
             float spawnPositonZ = LaneSystem.Instance.GetLanePositionZ(spawnLaneIndex);
-            Vector3 spawnPosition = new Vector3(_spawnPositionX, 0.2f, spawnPositonZ);
+            Vector3 spawnPosition = new Vector3(_spawnPositionX, 0.5f, spawnPositonZ);
 
-            GameObject carObject = Instantiate(_enemyPrefab, spawnPosition, _enemyDefaultRotation);
+            GameObject carObject = _objectPool.GetObject(_enemyPrefab);
+
             CarEnemy carEnemy = carObject.GetComponent<CarEnemy>();
-
             var randomColor = _enemyColors.GetRandom();
             var randomStat = _enemyStatDatas.GetRandom();
-            carEnemy.Init(randomColor, randomStat, spawnLaneIndex);
+            carEnemy.Init(randomColor, randomStat, spawnPosition, spawnLaneIndex);
         }
     }
 

@@ -1,6 +1,8 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class CarEnemy : MonoBehaviour,IParryable
+public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 {
 
     [SerializeField]
@@ -13,13 +15,26 @@ public class CarEnemy : MonoBehaviour,IParryable
     private MeshRenderer _meshRenderer;
     [SerializeField]
     private BoxCollider _collider;
+    [SerializeField]
 
 
+    private EnemyState _enemyState;
     private EnemyColor _color;
     private EnemyStatData _statData;
+    private GameObject _originalPrefab;
+    private Vector3 _forwardVector = new Vector3(-1, 0, 0);
+    private float _returnPositionX = 5f;
     private float _patternCooldownTime = 1;
     private float _patternCooldownTimer;
-    private bool _isParried;
+    private float _healthPoint;
+    private float _curVelocity;
+
+    private float _friction = 1f;
+    private float _knockbackPower = 0.5f;
+
+    public GameObject OriginalPrefab { get { return _originalPrefab; }}
+
+    public event System.Action<GameObject, GameObject> OnReturned;
 
     public enum EnemyColor
     {
@@ -29,23 +44,89 @@ public class CarEnemy : MonoBehaviour,IParryable
         Yellow
     }
 
+    public enum EnemyState
+    {
+        Drive,
+        Knockback,
+        Destroyed,
+        NotUse
+    }
+
     void Update()
     {
-        if (_isParried == false)
+        if(_enemyState == EnemyState.NotUse)
         {
-            float curVelocity = _statData.Velocity - GlobalMovementController.Instance.globalVelocity ;
-            transform.position += (transform.forward * curVelocity * Time.deltaTime);
-
-            if (_patternCooldownTimer > _patternCooldownTime)
-            {
-                DoPattern();
-                _patternCooldownTimer = 0;
-            }
-            else
-            {
-                _patternCooldownTimer += Time.deltaTime;
-            }
+            return;
         }
+
+        if(transform.position.x >=_returnPositionX)
+        {
+            Deactivate();
+        }
+    }
+
+    void FixedUpdate()
+    {
+
+        switch(_enemyState)
+        {
+            case EnemyState.Drive:
+                MoveForward(_curVelocity);
+                CheckPattern();
+                break;
+
+             case EnemyState.Knockback:
+                MoveForward(_curVelocity);
+                break;
+
+             case EnemyState.Destroyed:
+                MoveForward(0f);
+                break;
+        }
+
+        
+    }
+
+    private void MoveForward(float velocity)
+    {
+        float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity;
+        Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
+        _rigidbody.MovePosition(targetPosition);
+
+        RecoverVelocity();
+    }
+
+    private void CheckPattern()
+    {
+        if (_patternCooldownTimer > _patternCooldownTime)
+        {
+            DoPattern();
+            _patternCooldownTimer = 0;
+        }
+        else
+        {
+            _patternCooldownTimer += Time.deltaTime;
+        }
+    }
+
+    private void RecoverVelocity()
+    {
+        
+        if (_curVelocity <= _statData.Velocity)
+        {
+            _curVelocity = _statData.Velocity;
+        }
+        else
+        {
+            _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
+        }
+
+        if (_curVelocity <= GlobalMovementController.Instance.globalVelocity)
+        {
+            _enemyState = EnemyState.Drive;
+        }
+
+
     }
 
     private void DoPattern()
@@ -73,21 +154,84 @@ public class CarEnemy : MonoBehaviour,IParryable
 
     }
 
-    public void Init(EnemyColor color, EnemyStatData statData, int laneIndex)
+    private void Destroy(Vector3 direction)
     {
+        _collider.enabled = false;
+        _rigidbody.AddTorque(direction * 50f, ForceMode.Impulse);
+        _enemyState = EnemyState.Destroyed;
+    }
+
+    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, int laneIndex)
+    {
+        gameObject.SetActive(true);
+
         _statData = statData;
+        _curVelocity = statData.Velocity;
+        _healthPoint = statData.HealthPoint;
         _color = color;
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
+        transform.localScale = statData.Scale;
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
+
+        transform.position = position;
+        transform.rotation = statData.SpawnRotation;
+        _rigidbody.WakeUp();
+
+        _enemyState = EnemyState.Drive;
         _laneMover.Init(laneIndex);
+
     }
-    public void OnParried(Vector3 force)
+    public void OnParried(Vector3 direction, float damage)
     {
-        _isParried = true;
-        _rigidbody.isKinematic = false;
-        _rigidbody.useGravity = true;
-        _rigidbody.AddTorque(force, ForceMode.Impulse);
+        if (_enemyState != EnemyState.Drive)
+        {
+            return;
+        }
+
+        _healthPoint -= damage;
+        if (_healthPoint <= 0f)
+        {   //Destroy
+            Destroy(direction);
+        }
+        else
+        {   //Knockback
+            gameObject.tag = "Parried";
+            _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.globalVelocity * (1+_knockbackPower));
+            _enemyState = EnemyState.Knockback;
+
+        }
     }
+
+    public void OnAttack()
+    {
+        _rigidbody.Sleep();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Parried"))
+        {
+            Vector3 forceDirection = _rigidbody.position - collision.rigidbody.position;
+            forceDirection.Normalize();
+            Destroy(forceDirection);
+        }
+    }
+
+    #region PoolingObject Callbacks
+    public void Activate(GameObject originalPrefab)
+    {
+        _originalPrefab = originalPrefab;
+        _rigidbody.Sleep();
+
+    }
+
+    public void Deactivate()
+    {
+        _enemyState = EnemyState.NotUse;
+        _rigidbody.Sleep();
+        OnReturned?.Invoke(OriginalPrefab,gameObject);
+    }
+    #endregion
 }

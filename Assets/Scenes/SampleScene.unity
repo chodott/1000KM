@@ -503,6 +503,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3684722196037006511, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3684722196037006511, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: m_Size.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3684722196037006511, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3684722196037006511, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3718525976865496762, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: _moveLaneSpeed
       value: 10
@@ -596,8 +612,8 @@ MonoBehaviour:
   _enemyStatDatas:
   - {fileID: 11400000, guid: 80bbd1741c316f4408d7cb2425767381, type: 2}
   - {fileID: 11400000, guid: 09bd4bf3eb0ab6642b76e1c4a0d3b4f5, type: 2}
+  - {fileID: 11400000, guid: 09c5d4378b4bdff4b84eb4f0b8b5dc94, type: 2}
   _enemyPrefab: {fileID: 2899611395792235350, guid: 918123295119ecb4a829142dbb500f76, type: 3}
-  _enemyDefaultRotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
   _spawnRate: 1
   _defaultSpawnCount: 30
 --- !u!4 &766570785
