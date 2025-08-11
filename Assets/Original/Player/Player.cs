@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerInput _playerInput;
     [SerializeField]
+    private PartManager _partManager;
+    [SerializeField]
     private PlayerMovement _playerMovement;
     [SerializeField]
     private PlayerParrySystem _playerParrySystem;
@@ -35,9 +37,19 @@ public class Player : MonoBehaviour
         _parryAction.performed += OnParry;
     }
 
+    private void Start()
+    {
+        _partManager.OnChangedPartStatus += UpdateStatus;
+    }
+
     private void Update()
     {
         _playerMovement.SetMoveDirection(_thorottleAction.ReadValue<float>());
+    }
+
+    private void UpdateStatus(PartStatus status)
+    {
+        
     }
 
     #region PlayerInput Callbacks
