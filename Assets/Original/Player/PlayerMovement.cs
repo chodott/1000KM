@@ -4,10 +4,14 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float _acceleration = 5.0f;
+    private float _defaultAcceleration = 5.0f;
+    [SerializeField]
+    private float _defaultDrag = 1f;
 
+    private float _acceleration;
     private float _speed;
     private float _keyValue;
+    private float _drag;
 
     public event Action<float> OnSpeedChanged;
 
@@ -28,6 +32,12 @@ public class PlayerMovement : MonoBehaviour
             _speed -= _acceleration * Time.deltaTime;
         }
         OnSpeedChanged?.Invoke(_speed);
+    }
+
+    public void UpdateStatus(PartStatus status)
+    {
+        _acceleration = _defaultAcceleration + status.AccelerationBonus;
+        _drag = _defaultDrag - status.DragReduction;
     }
 
     public void SetMoveDirection(float value)

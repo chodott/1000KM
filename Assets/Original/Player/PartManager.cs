@@ -11,21 +11,21 @@ public class PartManager : MonoBehaviour
     }
 
     [SerializeField]
-    private Dictionary<PartType, PartStatus> _equippedPartMap = new Dictionary<PartType, PartStatus>();
+    List<PartStatus> _equippedParts = new List<PartStatus>();
 
     public event Action<PartStatus> OnChangedPartStatus;
 
     public void EquipNewPart(PartStatus newPart)
     {
         var type = newPart.Type;
-        _equippedPartMap[type] = newPart;
+        _equippedParts[(int)type] = newPart;
         OnChangedPartStatus?.Invoke(CalculateStats());
     }
 
     public PartStatus CalculateStats()
     {
         var baseStatus = new PartStatus();
-        foreach(PartStatus partStatus in _equippedPartMap.Values)
+        foreach(PartStatus partStatus in _equippedParts)
         {
             baseStatus.AddStatus(partStatus);
         }

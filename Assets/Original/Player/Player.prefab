@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 7245896829844107551}
-  _partManager: {fileID: 0}
+  _partManager: {fileID: 356308355879442216}
   _playerMovement: {fileID: 2846672660739862426}
   _playerParrySystem: {fileID: 2924355754974614267}
   _playerStatus: {fileID: 1790319375485075123}
@@ -200,7 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be7e65cc34dce474f91c786dbc926aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _acceleration: 5
+  _defaultAcceleration: 5
+  _defaultDrag: 1
 --- !u!114 &2924355754974614267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,10 +230,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hitCollider: {fileID: 8382296519919826827}
-  _maxGasPoint: 100
-  _maxHealthPoint: 100
-  _maxToiletPoint: 100
-  _gasUsagePerSec: 1
+  _defaultMaxGasPoint: 100
+  _defaultMaxHealthPoint: 100
+  _defaultMaxToiletPoint: 100
+  _defaultGasEfficiency: 1
   _toiletGainPerSec: 1
   _damage: 10
 --- !u!114 &3718525976865496762
@@ -250,7 +251,7 @@ MonoBehaviour:
   _animation: {fileID: 7727353892368443968}
   _moveLeftAnimation: {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
   _moveRightAnimation: {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
-  _moveLaneSpeed: 3
+  _defaultMoveLaneSpeed: 5
   _stopDistance: 0.05
 --- !u!111 &7727353892368443968
 Animation:
@@ -282,6 +283,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a83b95a688b0f4d8489a1817440a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _equippedParts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1427874650409527995
 GameObject:
   m_ObjectHideFlags: 0

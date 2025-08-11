@@ -499,6 +499,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 356308355879442216, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: '_equippedParts.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 94a1f354be667c343ad4708246446d7a, type: 2}
+    - target: {fileID: 356308355879442216, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: '_equippedParts.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 899b7c1ed7944a5418cf3ed115dd9f79, type: 2}
+    - target: {fileID: 356308355879442216, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: '_equippedParts.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d90363779fdf8e4eb1631e181c574e8, type: 2}
+    - target: {fileID: 356308355879442216, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: '_equippedParts.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 7a5eb95f9020cf1448d4369e2cb7759e, type: 2}
+    - target: {fileID: 356308355879442216, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: '_equippedParts.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 26087d0a2e10cb24e8f5e8de383eef50, type: 2}
     - target: {fileID: 829403507848857476, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: m_Name
       value: Player

@@ -35,11 +35,8 @@ public class Player : MonoBehaviour
         _moveLeftAction.performed += OnMoveLeft;
         _moveRightAction.performed += OnMoveRight;
         _parryAction.performed += OnParry;
-    }
-
-    private void Start()
-    {
         _partManager.OnChangedPartStatus += UpdateStatus;
+
     }
 
     private void Update()
@@ -49,7 +46,9 @@ public class Player : MonoBehaviour
 
     private void UpdateStatus(PartStatus status)
     {
-        
+        _playerMovement.UpdateStatus(status);
+        _playerStatus.UpdateStatus(status);
+        _laneMover.UpdateMoveLaneSpeed(status.LaneMoveSpeedBonus);
     }
 
     #region PlayerInput Callbacks

@@ -11,17 +11,21 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField]
     private HitCollider _hitCollider;
     [SerializeField]
-    private float _maxGasPoint;
+    private float _defaultMaxGasPoint;
     [SerializeField]
-    private float _maxHealthPoint;
+    private float _defaultMaxHealthPoint;
     [SerializeField]
-    private float _maxToiletPoint;
+    private float _defaultMaxToiletPoint;
     [SerializeField]
-    private float _gasUsagePerSec;
+    private float _defaultGasEfficiency;
     [SerializeField]
     private float _toiletGainPerSec;
     [SerializeField]
     private float _damage = 10.0f;
+
+
+    private float _gasEfficiency;
+    private float _maxHealthPoint;
 
     private float _curGasPoint;
     private float _curHealthPoint;
@@ -29,22 +33,28 @@ public class PlayerStatus : MonoBehaviour
 
     private void Start()
     {
-        _curGasPoint = _maxGasPoint;
-        _curHealthPoint = _maxHealthPoint;
+        _curGasPoint = _defaultMaxGasPoint;
+        _curHealthPoint = _defaultMaxHealthPoint;
         _curToiletPoint = 0.0f;
 
-        OnHPChanged?.Invoke(_curHealthPoint);
-        _hitCollider.OnHitEvent += OnDamaged;
     }
 
     private void Update()
     {
-        UseGas(_gasUsagePerSec * Time.deltaTime);
+        UseGas(_gasEfficiency * Time.deltaTime);
 
-        if(_curToiletPoint < _maxToiletPoint)
+        if(_curToiletPoint < _defaultMaxToiletPoint)
         {
             _curToiletPoint += _toiletGainPerSec;
         }
+    }
+
+    public void UpdateStatus(PartStatus status)
+    {
+        _maxHealthPoint = status.MaxHpBonus + _defaultMaxHealthPoint;
+        _gasEfficiency = _defaultGasEfficiency - status.GasEfficiencyBonus;
+        OnHPChanged?.Invoke(_curHealthPoint);
+
     }
 
     public void UseGas(float amount)

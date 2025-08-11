@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,12 +15,11 @@ public class LaneMover : MonoBehaviour
     private AnimationClip _moveRightAnimation;
 
     [SerializeField]
-    private float _moveLaneSpeed;
+    private float _defaultMoveLaneSpeed;
     [SerializeField]
     private float _stopDistance = 0.05f;
 
-
-
+    private float _moveLaneSpeed;
 
     private Rigidbody _rigidbody;
     private float _nextPositionZ;
@@ -37,7 +37,6 @@ public class LaneMover : MonoBehaviour
         {
             float curPositionZ = Mathf.Lerp(_rigidbody.position.z, _nextPositionZ, Time.deltaTime * _moveLaneSpeed);
             Vector3 newPosition = new Vector3(_rigidbody.position.x, _rigidbody.position.y, curPositionZ);
-
             _rigidbody.MovePosition(newPosition);
 
             if (Mathf.Abs(curPositionZ - _nextPositionZ) <= _stopDistance)
@@ -71,5 +70,12 @@ public class LaneMover : MonoBehaviour
 
         AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
         _animation.Play(playClip.name);
+    }
+
+    public void UpdateMoveLaneSpeed(float bonus)
+    {
+        _moveLaneSpeed = _defaultMoveLaneSpeed + bonus;
+        Debug.Log($"wheel {_moveLaneSpeed}");
+
     }
 }
