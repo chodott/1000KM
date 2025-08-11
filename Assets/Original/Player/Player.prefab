@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2924355754974614267}
   - component: {fileID: 1790319375485075123}
   - component: {fileID: 3718525976865496762}
+  - component: {fileID: 7727353892368443968}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -244,8 +245,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b3b8edbc9c93a4494891f436ba091c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animation: {fileID: 7727353892368443968}
+  _moveLeftAnimation: {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
+  _moveRightAnimation: {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
   _moveLaneSpeed: 3
   _stopDistance: 0.05
+--- !u!111 &7727353892368443968
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829403507848857476}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
+  - {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &1427874650409527995
 GameObject:
   m_ObjectHideFlags: 0

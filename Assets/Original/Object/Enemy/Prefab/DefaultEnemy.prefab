@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7093453293601517522}
   - component: {fileID: 3205625711696671415}
   - component: {fileID: -8618501305589520936}
+  - component: {fileID: 5116840457679394179}
   m_Layer: 0
   m_Name: DefaultEnemy
   m_TagString: Untagged
@@ -155,6 +156,7 @@ MonoBehaviour:
   _meshFilter: {fileID: 407504389598896300}
   _meshRenderer: {fileID: 1789332861490712944}
   _collider: {fileID: 7093453293601517522}
+  _enemyState: 0
 --- !u!114 &-8618501305589520936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,5 +169,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b3b8edbc9c93a4494891f436ba091c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animation: {fileID: 5116840457679394179}
+  _moveLeftAnimation: {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
+  _moveRightAnimation: {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
   _moveLaneSpeed: 10
   _stopDistance: 0.05
+--- !u!111 &5116840457679394179
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899611395792235350}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
+  - {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0

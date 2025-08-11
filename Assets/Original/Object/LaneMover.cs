@@ -5,10 +5,21 @@ using UnityEngine;
 public class LaneMover : MonoBehaviour
 {
     static private Vector3 _rightVector = new Vector3(0, 0, 1);
+
+    [SerializeField]
+    private Animation _animation; 
+    [SerializeField]
+    private AnimationClip _moveLeftAnimation;
+    [SerializeField]
+    private AnimationClip _moveRightAnimation;
+
     [SerializeField]
     private float _moveLaneSpeed;
     [SerializeField]
     private float _stopDistance = 0.05f;
+
+
+
 
     private Rigidbody _rigidbody;
     private float _nextPositionZ;
@@ -57,5 +68,8 @@ public class LaneMover : MonoBehaviour
         _nextPositionZ = transform.position.z + (LaneSystem.Instance.LaneWidth * isRight);
         _currentLaneIndex += direction;
         _isMoving = true;
+
+        AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
+        _animation.Play(playClip.name);
     }
 }
