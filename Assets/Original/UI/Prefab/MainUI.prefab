@@ -274,10 +274,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbab7d9f357ca7343abd739d40b12a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gasSlider: {fileID: 2058384049257439461}
-  _hpSlider: {fileID: 1063945189087943308}
-  _toiletSlider: {fileID: 7233127800376875491}
-  _speedSlider: {fileID: 9002125213339265176}
+  _gasSlider: {fileID: 0}
+  _hpSlider: {fileID: 0}
+  _toiletSlider: {fileID: 0}
+  _speedSlider: {fileID: 0}
 --- !u!1 &3664895878383894660
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Next
+  m_Text: NEXT
 --- !u!1001 &254749843202952173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -455,6 +455,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 8de1edabd23f37648a3bb336c6b7caa6, type: 3}
+    - target: {fileID: 857670845865953397, guid: f522eed49a8314043aa4983c96563c93, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1901546856774161198, guid: f522eed49a8314043aa4983c96563c93, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 55
@@ -478,6 +482,10 @@ PrefabInstance:
     - target: {fileID: 4737563278873482280, guid: f522eed49a8314043aa4983c96563c93, type: 3}
       propertyPath: m_Name
       value: SliderDetailUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737563278873482280, guid: f522eed49a8314043aa4983c96563c93, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6686146374817750944, guid: f522eed49a8314043aa4983c96563c93, type: 3}
       propertyPath: m_Color.b
@@ -668,6 +676,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: e4febed69f1ae5f48a03198044621199, type: 3}
+    - target: {fileID: 857670845865953397, guid: f522eed49a8314043aa4983c96563c93, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1901546856774161198, guid: f522eed49a8314043aa4983c96563c93, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 55
@@ -691,6 +703,10 @@ PrefabInstance:
     - target: {fileID: 4737563278873482280, guid: f522eed49a8314043aa4983c96563c93, type: 3}
       propertyPath: m_Name
       value: DestinationUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4737563278873482280, guid: f522eed49a8314043aa4983c96563c93, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6686146374817750944, guid: f522eed49a8314043aa4983c96563c93, type: 3}
       propertyPath: m_Color.b
@@ -878,15 +894,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1316734087024467276, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1316734087024467276, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5371202784461613462, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
       propertyPath: m_Name
       value: SpeedSliderUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5371202784461613462, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7897516162856114730, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
       propertyPath: m_Pivot.x
@@ -986,17 +1006,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7897516162856114730, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
   m_PrefabInstance: {fileID: 2467733176202548336}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9002125213339265176 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6832768846287568104, guid: 165dde28297e1234bb07cc8960015d76, type: 3}
-  m_PrefabInstance: {fileID: 2467733176202548336}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8c5a8b570d1ea0469c68a8f6c074eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2602629412220096979
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1008,6 +1017,10 @@ PrefabInstance:
     - target: {fileID: 1969742219577293495, guid: 8d86032043e55a049b8b5a4546abfaf0, type: 3}
       propertyPath: m_Name
       value: GasSliderUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969742219577293495, guid: 8d86032043e55a049b8b5a4546abfaf0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2437662043561062096, guid: 8d86032043e55a049b8b5a4546abfaf0, type: 3}
       propertyPath: m_Pivot.x
@@ -1091,11 +1104,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7197925497208164633, guid: 8d86032043e55a049b8b5a4546abfaf0, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7197925497208164633, guid: 8d86032043e55a049b8b5a4546abfaf0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.345
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1118,17 +1131,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2058384049257439461 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -5147969747495866058, guid: 8d86032043e55a049b8b5a4546abfaf0, type: 3}
-  m_PrefabInstance: {fileID: 2602629412220096979}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8c5a8b570d1ea0469c68a8f6c074eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3912880722316078010
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1144,6 +1146,10 @@ PrefabInstance:
     - target: {fileID: 1969742219577293495, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
       propertyPath: m_Name
       value: HpSliderUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969742219577293495, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2437662043561062096, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
       propertyPath: m_Pivot.x
@@ -1235,28 +1241,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7197925497208164633, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7197925497208164633, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
---- !u!114 &1063945189087943308 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -5147969747495866058, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
-  m_PrefabInstance: {fileID: 3912880722316078010}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8c5a8b570d1ea0469c68a8f6c074eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1700400227815998826 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2437662043561062096, guid: 650e64a9010e470479c6a52359ac508b, type: 3}
@@ -1284,6 +1279,10 @@ PrefabInstance:
     - target: {fileID: 1969742219577293495, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
       propertyPath: m_Name
       value: ToiletSliderUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969742219577293495, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2437662043561062096, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
       propertyPath: m_Pivot.x
@@ -1367,28 +1366,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7197925497208164633, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7197925497208164633, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.345
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
---- !u!114 &7233127800376875491 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -5147969747495866058, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
-  m_PrefabInstance: {fileID: 6696720306322172117}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8c5a8b570d1ea0469c68a8f6c074eec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8400992298771108592 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2916597937401313829, guid: 33802074e42b20f409f9d738dc3b1914, type: 3}
