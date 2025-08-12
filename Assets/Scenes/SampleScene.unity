@@ -614,6 +614,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 09bd4bf3eb0ab6642b76e1c4a0d3b4f5, type: 2}
   - {fileID: 11400000, guid: 09c5d4378b4bdff4b84eb4f0b8b5dc94, type: 2}
   _enemyPrefab: {fileID: 2899611395792235350, guid: 918123295119ecb4a829142dbb500f76, type: 3}
+  _spawnPosition: {x: -100, y: 1, z: 0}
+  _checkBoxSize: {x: 3, y: 3, z: 4}
   _spawnRate: 1
   _defaultSpawnCount: 30
 --- !u!4 &766570785
