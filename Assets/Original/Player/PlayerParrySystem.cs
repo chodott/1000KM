@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -26,9 +27,9 @@ public class PlayerParrySystem : MonoBehaviour
     {
         if (other.TryGetComponent<IParryable>(out var parryable))
         {
-            Vector3 parryDirection = (other.transform.position - transform.position).normalized;
-            parryable.OnParried(parryDirection, _parryPower);
+            Vector3 contactPoint = other.ClosestPoint(transform.position);
 
+            parryable.OnParried(contactPoint, _parryPower);
         }
     }
     #endregion

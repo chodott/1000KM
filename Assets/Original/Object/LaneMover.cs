@@ -42,22 +42,23 @@ public class LaneMover : MonoBehaviour
     {
         _currentLaneIndex = laneIndex;
     }
-    public void MoveLane(float isRight)
+    public bool MoveLane(float isRight)
     {
         if(_isMoving)
         {
-            return;
+            return false;
         }
 
         int direction = Math.Sign(isRight);
         bool canMove = LaneSystem.Instance.GetCanMove(direction, _currentLaneIndex);
         if (canMove == false)
         {
-            return;
+            return false;
         }
         _nextPositionZ = transform.position.z + (_laneWidth * isRight);
         _currentLaneIndex += direction;
         _isMoving = true;
+        return true;
     }
 
     public void CheckAndMoveLane(Vector3 position, Vector3 colliderSize, float isRight)

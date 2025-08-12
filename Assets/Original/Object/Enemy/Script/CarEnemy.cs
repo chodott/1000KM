@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 {
@@ -164,6 +165,14 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _rigidbody.AddForce(explosionDirection * _parryPower, ForceMode.Impulse);
         _rigidbody.AddTorque(explosionDirection *_parryPower, ForceMode.Impulse);
         _enemyState = EnemyState.Destroyed;
+
+        StartCoroutine(DestroyAfterDelay(1f));
+    }
+
+    IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Deactivate();
     }
 
     public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, int laneIndex)
@@ -189,23 +198,41 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _laneMover.Init(laneIndex);
 
     }
-    public void OnParried(Vector3 direction, float damage)
+    public void OnParried(Vector3 contactPoint, float damage)
     {
         if (_enemyState != EnemyState.Drive)
         {
             return;
         }
 
+        Vector3 parriedDirection = (contactPoint - transform.position).normalized;
+
+        float sign = Mathf.Sign(transform.position.z - contactPoint.z);
+        float angle = Vector3.Angle(parriedDirection, Vector3.back * sign);
+
         _healthPoint -= damage;
         if (_healthPoint <= 0f)
         {   //Destroy
-            Destroy(direction);
+            Destroy(parriedDirection);
         }
         else
         {   //Knockback
-            gameObject.tag = "Parried";
-            _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.globalVelocity * (1+_knockbackPower));
-            _enemyState = EnemyState.Knockback;
+
+            if(angle >= 80.0f)
+            {
+                gameObject.tag = "Parried";
+                _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.globalVelocity * (1 + _knockbackPower));
+                _enemyState = EnemyState.Knockback;
+            }
+            else
+            {
+                gameObject.tag = "Parried";
+                bool moveResult = _laneMover.MoveLane(sign);
+                if(moveResult == false)
+                {
+                    Destroy(parriedDirection);
+                }
+            }
 
         }
     }
