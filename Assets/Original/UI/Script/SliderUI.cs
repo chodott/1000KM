@@ -10,7 +10,7 @@ public class SliderUI : MonoBehaviour
 
     private float _curValue = 50.0f;
 
-    private void Start()
+    private void OnEnable()
     {
         slider.maxValue = _maxValue;
     }
