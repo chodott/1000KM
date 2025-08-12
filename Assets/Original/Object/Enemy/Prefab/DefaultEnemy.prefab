@@ -15,8 +15,7 @@ GameObject:
   - component: {fileID: 7093453293601517522}
   - component: {fileID: 3205625711696671415}
   - component: {fileID: -8618501305589520936}
-  - component: {fileID: 5116840457679394179}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DefaultEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +112,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0

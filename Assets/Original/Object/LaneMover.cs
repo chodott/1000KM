@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class LaneMover : MonoBehaviour
 {
-    static private Vector3 _rightVector = new Vector3(0, 0, 1);
-
     [SerializeField]
     private Animation _animation; 
     [SerializeField]
@@ -23,12 +21,14 @@ public class LaneMover : MonoBehaviour
 
     private Rigidbody _rigidbody;
     private float _nextPositionZ;
+    private float _laneWidth;
     private int _currentLaneIndex = 0;
     private bool _isMoving = false;
 
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _laneWidth = LaneSystem.Instance.LaneWidth;
     }
 
     private void FixedUpdate()
@@ -64,7 +64,7 @@ public class LaneMover : MonoBehaviour
         {
             return;
         }
-        _nextPositionZ = transform.position.z + (LaneSystem.Instance.LaneWidth * isRight);
+        _nextPositionZ = transform.position.z + (_laneWidth * isRight);
         _currentLaneIndex += direction;
         _isMoving = true;
 
@@ -77,5 +77,16 @@ public class LaneMover : MonoBehaviour
         _moveLaneSpeed = _defaultMoveLaneSpeed + bonus;
         Debug.Log($"wheel {_moveLaneSpeed}");
 
+    }
+
+    public void CheckAndMoveLane(Vector3 position, Vector3 colliderSize, float isRight)
+    {
+        Vector3 checkPosition = new Vector3(position.x, position.y, position.z + _laneWidth * isRight);
+       if( Physics.CheckBox(checkPosition, colliderSize, Quaternion.Euler(0,-90f,0), LayerMask.GetMask("Enemy")))
+        {
+            return;
+        }
+
+        MoveLane(isRight);
     }
 }
