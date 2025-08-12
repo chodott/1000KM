@@ -6,7 +6,7 @@ public class ParryCollider : MonoBehaviour
     public event Action<Collider> InParryRangeEvent;
 
     [SerializeField]
-    private BoxCollider _collider;
+    private CapsuleCollider _collider;
 
     private void Start()
     {
