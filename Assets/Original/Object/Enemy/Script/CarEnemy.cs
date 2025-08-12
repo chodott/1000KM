@@ -31,6 +31,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     private float _friction = 1f;
     private float _knockbackPower = 0.5f;
+    private float _parryPower = 50f;
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
@@ -157,7 +158,11 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private void Destroy(Vector3 direction)
     {
         _collider.enabled = false;
-        _rigidbody.AddTorque(direction * 50f, ForceMode.Impulse);
+        
+        Vector3 explosionDirection = new Vector3(-direction.x, 0.3f, direction.z);
+        explosionDirection.Normalize();
+        _rigidbody.AddForce(explosionDirection * _parryPower, ForceMode.Impulse);
+        _rigidbody.AddTorque(explosionDirection *_parryPower, ForceMode.Impulse);
         _enemyState = EnemyState.Destroyed;
     }
 
@@ -174,6 +179,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         transform.localScale = statData.Scale;
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
+        _collider.enabled = true;
 
         transform.position = position;
         transform.rotation = statData.SpawnRotation;
