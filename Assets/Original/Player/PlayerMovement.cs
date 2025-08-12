@@ -6,10 +6,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float _defaultAcceleration = 5.0f;
     [SerializeField]
-    private float _defaultDrag = 1f;
+    private float _defaultDrag = 1.5f;
 
     private float _acceleration;
-    private float _speed;
+    private float _velocity;
     private float _keyValue;
     private float _drag;
 
@@ -24,14 +24,24 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_keyValue > 0f)
         {
-            _speed += _acceleration * Time.deltaTime;
+            _velocity += _acceleration * Time.deltaTime;
         }
 
         else if (_keyValue < 0f)
         {
-            _speed -= _acceleration * Time.deltaTime;
+            _velocity -= _acceleration * Time.deltaTime;
         }
-        OnSpeedChanged?.Invoke(_speed);
+
+        else
+        {
+            _velocity -= _drag * Time.deltaTime;
+        }
+
+        if(_velocity <=0f)
+        {
+            _velocity = 0f;
+        }
+            OnSpeedChanged?.Invoke(_velocity);
     }
 
     public void UpdateStatus(PartStatus status)
