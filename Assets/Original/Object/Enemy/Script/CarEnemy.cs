@@ -150,7 +150,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
                 break;
         }
 
-        _laneMover.MoveLane(direction);
+        _laneMover.CheckAndMoveLane(transform.position, _statData.ColliderSize, direction);
 
     }
 
