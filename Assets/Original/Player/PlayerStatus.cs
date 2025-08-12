@@ -36,7 +36,12 @@ public class PlayerStatus : MonoBehaviour
         _curGasPoint = _defaultMaxGasPoint;
         _curHealthPoint = _defaultMaxHealthPoint;
         _curToiletPoint = 0.0f;
+        OnHPChanged?.Invoke(_curHealthPoint);
+    }
 
+    private void OnEnable()
+    {
+        _hitCollider.OnHitEvent += OnDamaged;
     }
 
     private void Update()
@@ -45,14 +50,16 @@ public class PlayerStatus : MonoBehaviour
 
         if(_curToiletPoint < _defaultMaxToiletPoint)
         {
-            _curToiletPoint += _toiletGainPerSec;
+            _curToiletPoint += (_toiletGainPerSec * Time.deltaTime);
+            OnToiletPointChanged?.Invoke(_curToiletPoint);
         }
     }
 
     public void UpdateStatus(PartStatus status)
     {
-        _maxHealthPoint = status.MaxHpBonus + _defaultMaxHealthPoint;
         _gasEfficiency = _defaultGasEfficiency - status.GasEfficiencyBonus;
+        _maxHealthPoint = status.MaxHpBonus + _defaultMaxHealthPoint;
+        _curHealthPoint = _maxHealthPoint;
         OnHPChanged?.Invoke(_curHealthPoint);
 
     }

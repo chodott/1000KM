@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     Player _player;
     #endregion
 
-    private void Start()
+    private void OnEnable()
     {
         PlayerStatus playerStatus = _player.GetComponent<PlayerStatus>();
         PlayerMovement playerMovement = _player.GetComponent<PlayerMovement>();
