@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerParrySystem : MonoBehaviour
 {
+    #region SerializeField
+    [SerializeField]
+    private GameObject _parryEffectPrefab;
     [SerializeField]
     private ParryCollider _parryCollider;
     [SerializeField]
     private float _parryCooldownTime = 0.3f;
     [SerializeField]
     private int _spinCount = 3;
+    #endregion
 
     private Quaternion _baseRotation;
     private float _parryPower = 1f;
@@ -21,17 +25,16 @@ public class PlayerParrySystem : MonoBehaviour
         _parryCollider.InParryRangeEvent += ParrySuccess;
     }
 
-    #region Collider Callbacks
     private void ParrySuccess(Collider other)
     {
         if (other.TryGetComponent<IParryable>(out var parryable))
         {
+            Instantiate(_parryEffectPrefab, other.ClosestPoint(transform.position), Quaternion.identity);
             Vector3 parryDirection = (other.transform.position - transform.position).normalized;
             parryable.OnParried(parryDirection, _parryPower);
 
         }
     }
-    #endregion
 
     private IEnumerator Spin()
     {

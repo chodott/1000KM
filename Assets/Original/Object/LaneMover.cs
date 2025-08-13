@@ -29,6 +29,7 @@ public class LaneMover : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         _laneWidth = LaneSystem.Instance.LaneWidth;
+        _moveLaneSpeed = _defaultMoveLaneSpeed;
     }
 
     private void FixedUpdate()

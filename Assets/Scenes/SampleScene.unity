@@ -1635,6 +1635,10 @@ PrefabInstance:
       propertyPath: _moveLaneSpeed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3718525976865496762, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: _defaultMoveLaneSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4288067339566298541, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.47

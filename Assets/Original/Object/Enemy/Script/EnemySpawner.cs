@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
     private float _spawnTimer;
     private int _laneCount;
     private int _laneRange;
-    private int _spawnLaneCount = 3;
+    private int _spawnLaneCount = 1;
 
 
     private void Start()

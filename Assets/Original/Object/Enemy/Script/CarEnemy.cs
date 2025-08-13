@@ -16,7 +16,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     [SerializeField]
     private BoxCollider _collider;
     [SerializeField]
-
+    private GameObject _destroyEffectPrefab;
 
     private EnemyState _enemyState;
     private EnemyColor _color;
@@ -164,6 +164,9 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _rigidbody.AddForce(explosionDirection * _parryPower, ForceMode.Impulse);
         _rigidbody.AddTorque(explosionDirection *_parryPower, ForceMode.Impulse);
         _enemyState = EnemyState.Destroyed;
+
+
+        Instantiate(_destroyEffectPrefab, transform.position, Quaternion.identity);
     }
 
     public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, int laneIndex)

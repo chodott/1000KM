@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7093453293601517522}
   - component: {fileID: 3205625711696671415}
   - component: {fileID: -8618501305589520936}
+  - component: {fileID: 5116840457679394179}
   m_Layer: 3
   m_Name: DefaultEnemy
   m_TagString: Untagged
@@ -155,7 +156,7 @@ MonoBehaviour:
   _meshFilter: {fileID: 407504389598896300}
   _meshRenderer: {fileID: 1789332861490712944}
   _collider: {fileID: 7093453293601517522}
-  _enemyState: 0
+  _destroyEffectPrefab: {fileID: 980769002882745835, guid: ab328390e3695d04681479b1e8d89955, type: 3}
 --- !u!114 &-8618501305589520936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +172,7 @@ MonoBehaviour:
   _animation: {fileID: 5116840457679394179}
   _moveLeftAnimation: {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
   _moveRightAnimation: {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
-  _moveLaneSpeed: 10
+  _defaultMoveLaneSpeed: 3
   _stopDistance: 0.05
 --- !u!111 &5116840457679394179
 Animation:
