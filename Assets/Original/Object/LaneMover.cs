@@ -52,18 +52,18 @@ public class LaneMover : MonoBehaviour
     {
         _currentLaneIndex = laneIndex;
     }
-    public void MoveLane(float isRight)
+    public bool MoveLane(float isRight)
     {
         if(_isMoving)
         {
-            return;
+            return false;
         }
 
         int direction = Math.Sign(isRight);
         bool canMove = LaneSystem.Instance.GetCanMove(direction, _currentLaneIndex);
         if (canMove == false)
         {
-            return;
+            return false;
         }
         _nextPositionZ = transform.position.z + (_laneWidth * isRight);
         _currentLaneIndex += direction;
@@ -71,13 +71,13 @@ public class LaneMover : MonoBehaviour
 
         AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
         _animation.Play(playClip.name);
+        return true;
     }
 
     public void UpdateMoveLaneSpeed(float bonus)
     {
         _moveLaneSpeed = _defaultMoveLaneSpeed + bonus;
         Debug.Log($"wheel {_moveLaneSpeed}");
-
     }
 
     public void CheckAndMoveLane(Vector3 position, Vector3 colliderSize, float isRight)
