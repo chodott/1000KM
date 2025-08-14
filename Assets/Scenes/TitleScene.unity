@@ -1502,6 +1502,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 363314387}
   m_Mesh: {fileID: 4300000, guid: 9054c70a5c9ed454f8ef48a11963db28, type: 3}
+--- !u!1 &380410881 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7262393909686639809, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
+  m_PrefabInstance: {fileID: 1349284820}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &411309829
 GameObject:
   m_ObjectHideFlags: 0
@@ -2954,6 +2959,7 @@ GameObject:
   - component: {fileID: 724018622}
   - component: {fileID: 724018624}
   - component: {fileID: 724018623}
+  - component: {fileID: 724018625}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -3018,6 +3024,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 724018621}
   m_CullTransparentMesh: 1
+--- !u!114 &724018625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724018621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f341c348a1494b4f8a9436f303bd3f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeDuration: 1
 --- !u!1 &730871269
 GameObject:
   m_ObjectHideFlags: 0
@@ -5815,6 +5834,8 @@ MonoBehaviour:
   optionButton: {fileID: 619314296}
   exitButton: {fileID: 1626193873}
   optionPanel: {fileID: 109223130}
+  timeline: {fileID: 1602210984}
+  obj: {fileID: 380410881}
 --- !u!114 &1057386566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6728,6 +6749,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639808, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262393909686639808, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 1
       objectReference: {fileID: 0}
@@ -6773,27 +6798,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639870, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.730018
+      value: -4.7300186
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639870, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.502838
+      value: 8.50284
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639870, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9590872
+      value: 0.95908713
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639870, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0000002067536
+      value: -0.00000021047887
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639870, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.28311098
+      value: 0.283111
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639870, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000024586916
+      value: -0.00000023841855
       objectReference: {fileID: 0}
     - target: {fileID: 7262393909686639870, guid: cd6f9b38431dd0d47aa82adb83cfcb92, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7820,6 +7845,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1602210983}
   - component: {fileID: 1602210984}
+  - component: {fileID: 1602210985}
   m_Layer: 0
   m_Name: CutsceneController
   m_TagString: Untagged
@@ -7852,17 +7878,30 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 499f45f9bf9a81846962b1e519cae37f, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
   - key: {fileID: -2950702663029304473, guid: 499f45f9bf9a81846962b1e519cae37f, type: 2}
     value: {fileID: 724018621}
-  - key: {fileID: 3339145727238782543, guid: 499f45f9bf9a81846962b1e519cae37f, type: 2}
+  - key: {fileID: 5880163947930586293, guid: 499f45f9bf9a81846962b1e519cae37f, type: 2}
     value: {fileID: 1517812017}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &1602210985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602210982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f39b28c5d09145469b55c5a014e13e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeline: {fileID: 1602210984}
 --- !u!1 &1617958530
 GameObject:
   m_ObjectHideFlags: 0
