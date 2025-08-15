@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class TitleButtons : MonoBehaviour
 {
@@ -15,6 +15,9 @@ public class TitleButtons : MonoBehaviour
     [SerializeField]
     private GameObject optionPanel;
 
+    public PlayableDirector timeline;
+    public GameObject obj;
+
     private void Start()
     {
         playButton.onClick.AddListener(Play);
@@ -24,7 +27,12 @@ public class TitleButtons : MonoBehaviour
 
     void Play()
     {
-        SceneManager.LoadScene(1);
+        obj.SetActive(false);
+        if (timeline != null)
+        {
+            timeline.time = 0;
+            timeline.Play();
+        }
     }
 
     void Option()
