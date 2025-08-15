@@ -22,6 +22,7 @@ public static class ListRandom
 
 public class EnemySpawner : MonoBehaviour
 {
+    #region SerializeField
     [SerializeField]
     private List<CarEnemy.EnemyColor> _enemyColors = new List<CarEnemy.EnemyColor>();
     [SerializeField]
@@ -37,13 +38,14 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private int _defaultSpawnCount = 30;
 
+    #endregion
     private ObjectPool _objectPool = new ObjectPool();
     private float _spawnTimer;
     private int _laneCount;
     private int _laneRange;
     private int _spawnLaneCount = 1;
 
-
+    #region Monobehaviour Callbacks
     private void Start()
     {
         _laneCount = LaneSystem.Instance.LaneCount;
@@ -64,6 +66,7 @@ public class EnemySpawner : MonoBehaviour
 
         }
     }
+    #endregion
 
     List<T> PickRandom<T>(List<T> list, int n)
     {

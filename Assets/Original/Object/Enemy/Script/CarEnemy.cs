@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 {
 
+    #region SerializeField
     [SerializeField]
     private Rigidbody _rigidbody;
     [SerializeField]
@@ -18,6 +19,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private BoxCollider _collider;
     [SerializeField]
     private GameObject _destroyEffectPrefab;
+    #endregion 
 
     private EnemyState _enemyState;
     private EnemyColor _color;
@@ -54,6 +56,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         NotUse
     }
 
+    #region Monobehaviour Callbacks
     void Update()
     {
         if(_enemyState == EnemyState.NotUse)
@@ -90,13 +93,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
                 MoveForward(0f);
                 break;
         }
-
-        
     }
+    #endregion  
 
     private void MoveForward(float velocity)
     {
-        float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity;
+        float curVelocity = velocity - GlobalMovementController.Instance.GlobalVelocity;
         Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
         _rigidbody.MovePosition(targetPosition);
 
@@ -135,7 +137,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
         }
 
-        if (_enemyState == EnemyState.Knockback && _curVelocity <= GlobalMovementController.Instance.globalVelocity)
+        if (_enemyState == EnemyState.Knockback && _curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
         {
             _enemyState = EnemyState.Drive;
             gameObject.tag = "Default";
@@ -237,7 +239,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             if(angle >= 80.0f)
             {
                 gameObject.tag = "Parried";
-                _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.globalVelocity * (1 + _knockbackPower));
+                _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.GlobalVelocity * (1 + _knockbackPower));
                 _enemyState = EnemyState.Knockback;
             }
             else

@@ -23,7 +23,7 @@ public class RoadSpawner : MonoBehaviour
 
     private void Update()
     {
-        movingSpeed = GlobalMovementController.Instance.globalVelocity;
+        movingSpeed = GlobalMovementController.Instance.GlobalVelocity;
     }
     void Awake()
     {

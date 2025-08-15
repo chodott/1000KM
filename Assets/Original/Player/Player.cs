@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     private InputAction _moveRightAction;
     private InputAction _parryAction;
 
+    #region Monobehavour Callbacks
     private void OnEnable()
     {
         _thorottleAction = _playerInput.actions["Accelerate"];
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
 
         _playerParrySystem.Init(_laneMover.MoveLaneSpeed);
     }
+    #endregion
 
     #region PlayerInput Callbacks
     private void OnParry(InputAction.CallbackContext context)
