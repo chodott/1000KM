@@ -11,6 +11,10 @@ public class LaneMover : MonoBehaviour
     private AnimationClip _moveLeftAnimation;
     [SerializeField]
     private AnimationClip _moveRightAnimation;
+    [SerializeField]
+    private AnimationClip _knockbackLeftAnimation;
+    [SerializeField]
+    private AnimationClip _knockbackRightAnimation;
 
     [SerializeField]
     private float _defaultMoveLaneSpeed;
@@ -53,6 +57,13 @@ public class LaneMover : MonoBehaviour
             }
         }
     }
+
+    private void SetTargetLanePosition(int isRight)
+    {
+        _nextPositionZ = transform.position.z + (_laneWidth * isRight);
+        _currentLaneIndex += isRight;
+        _isMoving = true;
+    }
     public void Init(int laneIndex)
     {
         _currentLaneIndex = laneIndex;
@@ -70,11 +81,25 @@ public class LaneMover : MonoBehaviour
         {
             return false;
         }
-        _nextPositionZ = transform.position.z + (_laneWidth * isRight);
-        _currentLaneIndex += direction;
-        _isMoving = true;
+
+        SetTargetLanePosition(direction);
 
         AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
+        _animation.Play(playClip.name);
+        return true;
+    }
+
+    public bool KnockbackLane(float isRight)
+    {
+        int direction = Math.Sign(isRight);
+        bool canMove = LaneSystem.Instance.GetCanMove(direction, _currentLaneIndex);
+        if(canMove == false)
+        {
+            return false;
+        }
+
+        SetTargetLanePosition(direction);
+        AnimationClip playClip = direction > 0 ? _knockbackRightAnimation : _knockbackLeftAnimation;
         _animation.Play(playClip.name);
         return true;
     }

@@ -244,7 +244,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             {
                 gameObject.tag = "Parried";
                 _laneMover.UpdateMoveLaneSpeed(moveLaneSpeed);
-                bool moveResult = _laneMover.MoveLane(sign);
+                bool moveResult = _laneMover.KnockbackLane(sign);
                 if(moveResult == false)
                 {
                     Destroy(parriedDirection);
