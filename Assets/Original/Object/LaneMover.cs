@@ -17,13 +17,16 @@ public class LaneMover : MonoBehaviour
     [SerializeField]
     private float _stopDistance = 0.05f;
 
-    private float _moveLaneSpeed;
 
+    public event Action OnFinishMove;
     private Rigidbody _rigidbody;
+    private float _moveLaneSpeed;
     private float _nextPositionZ;
     private float _laneWidth;
     private int _currentLaneIndex = 0;
     private bool _isMoving = false;
+
+    public float MoveLaneSpeed { get { return _moveLaneSpeed; } }
 
     private void Start()
     {
@@ -45,6 +48,8 @@ public class LaneMover : MonoBehaviour
                 Vector3 finalPosition = new Vector3(_rigidbody.position.x, _rigidbody.position.y, _nextPositionZ);
                 _rigidbody.MovePosition(finalPosition);
                 _isMoving = false;
+
+                OnFinishMove?.Invoke();
             }
         }
     }
@@ -74,10 +79,11 @@ public class LaneMover : MonoBehaviour
         return true;
     }
 
+
+
     public void UpdateMoveLaneSpeed(float bonus)
     {
         _moveLaneSpeed = _defaultMoveLaneSpeed + bonus;
-        Debug.Log($"wheel {_moveLaneSpeed}");
     }
 
     public void CheckAndMoveLane(Vector3 position, Vector3 colliderSize, float isRight)

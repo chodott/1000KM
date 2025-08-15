@@ -49,6 +49,8 @@ public class Player : MonoBehaviour
         _playerMovement.UpdateStatus(status);
         _playerStatus.UpdateStatus(status);
         _laneMover.UpdateMoveLaneSpeed(status.LaneMoveSpeedBonus);
+
+        _playerParrySystem.Init(_laneMover.MoveLaneSpeed);
     }
 
     #region PlayerInput Callbacks

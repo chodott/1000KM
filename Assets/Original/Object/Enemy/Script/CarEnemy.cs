@@ -67,6 +67,11 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         }
     }
 
+    void Start()
+    {
+        _laneMover.OnFinishMove += EndKnockback;
+    }
+
     void FixedUpdate()
     {
 
@@ -98,6 +103,13 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         RecoverVelocity();
     }
 
+    private void EndKnockback()
+    {
+        _laneMover.UpdateMoveLaneSpeed(0f);
+        _enemyState = EnemyState.Drive;
+        gameObject.tag = "Default";
+    }
+
     private void CheckPattern()
     {
         if (_patternCooldownTimer > _patternCooldownTime)
@@ -123,12 +135,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
         }
 
-        if (_curVelocity <= GlobalMovementController.Instance.globalVelocity)
+        if (_enemyState == EnemyState.Knockback && _curVelocity <= GlobalMovementController.Instance.globalVelocity)
         {
             _enemyState = EnemyState.Drive;
+            gameObject.tag = "Default";
+
         }
-
-
     }
 
     private void DoPattern()
@@ -184,22 +196,25 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _curVelocity = statData.Velocity;
         _healthPoint = statData.HealthPoint;
         _color = color;
+
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
-        transform.localScale = statData.Scale;
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
         _collider.enabled = true;
 
         transform.position = position;
         transform.rotation = statData.SpawnRotation;
+        transform.localScale = statData.Scale;
+
         _rigidbody.WakeUp();
 
         _enemyState = EnemyState.Drive;
+        gameObject.tag = "Default";
         _laneMover.Init(laneIndex);
 
     }
-    public void OnParried(Vector3 contactPoint, float damage)
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
         if (_enemyState != EnemyState.Drive)
         {
@@ -228,6 +243,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             else
             {
                 gameObject.tag = "Parried";
+                _laneMover.UpdateMoveLaneSpeed(moveLaneSpeed);
                 bool moveResult = _laneMover.MoveLane(sign);
                 if(moveResult == false)
                 {

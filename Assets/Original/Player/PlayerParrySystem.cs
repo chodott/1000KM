@@ -18,6 +18,7 @@ public class PlayerParrySystem : MonoBehaviour
 
     private Quaternion _baseRotation;
     private float _parryPower = 1f;
+    private float _moveLaneSpeed;
     private bool _isParry = false;
 
     private void Start()
@@ -34,7 +35,7 @@ public class PlayerParrySystem : MonoBehaviour
             Instantiate(_parryEffectPrefab, contactPoint, Quaternion.identity);
             Vector3 parryDirection = (other.transform.position - transform.position).normalized;
 
-            parryable.OnParried(contactPoint, _parryPower);
+            parryable.OnParried(contactPoint, _parryPower, _moveLaneSpeed);
         }
     }
 
@@ -58,6 +59,11 @@ public class PlayerParrySystem : MonoBehaviour
         transform.rotation = _baseRotation;
         _parryCollider.SetActive(false);
 
+    }
+
+    public void Init(float moveLaneSpeed)
+    {
+        _moveLaneSpeed = moveLaneSpeed;
     }
 
     public void Parry()
