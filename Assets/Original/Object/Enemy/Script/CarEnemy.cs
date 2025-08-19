@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -36,7 +37,8 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
-    public event System.Action<GameObject, GameObject> OnReturned;
+    public static event Action OnRewardDropped;
+    public event Action<GameObject, GameObject> OnReturned;
 
     public enum EnemyColor
     {
@@ -148,7 +150,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
                 direction = 1;
                 break;
             case EnemyColor.Yellow:
-                direction = Random.Range(0, 3) - 1;
+                direction = UnityEngine.Random.Range(0, 3) - 1;
                 break;
         }
 
@@ -214,6 +216,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _healthPoint -= damage;
         if (_healthPoint <= 0f)
         {   //Destroy
+            OnRewardDropped?.Invoke();
             Destroy(parriedDirection);
         }
         else

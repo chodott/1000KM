@@ -6,6 +6,7 @@ public class PlayerStatus : MonoBehaviour
     public event Action<float> OnHPChanged;
     public event Action<float> OnGasPointChanged;
     public event Action<float> OnToiletPointChanged;
+    public event Action<int> OnMoneyChanged;
 
 
     [SerializeField]
@@ -30,6 +31,7 @@ public class PlayerStatus : MonoBehaviour
     private float _curGasPoint;
     private float _curHealthPoint;
     private float _curToiletPoint;
+    private int _curMoney = 0;
 
     private void Start()
     {
@@ -42,6 +44,7 @@ public class PlayerStatus : MonoBehaviour
     private void OnEnable()
     {
         _hitCollider.OnHitEvent += OnDamaged;
+        CarEnemy.OnRewardDropped += EarnMoney;
     }
 
     private void Update()
@@ -68,6 +71,13 @@ public class PlayerStatus : MonoBehaviour
     {
         _curGasPoint -= amount;
         OnGasPointChanged?.Invoke(_curGasPoint);
+    }
+
+    private void EarnMoney()
+    {
+        _curMoney++;
+        Debug.Log(_curMoney);
+        OnMoneyChanged?.Invoke(_curMoney);
     }
 
     private void OnDamaged(Collider other)
