@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 {
 
+    #region SerializeField
     [SerializeField]
     private Rigidbody _rigidbody;
     [SerializeField]
@@ -19,6 +20,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private BoxCollider _collider;
     [SerializeField]
     private GameObject _destroyEffectPrefab;
+    #endregion 
 
     private EnemyState _enemyState;
     private EnemyColor _color;
@@ -56,6 +58,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         NotUse
     }
 
+    #region Monobehaviour Callbacks
     void Update()
     {
         if(_enemyState == EnemyState.NotUse)
@@ -67,6 +70,11 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         {
             Deactivate();
         }
+    }
+
+    void Start()
+    {
+        _laneMover.OnFinishMove += EndKnockback;
     }
 
     void FixedUpdate()
@@ -87,17 +95,23 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
                 MoveForward(0f);
                 break;
         }
-
-        
     }
+    #endregion  
 
     private void MoveForward(float velocity)
     {
-        float curVelocity = velocity - GlobalMovementController.Instance.globalVelocity;
+        float curVelocity = velocity - GlobalMovementController.Instance.GlobalVelocity;
         Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
         _rigidbody.MovePosition(targetPosition);
 
         RecoverVelocity();
+    }
+
+    private void EndKnockback()
+    {
+        _laneMover.UpdateMoveLaneSpeed(0f);
+        _enemyState = EnemyState.Drive;
+        gameObject.tag = "Default";
     }
 
     private void CheckPattern()
@@ -125,12 +139,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
         }
 
-        if (_curVelocity <= GlobalMovementController.Instance.globalVelocity)
+        if (_enemyState == EnemyState.Knockback && _curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
         {
             _enemyState = EnemyState.Drive;
+            gameObject.tag = "Default";
+
         }
-
-
     }
 
     private void DoPattern()
@@ -178,30 +192,33 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         Deactivate();
     }
 
-    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, int laneIndex)
+    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, float initVelocity, int laneIndex)
     {
         gameObject.SetActive(true);
 
+        _curVelocity = initVelocity;
         _statData = statData;
-        _curVelocity = statData.Velocity;
         _healthPoint = statData.HealthPoint;
         _color = color;
+
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
-        transform.localScale = statData.Scale;
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
         _collider.enabled = true;
 
         transform.position = position;
         transform.rotation = statData.SpawnRotation;
+        transform.localScale = statData.Scale;
+
         _rigidbody.WakeUp();
 
         _enemyState = EnemyState.Drive;
+        gameObject.tag = "Default";
         _laneMover.Init(laneIndex);
 
     }
-    public void OnParried(Vector3 contactPoint, float damage)
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
         if (_enemyState != EnemyState.Drive)
         {
@@ -225,13 +242,14 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
             if(angle >= 80.0f)
             {
                 gameObject.tag = "Parried";
-                _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.globalVelocity * (1 + _knockbackPower));
+                _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.GlobalVelocity * (1 + _knockbackPower));
                 _enemyState = EnemyState.Knockback;
             }
             else
             {
                 gameObject.tag = "Parried";
-                bool moveResult = _laneMover.MoveLane(sign);
+                _laneMover.UpdateMoveLaneSpeed(moveLaneSpeed);
+                bool moveResult = _laneMover.KnockbackLane(sign);
                 if(moveResult == false)
                 {
                     Destroy(parriedDirection);

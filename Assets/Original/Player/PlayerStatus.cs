@@ -8,7 +8,7 @@ public class PlayerStatus : MonoBehaviour
     public event Action<float> OnToiletPointChanged;
     public event Action<int> OnMoneyChanged;
 
-
+    #region SerializeField
     [SerializeField]
     private HitCollider _hitCollider;
     [SerializeField]
@@ -23,7 +23,7 @@ public class PlayerStatus : MonoBehaviour
     private float _toiletGainPerSec;
     [SerializeField]
     private float _damage = 10.0f;
-
+    #endregion
 
     private float _gasEfficiency;
     private float _maxHealthPoint;
@@ -33,6 +33,7 @@ public class PlayerStatus : MonoBehaviour
     private float _curToiletPoint;
     private int _curMoney = 0;
 
+    #region Monobehaviour Callbacks
     private void Start()
     {
         _curGasPoint = _defaultMaxGasPoint;
@@ -57,6 +58,7 @@ public class PlayerStatus : MonoBehaviour
             OnToiletPointChanged?.Invoke(_curToiletPoint);
         }
     }
+    #endregion
 
     public void UpdateStatus(PartStatus status)
     {

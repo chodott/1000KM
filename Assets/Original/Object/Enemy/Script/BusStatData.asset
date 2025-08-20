@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: BusStatData
   m_EditorClassIdentifier: 
   _materials:
-  - {fileID: 2100000, guid: e7e3a72408d0b314987c112ae1ecaec3, type: 2}
-  - {fileID: 2100000, guid: 5d964f763f8152440a07c6923ce9f588, type: 2}
-  - {fileID: 2100000, guid: 52d9ee1afefab134c805ff33ef5bf1e3, type: 2}
-  - {fileID: 2100000, guid: 78c60bbb243e3db48ac07c9a42e39e13, type: 2}
-  _mesh: {fileID: -2432090755550338912, guid: 180864341cf3ebf45b0464b9b5f3ddd5, type: 3}
+  - {fileID: 2100000, guid: 5f49f6d21fd05f546a25da7b05e1b108, type: 2}
+  - {fileID: 2100000, guid: e2226a5f7fd4015459bd2e5edc9e1c2c, type: 2}
+  - {fileID: 2100000, guid: 2df529a40b320d44a9b333301aea7b68, type: 2}
+  - {fileID: 2100000, guid: d071beef861504c43874af3def9f70b4, type: 2}
+  _mesh: {fileID: -2432090755550338912, guid: f687de285f5fe1c418fb6e55f8f5e9b9, type: 3}
   _rotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
   _scale: {x: 6, y: 6, z: 8}
   _colliderSize: {x: 0.4, y: 0.4, z: 1}

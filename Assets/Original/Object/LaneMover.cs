@@ -11,19 +11,26 @@ public class LaneMover : MonoBehaviour
     private AnimationClip _moveLeftAnimation;
     [SerializeField]
     private AnimationClip _moveRightAnimation;
+    [SerializeField]
+    private AnimationClip _knockbackLeftAnimation;
+    [SerializeField]
+    private AnimationClip _knockbackRightAnimation;
 
     [SerializeField]
     private float _defaultMoveLaneSpeed;
     [SerializeField]
     private float _stopDistance = 0.05f;
 
-    private float _moveLaneSpeed;
 
+    public event Action OnFinishMove;
     private Rigidbody _rigidbody;
+    private float _moveLaneSpeed;
     private float _nextPositionZ;
     private float _laneWidth;
     private int _currentLaneIndex = 0;
     private bool _isMoving = false;
+
+    public float MoveLaneSpeed { get { return _moveLaneSpeed; } }
 
     private void Start()
     {
@@ -45,8 +52,17 @@ public class LaneMover : MonoBehaviour
                 Vector3 finalPosition = new Vector3(_rigidbody.position.x, _rigidbody.position.y, _nextPositionZ);
                 _rigidbody.MovePosition(finalPosition);
                 _isMoving = false;
+
+                OnFinishMove?.Invoke();
             }
         }
+    }
+
+    private void SetTargetLanePosition(int isRight)
+    {
+        _nextPositionZ = transform.position.z + (_laneWidth * isRight);
+        _currentLaneIndex += isRight;
+        _isMoving = true;
     }
     public void Init(int laneIndex)
     {
@@ -65,19 +81,34 @@ public class LaneMover : MonoBehaviour
         {
             return false;
         }
-        _nextPositionZ = transform.position.z + (_laneWidth * isRight);
-        _currentLaneIndex += direction;
-        _isMoving = true;
+
+        SetTargetLanePosition(direction);
 
         AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
         _animation.Play(playClip.name);
         return true;
     }
 
+    public bool KnockbackLane(float isRight)
+    {
+        int direction = Math.Sign(isRight);
+        bool canMove = LaneSystem.Instance.GetCanMove(direction, _currentLaneIndex);
+        if(canMove == false)
+        {
+            return false;
+        }
+
+        SetTargetLanePosition(direction);
+        AnimationClip playClip = direction > 0 ? _knockbackRightAnimation : _knockbackLeftAnimation;
+        _animation.Play(playClip.name);
+        return true;
+    }
+
+
+
     public void UpdateMoveLaneSpeed(float bonus)
     {
         _moveLaneSpeed = _defaultMoveLaneSpeed + bonus;
-        Debug.Log($"wheel {_moveLaneSpeed}");
     }
 
     public void CheckAndMoveLane(Vector3 position, Vector3 colliderSize, float isRight)

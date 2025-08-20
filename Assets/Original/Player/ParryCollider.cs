@@ -15,6 +15,11 @@ public class ParryCollider : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.CompareTag("Default") == false)
+        {
+            return;
+        }
+
         InParryRangeEvent?.Invoke(other);
     }
 

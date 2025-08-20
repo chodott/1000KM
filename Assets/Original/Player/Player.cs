@@ -24,7 +24,9 @@ public class Player : MonoBehaviour
     private InputAction _moveLeftAction;
     private InputAction _moveRightAction;
     private InputAction _parryAction;
+    private bool _canInput = true;
 
+    #region Monobehavour Callbacks
     private void OnEnable()
     {
         _thorottleAction = _playerInput.actions["Accelerate"];
@@ -49,22 +51,33 @@ public class Player : MonoBehaviour
         _playerMovement.UpdateStatus(status);
         _playerStatus.UpdateStatus(status);
         _laneMover.UpdateMoveLaneSpeed(status.LaneMoveSpeedBonus);
+
+        _playerParrySystem.Init(_laneMover.MoveLaneSpeed);
     }
+    #endregion
 
     #region PlayerInput Callbacks
     private void OnParry(InputAction.CallbackContext context)
     {
+        if (_canInput == false) return;
         _playerParrySystem.Parry();
     }
 
     private void OnMoveLeft(InputAction.CallbackContext context)
     {
+        if (_canInput == false) return;
         _laneMover.MoveLane(-1);
     }
 
     private void OnMoveRight(InputAction.CallbackContext context)
     {
+        if (_canInput == false) return;
         _laneMover.MoveLane(1);
     }
     #endregion
+
+    public void DeactivateInput()
+    {
+        _canInput = false;
+    }
 }

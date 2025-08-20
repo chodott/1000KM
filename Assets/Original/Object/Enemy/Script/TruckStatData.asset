@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1bf8d0feec80d946b35e1685a6cd099, type: 3}
+  m_Name: TruckStatData
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: a9422d12ccb92694d8f2d194cd0a34aa, type: 2}
+  - {fileID: 2100000, guid: 26277495cb195594ea7f19329f74e661, type: 2}
+  - {fileID: 2100000, guid: 76c76638ec674d241b9b73c0383d6189, type: 2}
+  - {fileID: 2100000, guid: 7659a76be34c11e43a3424f0fbda23ea, type: 2}
+  _mesh: {fileID: -2432090755550338912, guid: f498d7aaa2046c640a45daf4e6e41bac, type: 3}
+  _rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+  _scale: {x: 4, y: 4, z: 4}
+  _colliderSize: {x: 0.5, y: 0.5, z: 1}
+  _colliderCenter: {x: 0, y: 0, z: 0}
+  _name: Truck
+  _healthPoint: 2
+  _velocity: 3

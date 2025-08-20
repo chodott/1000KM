@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: CarStatData
   m_EditorClassIdentifier: 
   _materials:
-  - {fileID: 2100000, guid: e7e3a72408d0b314987c112ae1ecaec3, type: 2}
-  - {fileID: 2100000, guid: ca578ee341944924d854d0625c85d597, type: 2}
-  - {fileID: 2100000, guid: a5db46007f6880a4fbeb44fe0d024c57, type: 2}
-  - {fileID: 2100000, guid: ef93f8e00abcaad48b154bce017baf2d, type: 2}
-  _mesh: {fileID: -2432090755550338912, guid: 2067edc53099c7146aa59119a05758a6, type: 3}
+  - {fileID: 2100000, guid: 738484a926fa37b41ae65bd23aa56342, type: 2}
+  - {fileID: 2100000, guid: f1b9dd5be85fe664ba13a0dbf3c02191, type: 2}
+  - {fileID: 2100000, guid: e3eee108b0df74c4a9fc9a3b6a5f2cb8, type: 2}
+  - {fileID: 2100000, guid: 99fc6945db9ff664fb1c185852f6c841, type: 2}
+  _mesh: {fileID: -2432090755550338912, guid: 8ed2be3b486df934693bbd3975e81c33, type: 3}
   _rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   _scale: {x: 2, y: 2, z: 2}
-  _colliderSize: {x: 1, y: 0.8, z: 1}
+  _colliderSize: {x: 0.8, y: 0.8, z: 1}
   _colliderCenter: {x: 0, y: 0, z: 0}
   _name: Car
   _healthPoint: 1

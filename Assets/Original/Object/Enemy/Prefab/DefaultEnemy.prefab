@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5116840457679394179}
   m_Layer: 3
   m_Name: DefaultEnemy
-  m_TagString: Untagged
+  m_TagString: Default
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,6 +172,8 @@ MonoBehaviour:
   _animation: {fileID: 5116840457679394179}
   _moveLeftAnimation: {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
   _moveRightAnimation: {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
+  _knockbackLeftAnimation: {fileID: 7400000, guid: 1ca5e0a83564814428ca0772f877fdfc, type: 2}
+  _knockbackRightAnimation: {fileID: 7400000, guid: 30c98e59bb7f0b045a6a846bfded75ef, type: 2}
   _defaultMoveLaneSpeed: 3
   _stopDistance: 0.05
 --- !u!111 &5116840457679394179
@@ -187,6 +189,8 @@ Animation:
   m_Animations:
   - {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
   - {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
+  - {fileID: 7400000, guid: 1ca5e0a83564814428ca0772f877fdfc, type: 2}
+  - {fileID: 7400000, guid: 30c98e59bb7f0b045a6a846bfded75ef, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
