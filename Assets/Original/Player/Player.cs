@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private InputAction _moveLeftAction;
     private InputAction _moveRightAction;
     private InputAction _parryAction;
+    private bool _canInput = true;
 
     #region Monobehavour Callbacks
     private void OnEnable()
@@ -58,17 +59,25 @@ public class Player : MonoBehaviour
     #region PlayerInput Callbacks
     private void OnParry(InputAction.CallbackContext context)
     {
+        if (_canInput == false) return;
         _playerParrySystem.Parry();
     }
 
     private void OnMoveLeft(InputAction.CallbackContext context)
     {
+        if (_canInput == false) return;
         _laneMover.MoveLane(-1);
     }
 
     private void OnMoveRight(InputAction.CallbackContext context)
     {
+        if (_canInput == false) return;
         _laneMover.MoveLane(1);
     }
     #endregion
+
+    public void DeactivateInput()
+    {
+        _canInput = false;
+    }
 }
