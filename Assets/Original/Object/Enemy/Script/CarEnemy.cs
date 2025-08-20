@@ -190,12 +190,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         Deactivate();
     }
 
-    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, int laneIndex)
+    public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, float initVelocity, int laneIndex)
     {
         gameObject.SetActive(true);
 
+        _curVelocity = initVelocity;
         _statData = statData;
-        _curVelocity = statData.Velocity;
         _healthPoint = statData.HealthPoint;
         _color = color;
 
