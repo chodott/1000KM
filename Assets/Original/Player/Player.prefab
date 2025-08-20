@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 7727353892368443968}
   - component: {fileID: 356308355879442216}
   - component: {fileID: 2608572121899648787}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 1937028723310857481}
   - component: {fileID: 3314152513691770050}
   - component: {fileID: 8382296519919826827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HitCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 51344941055568798}
   - component: {fileID: 3748035686533080669}
   - component: {fileID: 4907325186825650830}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ParryCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
