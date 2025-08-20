@@ -100,7 +100,6 @@ public class EnemySpawner : MonoBehaviour
     {
         float curPlayerSpeed = GlobalMovementController.Instance.GlobalVelocity;
         spawnRate = _spawnRateMultiplier / curPlayerSpeed;
-        Debug.Log(curPlayerSpeed);
         if (curPlayerSpeed >= _difficultySpeedThresholds[_difficulty])
         {
             if (_difficulty >= _difficultySpeedThresholds.Count - 1)

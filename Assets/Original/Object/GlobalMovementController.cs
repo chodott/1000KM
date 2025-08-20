@@ -9,13 +9,14 @@ public class GlobalMovementController : MonoBehaviour
     [SerializeField]
     private RestAreaEntrance _restAreaEntrance;
     [SerializeField]
-    private float _restAreaSpawnDistance;
-    [SerializeField]
     private float _maxBendSize = 6f;
 
     private PlayerMovement _playerMovement;
     private float _distanceThreshold = 500f;
     private float _distanceAccumulator = 0f;
+    private float _restAreaInterval = 500f;
+    private float _restAreaSpawnDistance = 200f;
+
 
     //(Horizontal, Vertical)
     private (float, float) _targetBendSize = (3,1);
@@ -23,8 +24,6 @@ public class GlobalMovementController : MonoBehaviour
 
 
     public static GlobalMovementController Instance { get; private set; }
-
-    public event Action OnRestAreaNearby;
     public float GlobalVelocity { get; private set; }
     public float TotalDistance { get; private set; }
 
@@ -53,7 +52,8 @@ public class GlobalMovementController : MonoBehaviour
 
         if(TotalDistance >= _restAreaSpawnDistance)
         {
-            OnRestAreaNearby?.Invoke();
+            _restAreaEntrance.gameObject.SetActive(true);
+            _restAreaSpawnDistance += _restAreaInterval;
         }
 
         float lerpAlpha = _distanceAccumulator / _distanceThreshold;
