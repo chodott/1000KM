@@ -68,6 +68,13 @@ public class LaneMover : MonoBehaviour
     {
         _currentLaneIndex = laneIndex;
     }
+
+    public void StopLaneMove()
+    {
+        _nextPositionZ = 0f;
+        _isMoving = false;
+    }
+
     public bool MoveLane(float isRight)
     {
         if(_isMoving)
@@ -103,8 +110,6 @@ public class LaneMover : MonoBehaviour
         _animation.Play(playClip.name);
         return true;
     }
-
-
 
     public void UpdateMoveLaneSpeed(float bonus)
     {

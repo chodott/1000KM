@@ -22,7 +22,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private GameObject _destroyEffectPrefab;
     #endregion 
 
-    private EnemyState _enemyState;
+    private IEnemyState _curState;
     private EnemyColor _color;
     private EnemyStatData _statData;
     private GameObject _originalPrefab;
@@ -32,10 +32,15 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private float _patternCooldownTimer;
     private float _healthPoint;
     private float _curVelocity;
+    private float _maxVelocity;
 
     private float _friction = 1f;
     private float _knockbackPower = 0.5f;
     private float _parryPower = 50f;
+
+
+    private DriveState _driveState = new DriveState();
+    private VerticalKnockbackState _verticalKnockbackState = new VerticalKnockbackState();
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
@@ -50,28 +55,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         Yellow
     }
 
-    public enum EnemyState
-    {
-        Drive,
-        Knockback,
-        Destroyed,
-        NotUse
-    }
-
     #region Monobehaviour Callbacks
-    void Update()
-    {
-        if(_enemyState == EnemyState.NotUse)
-        {
-            return;
-        }
-
-        if(transform.position.x >=_returnPositionX)
-        {
-            Deactivate();
-        }
-    }
-
     void Start()
     {
         _laneMover.OnFinishMove += EndKnockback;
@@ -79,22 +63,8 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     void FixedUpdate()
     {
-
-        switch(_enemyState)
-        {
-            case EnemyState.Drive:
-                MoveForward(_curVelocity);
-                CheckPattern();
-                break;
-
-             case EnemyState.Knockback:
-                MoveForward(_curVelocity);
-                break;
-
-             case EnemyState.Destroyed:
-                MoveForward(0f);
-                break;
-        }
+        MoveForward(_curVelocity);
+        _curState.Update();
     }
     #endregion  
 
@@ -103,48 +73,23 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         float curVelocity = velocity - GlobalMovementController.Instance.GlobalVelocity;
         Vector3 targetPosition = _rigidbody.position + (_forwardVector * curVelocity * Time.fixedDeltaTime);
         _rigidbody.MovePosition(targetPosition);
+    }
 
-        RecoverVelocity();
+    private void ChangeState(IEnemyState state)
+    {
+        if(_curState != null)
+        {
+            _curState.Exit();
+        }
+        _curState = state;
+        _curState.Enter(this);
     }
 
     private void EndKnockback()
     {
         _laneMover.UpdateMoveLaneSpeed(0f);
-        _enemyState = EnemyState.Drive;
+        ChangeState(_driveState);
         gameObject.tag = "Default";
-    }
-
-    private void CheckPattern()
-    {
-        if (_patternCooldownTimer > _patternCooldownTime)
-        {
-            DoPattern();
-            _patternCooldownTimer = 0;
-        }
-        else
-        {
-            _patternCooldownTimer += Time.deltaTime;
-        }
-    }
-
-    private void RecoverVelocity()
-    {
-        
-        if (_curVelocity <= _statData.Velocity)
-        {
-            _curVelocity = _statData.Velocity;
-        }
-        else
-        {
-            _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
-        }
-
-        if (_enemyState == EnemyState.Knockback && _curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
-        {
-            _enemyState = EnemyState.Drive;
-            gameObject.tag = "Default";
-
-        }
     }
 
     private void DoPattern()
@@ -169,22 +114,25 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         }
 
         _laneMover.CheckAndMoveLane(transform.position, _statData.ColliderSize, direction);
+    }
 
+    private void ResetPhysics()
+    {
+        _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.linearVelocity = Vector3.zero;
+        _rigidbody.Sleep();
     }
 
     private void Destroy(Vector3 direction)
     {
         _collider.enabled = false;
-        
+        OnRewardDropped?.Invoke();
         Vector3 explosionDirection = new Vector3(-direction.x, 0.3f, direction.z);
         explosionDirection.Normalize();
-        _rigidbody.AddForce(explosionDirection * _parryPower, ForceMode.Impulse);
-        _rigidbody.AddTorque(explosionDirection *_parryPower, ForceMode.Impulse);
-        _enemyState = EnemyState.Destroyed;
-
-        Instantiate(_destroyEffectPrefab, transform.position, Quaternion.identity);
+        ChangeState(new DestroyedState(explosionDirection));
         StartCoroutine(DestroyAfterDelay(1f));
     }
+
 
     IEnumerator DestroyAfterDelay(float delay)
     {
@@ -192,10 +140,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         Deactivate();
     }
 
+
     public void Init(EnemyColor color, EnemyStatData statData, Vector3 position, float initVelocity, int laneIndex)
     {
         gameObject.SetActive(true);
 
+        _maxVelocity = initVelocity;
         _curVelocity = initVelocity;
         _statData = statData;
         _healthPoint = statData.HealthPoint;
@@ -210,53 +160,87 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         transform.position = position;
         transform.rotation = statData.SpawnRotation;
         transform.localScale = statData.Scale;
-
         _rigidbody.WakeUp();
 
-        _enemyState = EnemyState.Drive;
+        ChangeState(_driveState);
         gameObject.tag = "Default";
         _laneMover.Init(laneIndex);
 
     }
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+
+    public void CheckOutInRange()
     {
-        if (_enemyState != EnemyState.Drive)
+        if (transform.position.x >= _returnPositionX)
         {
-            return;
+            Deactivate();
         }
+    }
 
-        Vector3 parriedDirection = (contactPoint - transform.position).normalized;
-
-        float sign = Mathf.Sign(transform.position.z - contactPoint.z);
-        float angle = Vector3.Angle(parriedDirection, Vector3.back * sign);
-
-        _healthPoint -= damage;
-        if (_healthPoint <= 0f)
-        {   //Destroy
-            OnRewardDropped?.Invoke();
-            Destroy(parriedDirection);
+    public void CheckPatternTimer()
+    {
+        if (_patternCooldownTimer > _patternCooldownTime)
+        {
+            DoPattern();
+            _patternCooldownTimer = 0;
         }
         else
-        {   //Knockback
-
-            if(angle >= 80.0f)
-            {
-                gameObject.tag = "Parried";
-                _curVelocity = _statData.Velocity + (GlobalMovementController.Instance.GlobalVelocity * (1 + _knockbackPower));
-                _enemyState = EnemyState.Knockback;
-            }
-            else
-            {
-                gameObject.tag = "Parried";
-                _laneMover.UpdateMoveLaneSpeed(moveLaneSpeed);
-                bool moveResult = _laneMover.KnockbackLane(sign);
-                if(moveResult == false)
-                {
-                    Destroy(parriedDirection);
-                }
-            }
-
+        {
+            _patternCooldownTimer += Time.deltaTime;
         }
+    }
+
+    public void ResetPatternTimer()
+    {
+        _patternCooldownTimer = 0f;
+        _laneMover.StopLaneMove();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _healthPoint -= damage;
+
+    }
+
+    public bool CheckDie(Vector3 parriedDirection)
+    {
+        if(_healthPoint <= 0f)
+        {
+            Destroy(parriedDirection);
+            return true;
+        }
+        return false;
+    }
+
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+        _curState.OnParried(contactPoint, damage, moveLaneSpeed);
+        gameObject.tag = "Parried";
+    }
+
+    public void ApplyFriction()
+    {
+        if (_curVelocity <= _maxVelocity)
+        {
+            _curVelocity = _maxVelocity;
+        }
+        else
+        {
+            _curVelocity -= _friction * Time.fixedDeltaTime * _curVelocity;
+        }
+    }
+
+    public void RecoverVelocity()
+    {
+        if (_curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
+        {
+            ChangeState(_driveState);
+            gameObject.tag = "Default";
+        }
+    }
+
+    public void ResetVelocity()
+    {
+        _curVelocity = 0f;
     }
 
     public void OnAttack()
@@ -264,28 +248,60 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _rigidbody.Sleep();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void ApplyExplosionForce(Vector3 direction)
     {
-        if (collision.gameObject.CompareTag("Parried"))
+        _rigidbody.AddForce(direction * _parryPower, ForceMode.Impulse);
+        _rigidbody.AddTorque(direction * _parryPower, ForceMode.Impulse);
+    }
+
+    public void SpawnDestroyEffect()
+    {
+        Instantiate(_destroyEffectPrefab, transform.position, Quaternion.identity);
+    }
+
+    public void KnockbackToForward()
+    {
+        _curVelocity += (GlobalMovementController.Instance.GlobalVelocity * (1 + _knockbackPower));
+        ChangeState(_verticalKnockbackState);
+    }
+
+    public void UpdateMoveLaneSpeed(float moveLaneSpeed)
+    {
+        _laneMover.UpdateMoveLaneSpeed(moveLaneSpeed);
+    }
+
+    public void KnockbackToSide(Vector3 parriedDirection, float sign)
+    {
+        bool moveResult = _laneMover.KnockbackLane(sign);
+        if (moveResult == false)
         {
-            Vector3 forceDirection = _rigidbody.position - collision.rigidbody.position;
-            forceDirection.Normalize();
-            Destroy(forceDirection);
+            Destroy(parriedDirection);
         }
+    }
+
+    public void ApplyAccident(Collision collision)
+    {
+        Vector3 forceDirection = _rigidbody.position - collision.rigidbody.position;
+        forceDirection.Normalize();
+        Destroy(forceDirection);
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        _curState.OnCollisionEnter(collision);
     }
 
     #region PoolingObject Callbacks
     public void Activate(GameObject originalPrefab)
     {
         _originalPrefab = originalPrefab;
-        _rigidbody.Sleep();
-
     }
 
     public void Deactivate()
     {
-        _enemyState = EnemyState.NotUse;
-        _rigidbody.Sleep();
+        gameObject.SetActive(false);
+        ResetPhysics();
+        _curState = null;
         OnReturned?.Invoke(OriginalPrefab,gameObject);
     }
     #endregion
