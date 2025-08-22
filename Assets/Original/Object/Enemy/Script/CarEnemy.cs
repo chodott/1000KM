@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -40,9 +41,11 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
 
     private DriveState _driveState = new DriveState();
-    private VerticalKnockbackState _verticalKnockbackState = new VerticalKnockbackState();
+
+    public DriveState DriveState  { get{ return _driveState; } }
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
+    public LaneMover LaneMover { get { return _laneMover; }}
 
     public static event Action OnRewardDropped;
     public event Action<GameObject, GameObject> OnReturned;
@@ -50,16 +53,13 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     public enum EnemyColor
     {
         White,
-        Grey,
-        Black,
+        Blue,
+        Red,
         Yellow
     }
 
     #region Monobehaviour Callbacks
-    void Start()
-    {
-        _laneMover.OnFinishMove += EndKnockback;
-    }
+
 
     void FixedUpdate()
     {
@@ -75,7 +75,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _rigidbody.MovePosition(targetPosition);
     }
 
-    private void ChangeState(IEnemyState state)
+    public void ChangeState(IEnemyState state)
     {
         if(_curState != null)
         {
@@ -85,31 +85,27 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _curState.Enter(this);
     }
 
-    private void EndKnockback()
-    {
-        _laneMover.UpdateMoveLaneSpeed(0f);
-        ChangeState(_driveState);
-        gameObject.tag = "Default";
-    }
-
     private void DoPattern()
     {
-        int direction = 1;
+        int direction;
         switch(_color)
         {
             case EnemyColor.White:
                 direction = 0;
                 break;
 
-             case EnemyColor.Grey:
+             case EnemyColor.Blue:
                 direction = -1;
                 break;
 
-             case EnemyColor.Black:
+             case EnemyColor.Red:
                 direction = 1;
                 break;
             case EnemyColor.Yellow:
                 direction = UnityEngine.Random.Range(0, 3) - 1;
+                break;
+            default:
+                direction = 0;
                 break;
         }
 
@@ -153,6 +149,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
         _meshFilter.mesh = statData.Mesh;
         _meshRenderer.material = _statData.materialVariants[(int)color];
+
         _collider.size = statData.ColliderSize;
         _collider.center = statData.ColliderCenter;
         _collider.enabled = true;
@@ -163,7 +160,6 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         _rigidbody.WakeUp();
 
         ChangeState(_driveState);
-        gameObject.tag = "Default";
         _laneMover.Init(laneIndex);
 
     }
@@ -181,7 +177,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         if (_patternCooldownTimer > _patternCooldownTime)
         {
             DoPattern();
-            _patternCooldownTimer = 0;
+            _patternCooldownTimer = 0f;
         }
         else
         {
@@ -211,12 +207,6 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         return false;
     }
 
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-        _curState.OnParried(contactPoint, damage, moveLaneSpeed);
-        gameObject.tag = "Parried";
-    }
-
     public void ApplyFriction()
     {
         if (_curVelocity <= _maxVelocity)
@@ -234,18 +224,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         if (_curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
         {
             ChangeState(_driveState);
-            gameObject.tag = "Default";
         }
     }
 
     public void ResetVelocity()
     {
         _curVelocity = 0f;
-    }
-
-    public void OnAttack()
-    {
-        _rigidbody.Sleep();
     }
 
     public void ApplyExplosionForce(Vector3 direction)
@@ -262,18 +246,12 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     public void KnockbackToForward()
     {
         _curVelocity += (GlobalMovementController.Instance.GlobalVelocity * (1 + _knockbackPower));
-        ChangeState(_verticalKnockbackState);
-    }
-
-    public void UpdateMoveLaneSpeed(float moveLaneSpeed)
-    {
-        _laneMover.UpdateMoveLaneSpeed(moveLaneSpeed);
     }
 
     public void KnockbackToSide(Vector3 parriedDirection, float sign)
     {
-        bool moveResult = _laneMover.KnockbackLane(sign);
-        if (moveResult == false)
+        bool canMove = _laneMover.KnockbackLane(sign);
+        if (canMove == false)
         {
             Destroy(parriedDirection);
         }
@@ -303,6 +281,18 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
         ResetPhysics();
         _curState = null;
         OnReturned?.Invoke(OriginalPrefab,gameObject);
+    }
+    #endregion
+
+    #region IParyable Callbacks
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+        _curState.OnParried(contactPoint, damage, moveLaneSpeed);
+    }
+
+    public void OnAttack()
+    {
+        _rigidbody.Sleep();
     }
     #endregion
 }

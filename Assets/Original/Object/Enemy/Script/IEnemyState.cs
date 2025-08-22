@@ -22,6 +22,7 @@ public class DriveState : IEnemyState
     public void Enter(CarEnemy enemy)
     {
         _enemy = enemy;
+        _enemy.gameObject.tag = "Default";
     }
 
     public void Exit()
@@ -50,15 +51,13 @@ public class DriveState : IEnemyState
         {
             return;
         }
-
         if (angle >= 80.0f)
         {
-            _enemy.KnockbackToForward();
+            _enemy.ChangeState(new VerticalKnockbackState());
         }
         else
         {
-            _enemy.UpdateMoveLaneSpeed(moveLaneSpeed);
-            _enemy.KnockbackToSide(parriedDirection, sign);
+            _enemy.ChangeState(new HorizontalKnockbackState(parriedDirection, moveLaneSpeed, sign));
         }
     }
 
@@ -76,11 +75,13 @@ public class VerticalKnockbackState : IEnemyState
     public void Enter(CarEnemy enemy)
     {
         _enemy = enemy;
+        _enemy.gameObject.tag = "Parried";
+        _enemy.KnockbackToForward();
     }
 
     public void Exit()
     {
-        
+        _enemy = null;
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -93,13 +94,69 @@ public class VerticalKnockbackState : IEnemyState
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void Update()
     {
         _enemy.ApplyFriction();
         _enemy.RecoverVelocity();
+    }
+}
+
+public class HorizontalKnockbackState : IEnemyState
+{
+    private CarEnemy _enemy;
+    private LaneMover _laneMover;
+    private Vector3 _knockbackDirection;
+    private float _knockbackSpeed;
+    private float _laneDirection;
+    public HorizontalKnockbackState(Vector3 knockbackDirection, float moveLaneSpeed, float laneDirection)
+    {
+        _knockbackDirection = knockbackDirection;
+        _knockbackSpeed = moveLaneSpeed;
+        _laneDirection = laneDirection;
+    }
+    public void Enter(CarEnemy enemy)
+    {
+        _enemy = enemy;
+        _enemy.gameObject.tag = "Parried";
+        _laneMover = enemy.LaneMover;
+        _laneMover.UpdateMoveLaneSpeed(_knockbackSpeed);
+        _laneMover.OnFinishMove += EndKnockback;
+
+        _enemy.KnockbackToSide(_knockbackDirection, _laneDirection);
+    }
+
+    public void Exit()
+    {
+        _laneMover.UpdateMoveLaneSpeed(0f);
+        _laneMover.OnFinishMove -= EndKnockback;
+        _laneMover = null;
+        _enemy = null;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Parried"))
+        {
+            _enemy.ApplyAccident(collision);
+        }
+    }
+
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+        return;
+    }
+
+    public void Update()
+    {
+        _enemy.ApplyFriction();
+    }
+
+    public void EndKnockback()
+    {
+        _enemy.ChangeState(_enemy.DriveState);
     }
 }
 
