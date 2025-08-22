@@ -188,7 +188,6 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     public void ResetPatternTimer()
     {
         _patternCooldownTimer = 0f;
-        _laneMover.StopLaneMove();
     }
 
     public void TakeDamage(float damage)

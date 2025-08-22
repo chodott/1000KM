@@ -23,6 +23,8 @@ public class DriveState : IEnemyState
     {
         _enemy = enemy;
         _enemy.gameObject.tag = "Default";
+        _enemy.LaneMover.UpdateMoveLaneSpeed(0f);
+
     }
 
     public void Exit()
@@ -130,7 +132,6 @@ public class HorizontalKnockbackState : IEnemyState
 
     public void Exit()
     {
-        _laneMover.UpdateMoveLaneSpeed(0f);
         _laneMover.OnFinishMove -= EndKnockback;
         _laneMover = null;
         _enemy = null;
@@ -175,6 +176,8 @@ public class DestroyedState : IEnemyState
         _enemy.ResetVelocity();
         _enemy.ApplyExplosionForce(_explosionDirection);
         _enemy.SpawnDestroyEffect();
+        enemy.LaneMover.StopLaneMove();
+
     }
 
     public void Exit()
