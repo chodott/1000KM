@@ -68,7 +68,7 @@ public class LaneMover : MonoBehaviour
     {
         _currentLaneIndex = laneIndex;
     }
-    public bool MoveLane(float isRight)
+    public bool MoveLane(float isRight, bool shouldAnimate)
     {
         if(_isMoving)
         {
@@ -119,6 +119,11 @@ public class LaneMover : MonoBehaviour
             return;
         }
 
-        MoveLane(isRight);
+        MoveLane(isRight, true);
+    }
+
+    public void StopAnimation()
+    {
+        _animation.Stop();
     }
 }

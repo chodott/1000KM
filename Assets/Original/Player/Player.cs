@@ -20,13 +20,26 @@ public class Player : MonoBehaviour
     private LaneMover _laneMover;
     #endregion
 
+    private IPlayerState _curState;
+
+    public readonly PlayerDriveState DriveState = new PlayerDriveState();
+    public readonly PlayerParryState ParryState = new PlayerParryState();
+    public readonly NoInputState NoInputState = new NoInputState();
+
     private InputAction _thorottleAction;
     private InputAction _moveLeftAction;
     private InputAction _moveRightAction;
     private InputAction _parryAction;
-    private bool _canInput = true;
+
+    public PlayerParrySystem ParrySystem { get { return _playerParrySystem; } }
+    public LaneMover LaneMover { get { return _laneMover; } }
 
     #region Monobehavour Callbacks
+
+    private void Start()
+    {
+        ChangeState(DriveState);
+    }
     private void OnEnable()
     {
         _thorottleAction = _playerInput.actions["Accelerate"];
@@ -59,25 +72,32 @@ public class Player : MonoBehaviour
     #region PlayerInput Callbacks
     private void OnParry(InputAction.CallbackContext context)
     {
-        if (_canInput == false) return;
-        _playerParrySystem.Parry();
+        _curState.OnParry(context);
     }
 
     private void OnMoveLeft(InputAction.CallbackContext context)
     {
-        if (_canInput == false) return;
-        _laneMover.MoveLane(-1);
+        _curState.OnMoveLeft(context);
     }
 
     private void OnMoveRight(InputAction.CallbackContext context)
     {
-        if (_canInput == false) return;
-        _laneMover.MoveLane(1);
+        _curState.OnMoveRight(context);
     }
     #endregion
 
-    public void DeactivateInput()
+    public void ChangeState(IPlayerState state)
     {
-        _canInput = false;
+        if(_curState != null)
+        {
+            _curState.Exit();
+        }
+        _curState = state;
+        _curState.Enter(this);
+    }
+
+    public void EnterNoInputState()
+    {
+        ChangeState(NoInputState);
     }
 }
