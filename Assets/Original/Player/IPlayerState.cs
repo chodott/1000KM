@@ -43,7 +43,7 @@ public class PlayerDriveState : IPlayerState
 
     public void OnParry(InputAction.CallbackContext context)
     {
-        _player.ChangeState(_player.ParryState);
+        _player.EnterParryState();
     }
 
     public void Update()
@@ -96,7 +96,7 @@ public class PlayerParryState : IPlayerState
 
     private void EndParry()
     {
-        _player.ChangeState(_player.DriveState);
+        _player.EnterDriveState();
     }
 }
 

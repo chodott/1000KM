@@ -22,9 +22,9 @@ public class Player : MonoBehaviour
 
     private IPlayerState _curState;
 
-    public readonly PlayerDriveState DriveState = new PlayerDriveState();
-    public readonly PlayerParryState ParryState = new PlayerParryState();
-    public readonly NoInputState NoInputState = new NoInputState();
+    private PlayerDriveState _driveState = new PlayerDriveState();
+    private PlayerParryState _parryState = new PlayerParryState();
+    private NoInputState _noInputState = new NoInputState();
 
     private InputAction _thorottleAction;
     private InputAction _moveLeftAction;
@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        ChangeState(DriveState);
+        ChangeState(_driveState);
     }
     private void OnEnable()
     {
@@ -51,7 +51,14 @@ public class Player : MonoBehaviour
         _moveRightAction.performed += OnMoveRight;
         _parryAction.performed += OnParry;
         _partManager.OnChangedPartStatus += UpdateStatus;
+    }
 
+    private void OnDisable()
+    {
+        _moveLeftAction.performed -= OnMoveLeft;
+        _moveRightAction.performed -= OnMoveRight;
+        _parryAction.performed -= OnParry;
+        _partManager.OnChangedPartStatus -= UpdateStatus;
     }
 
     private void Update()
@@ -86,7 +93,8 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    public void ChangeState(IPlayerState state)
+    #region State Switching
+    private void ChangeState(IPlayerState state)
     {
         if(_curState != null)
         {
@@ -95,9 +103,17 @@ public class Player : MonoBehaviour
         _curState = state;
         _curState.Enter(this);
     }
-
+    public void EnterDriveState()
+    {
+        ChangeState(_driveState);
+    }
+    public void EnterParryState()
+    {
+        ChangeState(_parryState);
+    }
     public void EnterNoInputState()
     {
-        ChangeState(NoInputState);
+        ChangeState(_noInputState);
     }
+    #endregion;
 }

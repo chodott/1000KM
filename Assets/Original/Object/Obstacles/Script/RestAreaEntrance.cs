@@ -37,7 +37,7 @@ public class RestAreaEntrance : MonoBehaviour
     {
         if(other.TryGetComponent<Player>(out Player player))
         {
-            player.DeactivateInput();
+            player.EnterNoInputState();
         }
     }
     private void Activate()
