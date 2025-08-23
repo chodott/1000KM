@@ -9,6 +9,8 @@ public class PlayerStatus : MonoBehaviour
     public event Action<int> OnMoneyChanged;
 
     #region SerializeField
+    [SerializeField] 
+    private InvincibleSystem _invincibility;
     [SerializeField]
     private HitCollider _hitCollider;
     [SerializeField]
@@ -89,9 +91,16 @@ public class PlayerStatus : MonoBehaviour
             return;
         }
 
+        if (_invincibility.IsActive)
+        {
+            Debug.Log("Pass Damage");
+            return;
+        }
+
         if (other.TryGetComponent<IParryable>(out var parryable))
         {
             _curHealthPoint -= _damage;
+            _invincibility.StartInvinble();
             OnHPChanged?.Invoke(_curHealthPoint);
             parryable.OnAttack();  
         }

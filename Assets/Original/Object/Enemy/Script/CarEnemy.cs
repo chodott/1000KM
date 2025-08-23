@@ -261,6 +261,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     public void OnAttack()
     {
+        _collider.enabled = false;
         _rigidbody.Sleep();
     }
 
