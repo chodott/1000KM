@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 3718525976865496762}
   - component: {fileID: 7727353892368443968}
   - component: {fileID: 356308355879442216}
+  - component: {fileID: 4732548846945569066}
   - component: {fileID: 2608572121899648787}
   m_Layer: 7
   m_Name: Player
@@ -231,6 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df66ab998fd921d46b2a97434cd3cb4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _invincibility: {fileID: 4732548846945569066}
   _hitCollider: {fileID: 8382296519919826827}
   _defaultMaxGasPoint: 100
   _defaultMaxHealthPoint: 100
@@ -293,6 +295,19 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &4732548846945569066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829403507848857476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d0de0efff7854849a0b871b87a19f4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _invincibleTime: 1
 --- !u!65 &2608572121899648787
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -357,10 +372,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 183
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0

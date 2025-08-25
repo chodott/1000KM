@@ -21,6 +21,8 @@ public class PlayerParrySystem : MonoBehaviour
     private float _moveLaneSpeed;
     private bool _isParry = false;
 
+    public event Action OnParryFinished;
+
     private void Start()
     {
        _baseRotation = transform.rotation;
@@ -58,7 +60,7 @@ public class PlayerParrySystem : MonoBehaviour
         _isParry = false;
         transform.rotation = _baseRotation;
         _parryCollider.SetActive(false);
-
+        OnParryFinished?.Invoke();
     }
 
     public void Init(float moveLaneSpeed)

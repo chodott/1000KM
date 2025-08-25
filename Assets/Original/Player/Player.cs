@@ -20,13 +20,26 @@ public class Player : MonoBehaviour
     private LaneMover _laneMover;
     #endregion
 
+    private IPlayerState _curState;
+
+    private PlayerDriveState _driveState = new PlayerDriveState();
+    private PlayerParryState _parryState = new PlayerParryState();
+    private NoInputState _noInputState = new NoInputState();
+
     private InputAction _thorottleAction;
     private InputAction _moveLeftAction;
     private InputAction _moveRightAction;
     private InputAction _parryAction;
-    private bool _canInput = true;
+
+    public PlayerParrySystem ParrySystem { get { return _playerParrySystem; } }
+    public LaneMover LaneMover { get { return _laneMover; } }
 
     #region Monobehavour Callbacks
+
+    private void Start()
+    {
+        ChangeState(_driveState);
+    }
     private void OnEnable()
     {
         _thorottleAction = _playerInput.actions["Accelerate"];
@@ -38,7 +51,14 @@ public class Player : MonoBehaviour
         _moveRightAction.performed += OnMoveRight;
         _parryAction.performed += OnParry;
         _partManager.OnChangedPartStatus += UpdateStatus;
+    }
 
+    private void OnDisable()
+    {
+        _moveLeftAction.performed -= OnMoveLeft;
+        _moveRightAction.performed -= OnMoveRight;
+        _parryAction.performed -= OnParry;
+        _partManager.OnChangedPartStatus -= UpdateStatus;
     }
 
     private void Update()
@@ -59,25 +79,41 @@ public class Player : MonoBehaviour
     #region PlayerInput Callbacks
     private void OnParry(InputAction.CallbackContext context)
     {
-        if (_canInput == false) return;
-        _playerParrySystem.Parry();
+        _curState.OnParry(context);
     }
 
     private void OnMoveLeft(InputAction.CallbackContext context)
     {
-        if (_canInput == false) return;
-        _laneMover.MoveLane(-1);
+        _curState.OnMoveLeft(context);
     }
 
     private void OnMoveRight(InputAction.CallbackContext context)
     {
-        if (_canInput == false) return;
-        _laneMover.MoveLane(1);
+        _curState.OnMoveRight(context);
     }
     #endregion
 
-    public void DeactivateInput()
+    #region State Switching
+    private void ChangeState(IPlayerState state)
     {
-        _canInput = false;
+        if(_curState != null)
+        {
+            _curState.Exit();
+        }
+        _curState = state;
+        _curState.Enter(this);
     }
+    public void EnterDriveState()
+    {
+        ChangeState(_driveState);
+    }
+    public void EnterParryState()
+    {
+        ChangeState(_parryState);
+    }
+    public void EnterNoInputState()
+    {
+        ChangeState(_noInputState);
+    }
+    #endregion;
 }
