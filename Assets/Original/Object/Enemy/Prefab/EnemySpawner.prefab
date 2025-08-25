@@ -46,36 +46,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyColors: 00000000010000000200000003000000
   _enemyStatDatas:
+  - {fileID: 11400000, guid: 09c5d4378b4bdff4b84eb4f0b8b5dc94, type: 2}
   - {fileID: 11400000, guid: 80bbd1741c316f4408d7cb2425767381, type: 2}
-  - {fileID: 11400000, guid: 09bd4bf3eb0ab6642b76e1c4a0d3b4f5, type: 2}
   - {fileID: 11400000, guid: 10c37760be1873f4f989ab84d5b6b685, type: 2}
-  _difficultyBands:
-  - spawnLaneCount: 1
-    spawnCarColorRange: 1
-    spawnCarTypeRange: 1
-  - spawnLaneCount: 1
-    spawnCarColorRange: 1
-    spawnCarTypeRange: 2
-  - spawnLaneCount: 1
-    spawnCarColorRange: 1
-    spawnCarTypeRange: 3
-  - spawnLaneCount: 2
-    spawnCarColorRange: 3
-    spawnCarTypeRange: 3
-  - spawnLaneCount: 3
-    spawnCarColorRange: 3
-    spawnCarTypeRange: 3
-  - spawnLaneCount: 4
-    spawnCarColorRange: 3
-    spawnCarTypeRange: 3
-  _difficultySpeedThresholds:
-  - 20
-  - 50
-  - 80
-  - 100
-  - 130
+  _difficultyTiers:
+  - spawnRate: 0
+    minVelocity: 0
+    maxVelocity: 10
+    laneCooldown: 0
+  - spawnRate: 0.5
+    minVelocity: 10
+    maxVelocity: 50
+    laneCooldown: 0
+  - spawnRate: 1
+    minVelocity: 50
+    maxVelocity: 80
+    laneCooldown: 0
+  - spawnRate: 2
+    minVelocity: 80
+    maxVelocity: 100
+    laneCooldown: 0
+  - spawnRate: 3
+    minVelocity: 100
+    maxVelocity: 130
+    laneCooldown: 0
+  - spawnRate: 5
+    minVelocity: 130
+    maxVelocity: 300
+    laneCooldown: 0
   _enemyPrefab: {fileID: 2899611395792235350, guid: 918123295119ecb4a829142dbb500f76, type: 3}
-  _spawnPosition: {x: -100, y: 1, z: 0}
+  _spawnPosition: {x: -300, y: 1, z: 0}
   _checkBoxSize: {x: 3, y: 3, z: 4}
-  _spawnRate: 1
+  _enemySpeedMultiplier: 0.3
   _defaultSpawnCount: 30
+  _spawnBudgetLimit: 8

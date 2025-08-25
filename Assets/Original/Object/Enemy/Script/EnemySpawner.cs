@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 public static class ListRandom
 {
@@ -19,8 +16,6 @@ public static class ListRandom
     }
 }
 
-
-
 public class EnemySpawner : MonoBehaviour
 {
     #region SerializeField
@@ -29,9 +24,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private List<EnemyStatData> _enemyStatDatas = new List<EnemyStatData>();
     [SerializeField]
-    private List<DifficultyBand> _difficultyBands = new List<DifficultyBand>();
-    [SerializeField]
-    private List<float> _difficultySpeedThresholds = new List<float>();
+    private List<DifficultyTier> _difficultyTiers = new List<DifficultyTier>();
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
@@ -39,19 +32,18 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private Vector3 _checkBoxSize;
     [SerializeField]
-    private float _spawnRateMultiplier = 150;
-    [SerializeField]
     private float _enemySpeedMultiplier = 0.3f;
 
     [SerializeField]
     private int _defaultSpawnCount = 30;
+    [SerializeField]
+    private float _spawnBudgetLimit = 8f;
 
     #endregion
     private ObjectPool _objectPool = new ObjectPool();
-    private float _spawnTimer;
+    private float _spawnBudget = 0f;
     private int _laneCount;
     private int _laneRange;
-    private int _difficulty;
 
     #region Monobehaviour Callbacks
     private void Start()
@@ -61,55 +53,37 @@ public class EnemySpawner : MonoBehaviour
         _objectPool.CreateDefaultObjects(_enemyPrefab, _defaultSpawnCount);
     }
 
-
     private void Update()
     {
-        _spawnTimer += Time.deltaTime;
-        UpdateDifficulty(out float spawnRate);
-        if(_spawnTimer > spawnRate)
+        DifficultyTier tier =  GetCurrentTier();
+        _spawnBudget = Mathf.Min(_spawnBudget + tier.spawnRate * Time.deltaTime, _spawnBudgetLimit);
+        if(_spawnBudget < 1f)
         {
-            _spawnTimer = 0;
-            List<int> spawnLanes = GetAvailableSpawnLanes();
-            SpawnEnemys(spawnLanes);
+            return;
+        }
 
+        if (TrySpawnEnemy())
+        {
+            _spawnBudget -= 1f;
         }
     }
     #endregion
 
-    List<T> PickRandom<T>(List<T> list, int n)
-    {
-        if (n >= list.Count)
-        {
-            return new List<T>(list);
-        }
-
-        List<T> tempList = new List<T>(list);
-
-        for (int i = 0; i < tempList.Count - 1; i++)
-        {
-            int randIndex = Random.Range(i, tempList.Count);
-            T temp = tempList[i];
-            tempList[i] = tempList[randIndex];
-            tempList[randIndex] = temp;
-        }
-
-        return tempList.GetRange(0, n);
-    }
-
-    private void UpdateDifficulty(out float spawnRate)
+    private DifficultyTier GetCurrentTier()
     {
         float curPlayerSpeed = GlobalMovementController.Instance.GlobalVelocity;
-        spawnRate = _spawnRateMultiplier / curPlayerSpeed;
-        if (curPlayerSpeed >= _difficultySpeedThresholds[_difficulty])
+        foreach(var tier in _difficultyTiers)
         {
-            if (_difficulty >= _difficultySpeedThresholds.Count - 1)
+            if (curPlayerSpeed < tier.minVelocity || curPlayerSpeed  >= tier.maxVelocity)
             {
-                return;
+                continue;
             }
-            _difficulty++;
+            return tier;
         }
+        return _difficultyTiers[_difficultyTiers.Count - 1];
     }
-    private List<int> GetAvailableSpawnLanes()
+
+    private bool TrySpawnEnemy()
     {
         List<int> availableLanes = new List<int>();
         for (int index = 0; index < _laneCount; index++)
@@ -118,28 +92,34 @@ public class EnemySpawner : MonoBehaviour
             float spawnPositionZ = LaneSystem.Instance.GetLanePositionZ(spawnLaneIndex);
             Vector3 spawnPosition = new Vector3(_spawnPosition.x, _spawnPosition.y, spawnPositionZ);
 
-            if(!Physics.CheckBox(spawnPosition, _checkBoxSize,Quaternion.Euler(0,-90f,0), LayerMask.GetMask("Enemy")))
+            if (!Physics.CheckBox(spawnPosition, _checkBoxSize, Quaternion.Euler(0, -90f, 0), LayerMask.GetMask("Enemy")))
             {
                 availableLanes.Add(spawnLaneIndex);
             }
         }
-        List<int> spawnLanes = PickRandom(availableLanes, _difficultyBands[_difficulty].spawnLaneCount);
-        return spawnLanes;
+
+        if(availableLanes.Count <= 0)
+        {
+            return false;
+        }
+
+        int randomIndex = Random.Range(0, availableLanes.Count);
+        int spawnLane = availableLanes[randomIndex];
+        SpawnEnemy(spawnLane);
+
+        return true;
+
     }
 
-    private void SpawnEnemys(List<int> spawnLanes)
+    private void SpawnEnemy(int spawnLaneIndex)
     {
-        foreach (int spawnLaneIndex in spawnLanes)
-        {
             float spawnPositionZ = LaneSystem.Instance.GetLanePositionZ(spawnLaneIndex);
             Vector3 spawnPosition = new Vector3(_spawnPosition.x, _spawnPosition.y, spawnPositionZ);
             GameObject carObject = _objectPool.GetObject(_enemyPrefab);
             CarEnemy carEnemy = carObject.GetComponent<CarEnemy>();
-            var randomColor = _enemyColors.GetRandom(_difficultyBands[_difficulty].spawnCarColorRange);
-            var randomStat = _enemyStatDatas.GetRandom(_difficultyBands[_difficulty].spawnCarTypeRange);
+            var randomColor = _enemyColors.GetRandom(4);
+            var randomStat = _enemyStatDatas.GetRandom(3);
             float velocity = GlobalMovementController.Instance.GlobalVelocity * _enemySpeedMultiplier;
             carEnemy.Init(randomColor, randomStat, spawnPosition, velocity, spawnLaneIndex);
-        }
-    }
-
+     }
 }
