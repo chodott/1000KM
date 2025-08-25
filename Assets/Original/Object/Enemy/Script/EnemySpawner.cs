@@ -32,8 +32,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private Vector3 _checkBoxSize;
     [SerializeField]
-    private float _spawnRateMultiplier = 150;
-    [SerializeField]
     private float _enemySpeedMultiplier = 0.3f;
 
     [SerializeField]
@@ -76,7 +74,7 @@ public class EnemySpawner : MonoBehaviour
         float curPlayerSpeed = GlobalMovementController.Instance.GlobalVelocity;
         foreach(var tier in _difficultyTiers)
         {
-            if (curPlayerSpeed < tier.minVelocity && curPlayerSpeed  >= tier.maxVelocity)
+            if (curPlayerSpeed < tier.minVelocity || curPlayerSpeed  >= tier.maxVelocity)
             {
                 continue;
             }
