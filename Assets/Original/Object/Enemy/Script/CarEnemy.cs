@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 {
 
+    public static event Action<int> OnRewardDropped;
+
     #region SerializeField
     [SerializeField]
     private Rigidbody _rigidbody;
@@ -47,7 +49,6 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
     public LaneMover LaneMover { get { return _laneMover; }}
 
-    public static event Action OnRewardDropped;
     public event Action<GameObject, GameObject> OnReturned;
 
     public enum EnemyColor
@@ -122,7 +123,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private void Destroy(Vector3 direction)
     {
         _collider.enabled = false;
-        OnRewardDropped?.Invoke();
+        OnRewardDropped?.Invoke(1);
         Vector3 explosionDirection = new Vector3(-direction.x, 0.3f, direction.z);
         explosionDirection.Normalize();
         ChangeState(new DestroyedState(explosionDirection));

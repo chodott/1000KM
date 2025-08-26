@@ -6,7 +6,6 @@ public class PlayerStatus : MonoBehaviour
     public event Action<float> OnHPChanged;
     public event Action<float> OnGasPointChanged;
     public event Action<float> OnToiletPointChanged;
-    public event Action<int> OnMoneyChanged;
 
     #region SerializeField
     [SerializeField] 
@@ -33,7 +32,6 @@ public class PlayerStatus : MonoBehaviour
     private float _curGasPoint;
     private float _curHealthPoint;
     private float _curToiletPoint;
-    private int _curMoney = 0;
 
     #region Monobehaviour Callbacks
     private void Start()
@@ -47,7 +45,6 @@ public class PlayerStatus : MonoBehaviour
     private void OnEnable()
     {
         _hitCollider.OnHitEvent += OnDamaged;
-        CarEnemy.OnRewardDropped += EarnMoney;
     }
 
     private void Update()
@@ -68,20 +65,12 @@ public class PlayerStatus : MonoBehaviour
         _maxHealthPoint = status.MaxHpBonus + _defaultMaxHealthPoint;
         _curHealthPoint = _maxHealthPoint;
         OnHPChanged?.Invoke(_curHealthPoint);
-
     }
 
     public void UseGas(float amount)
     {
         _curGasPoint -= amount;
         OnGasPointChanged?.Invoke(_curGasPoint);
-    }
-
-    private void EarnMoney()
-    {
-        _curMoney++;
-        Debug.Log(_curMoney);
-        OnMoneyChanged?.Invoke(_curMoney);
     }
 
     private void OnDamaged(Collider other)
