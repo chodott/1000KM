@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     private InputAction _moveRightAction;
     private InputAction _parryAction;
 
+    public PlayerStatus Status { get {return _playerStatus; } }
     public PlayerParrySystem ParrySystem { get { return _playerParrySystem; } }
     public LaneMover LaneMover { get { return _laneMover; } }
 

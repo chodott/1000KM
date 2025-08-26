@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerStatus : MonoBehaviour
 {
@@ -33,6 +34,10 @@ public class PlayerStatus : MonoBehaviour
     private float _curHealthPoint;
     private float _curToiletPoint;
 
+    private int _curMoney;
+
+    public int CurrentMoney;
+
     #region Monobehaviour Callbacks
     private void Start()
     {
@@ -45,6 +50,13 @@ public class PlayerStatus : MonoBehaviour
     private void OnEnable()
     {
         _hitCollider.OnHitEvent += OnDamaged;
+        CarEnemy.OnRewardDropped += EarnMoney;
+    }
+
+    private void OnDisable()
+    {
+        _hitCollider.OnHitEvent -= OnDamaged;
+        CarEnemy.OnRewardDropped -= EarnMoney;
     }
 
     private void Update()
@@ -58,20 +70,6 @@ public class PlayerStatus : MonoBehaviour
         }
     }
     #endregion
-
-    public void UpdateStatus(PartStatus status)
-    {
-        _gasEfficiency = _defaultGasEfficiency - status.GasEfficiencyBonus;
-        _maxHealthPoint = status.MaxHpBonus + _defaultMaxHealthPoint;
-        _curHealthPoint = _maxHealthPoint;
-        OnHPChanged?.Invoke(_curHealthPoint);
-    }
-
-    public void UseGas(float amount)
-    {
-        _curGasPoint -= amount;
-        OnGasPointChanged?.Invoke(_curGasPoint);
-    }
 
     private void OnDamaged(Collider other)
     {
@@ -91,7 +89,51 @@ public class PlayerStatus : MonoBehaviour
             _curHealthPoint -= _damage;
             _invincibility.StartInvinble();
             OnHPChanged?.Invoke(_curHealthPoint);
-            parryable.OnAttack();  
+            parryable.OnAttack();
+        }
+    }
+
+    public void UpdateStatus(PartStatus status)
+    {
+        _gasEfficiency = _defaultGasEfficiency - status.GasEfficiencyBonus;
+        _maxHealthPoint = status.MaxHpBonus + _defaultMaxHealthPoint;
+        _curHealthPoint = _maxHealthPoint;
+        OnHPChanged?.Invoke(_curHealthPoint);
+    }
+
+    public void UseGas(float amount)
+    {
+        _curGasPoint -= amount;
+        OnGasPointChanged?.Invoke(_curGasPoint);
+    }
+
+    public void RefillGas()
+    {
+        _curGasPoint = _defaultMaxGasPoint;
+        OnGasPointChanged?.Invoke(_curGasPoint);
+    }
+
+    public void RefillHP(float amount)
+    {
+        _curHealthPoint += amount;
+        OnHPChanged?.Invoke(_curHealthPoint);
+    }
+
+    public void EarnMoney(int amount)
+    {
+        _curMoney += amount;
+    }
+
+    public bool TrySpendMoney(int amount)
+    {
+        if (CurrentMoney < amount)
+        {
+            return false;
+        }
+        else
+        {
+            _curMoney -= amount;
+            return true;
         }
     }
 }
