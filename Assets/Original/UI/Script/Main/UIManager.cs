@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     SliderUI _toiletSlider;
     [SerializeField]
     SliderUI _speedSlider;
+    [SerializeField]
+    ShopButton _shopUI;
 
     public void Init(PlayerStatus playerStatus, PlayerMovement playerMovement)
     {
@@ -17,7 +19,9 @@ public class UIManager : MonoBehaviour
         playerStatus.OnHPChanged += UpdateHpUI;
         playerStatus.OnToiletPointChanged += UpdateToiletUI;
         playerMovement.OnSpeedChanged += UpdateSpeedUI;
-        
+
+        _shopUI.Init(playerStatus);
+
     }
 
     private void UpdateGasUI(float value)
