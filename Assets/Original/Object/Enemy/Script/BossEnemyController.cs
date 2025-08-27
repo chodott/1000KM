@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossEnemyController : MonoBehaviour
+public class BossEnemyController : MonoBehaviour, IDamagable
 {
     #region SerializeField
     [SerializeField]
@@ -13,6 +13,8 @@ public class BossEnemyController : MonoBehaviour
     private GameObject _destroyEffectPrefab;
     [SerializeField]
     private GameObject _projectilePrefab;
+    [SerializeField]
+    private float _maxHealthPoint = 6;
     #endregion 
 
 
@@ -20,6 +22,8 @@ public class BossEnemyController : MonoBehaviour
     private DropCargoState _dropCargoState = new DropCargoState();
     private Vector3 _forwardVector = -Vector3.right;
     private float _curVelocity;
+
+    private float _curHealthPoint;
 
     public LaneMover LaneMover { get { return _laneMover; } }
 
@@ -48,4 +52,13 @@ public class BossEnemyController : MonoBehaviour
         Instantiate(_projectilePrefab, transform.position, transform.rotation);
     }
 
+    public void OnDamaged(float amount)
+    {
+        _curHealthPoint -= amount;
+        Debug.Log(_curHealthPoint);
+        if (_curHealthPoint < 0)
+        {
+            
+        }
+    }
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4763061732785125101}
   - component: {fileID: 1208458732690983505}
   - component: {fileID: 255889632344787521}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Boss_TrailerTruck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

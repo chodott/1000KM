@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9015208454503611655}
   - component: {fileID: 2548128925154609649}
+  - component: {fileID: 6641685501652527385}
   - component: {fileID: 2523151940832249414}
   - component: {fileID: 3420089932309203551}
   - component: {fileID: 2872645687058503415}
@@ -54,6 +55,29 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.270091
+  m_Height: 1.2
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.1, z: 0}
+--- !u!136 &6641685501652527385
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4217470419449000658}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1015
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.270091
   m_Height: 1.2
@@ -152,8 +176,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collider: {fileID: 2548128925154609649}
+  _triggerCollider: {fileID: 6641685501652527385}
   _rigidbody: {fileID: 2523151940832249414}
-  _LayerNameAfterParry: P
+  _explosionEffectPrefab: {fileID: 458320537626344600, guid: b4bc86fafdaad344b970825610d77f07, type: 3}
+  _LayerNameAfterParry: PlayerProjectile
 --- !u!1 &4262950291413168346
 GameObject:
   m_ObjectHideFlags: 0
