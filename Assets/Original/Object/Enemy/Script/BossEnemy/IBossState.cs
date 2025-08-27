@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface IBossState : IState<BossEnemyController>
@@ -70,5 +72,43 @@ public class DropCargoState : IBossState
     {
         _bossEnemy.DropProjectile();
         DoCycle();
+    }
+}
+
+
+public class BossStunState : IBossState
+{
+    BossEnemyController _bossEnemy;
+    private float _stunTime = 2f;
+    public void Enter(BossEnemyController owner)
+    {
+        _bossEnemy = owner;
+        _bossEnemy.StartCoroutine(Stun());
+
+        //Apply Effect
+    }
+
+    public void Exit()
+    {
+        _bossEnemy = null;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+    }
+
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+    }
+
+    public void Update()
+    {
+    }
+
+    IEnumerator Stun()
+    {
+        yield return new WaitForSeconds(_stunTime);
+
+        _bossEnemy.ChangeDropState();
     }
 }

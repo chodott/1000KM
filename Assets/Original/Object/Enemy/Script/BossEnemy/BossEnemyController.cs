@@ -4,6 +4,10 @@ public class BossEnemyController : MonoBehaviour, IDamagable
 {
     #region SerializeField
     [SerializeField]
+    private BossPhaseData[] _phaseDatas;
+    [SerializeField]
+    private GameObject[] _projectilePrefabs;
+    [SerializeField]
     private Rigidbody _rigidbody;
     [SerializeField]
     private LaneMover _laneMover;
@@ -12,18 +16,19 @@ public class BossEnemyController : MonoBehaviour, IDamagable
     [SerializeField]
     private GameObject _destroyEffectPrefab;
     [SerializeField]
-    private GameObject _projectilePrefab;
-    [SerializeField]
     private float _maxHealthPoint = 6;
     #endregion 
 
 
     private StateMachine<BossEnemyController> _stateMachine;
     private DropCargoState _dropCargoState = new DropCargoState();
+    private BossStunState _stunState = new BossStunState();
+
     private Vector3 _forwardVector = -Vector3.right;
     private float _curVelocity;
 
     private float _curHealthPoint;
+    private int _curPhaseIndex;
 
     public LaneMover LaneMover { get { return _laneMover; } }
 
@@ -35,6 +40,7 @@ public class BossEnemyController : MonoBehaviour, IDamagable
     private void Start()
     {
         _stateMachine.ChangeState(_dropCargoState);
+        UpdatePhase();
     }
 
     private void FixedUpdate()
@@ -42,20 +48,42 @@ public class BossEnemyController : MonoBehaviour, IDamagable
         _stateMachine.Update();
     }
 
-    public void ChangeState(IBossState state)
+    private void UpdatePhase()
     {
-        _stateMachine.ChangeState(state);
+        if(_curPhaseIndex + 1 < _phaseDatas.Length)
+        {
+            var nextPhase = _phaseDatas[_curPhaseIndex + 1];
+            if(nextPhase.HpThreshold < _curHealthPoint)
+            {
+                return;
+            }
+            _curPhaseIndex++;
+            _laneMover.UpdateMoveLaneSpeed(nextPhase.MoveSpeed);
+        }
     }
 
     public void DropProjectile()
     {
-        Instantiate(_projectilePrefab, transform.position, transform.rotation);
+        var phase = _phaseDatas[_curPhaseIndex];
+        int randomIndex = UnityEngine.Random.Range(phase.UseProjectileRanage.x, phase.UseProjectileRanage.y+1);
+        GameObject spawnPrefab = _projectilePrefabs[randomIndex];
+        Instantiate(spawnPrefab, transform.position, transform.rotation);
+    }
+
+    public void ChangeDropState()
+    {
+        _stateMachine.ChangeState(_dropCargoState);
+    }
+
+    public void ChangeStunState()
+    {
+        _stateMachine.ChangeState(_stunState);
     }
 
     public void OnDamaged(float amount)
     {
         _curHealthPoint -= amount;
-        Debug.Log(_curHealthPoint);
+        UpdatePhase();
         if (_curHealthPoint < 0)
         {
             
