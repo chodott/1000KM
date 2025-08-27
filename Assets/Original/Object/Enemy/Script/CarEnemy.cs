@@ -23,7 +23,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private GameObject _destroyEffectPrefab;
     #endregion 
 
-    private IEnemyState _curState;
+    private StateMachine<CarEnemy> _stateMachine;
     private EnemyColor _color;
     private EnemyStatData _statData;
     private GameObject _originalPrefab;
@@ -60,11 +60,14 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     #region Monobehaviour Callbacks
 
-
+    void Awake()
+    {
+        _stateMachine = new StateMachine<CarEnemy>(this);
+    }
     void FixedUpdate()
     {
         MoveForward(_curVelocity);
-        _curState.Update();
+        _stateMachine.Update();
     }
     #endregion  
 
@@ -77,12 +80,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     public void ChangeState(IEnemyState state)
     {
-        if(_curState != null)
-        {
-            _curState.Exit();
-        }
-        _curState = state;
-        _curState.Enter(this);
+        _stateMachine.ChangeState(state);
     }
 
     private void DoPattern()
@@ -265,7 +263,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     public void OnCollisionEnter(Collision collision)
     {
-        _curState.OnCollisionEnter(collision);
+        _stateMachine.OnCollisionEnter(collision);
     }
 
     #region PoolingObject Callbacks
@@ -278,7 +276,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     {
         gameObject.SetActive(false);
         ResetPhysics();
-        _curState = null;
+        //_curState = null;
         OnReturned?.Invoke(OriginalPrefab,gameObject);
     }
     #endregion
@@ -286,7 +284,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     #region IParyable Callbacks
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
-        _curState.OnParried(contactPoint, damage, moveLaneSpeed);
+        _stateMachine.OnParried(contactPoint, damage, moveLaneSpeed);
     }
 
     public void OnAttack()

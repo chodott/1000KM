@@ -3,16 +3,54 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using UnityEngine;
 
-public interface IEnemyState
+public interface IState<TOwner>
 {
-    public void Enter(CarEnemy enemy);
+    public void Enter(TOwner owner);
     public void Exit();
-
     public void Update();
-
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed);
-
     public void OnCollisionEnter(Collision collision);
+}
+
+public class StateMachine<TOwner>
+{
+    private TOwner _owner;
+    IState<TOwner> _curState;
+
+
+    public StateMachine(TOwner owner)
+    {
+        _owner = owner;
+    }
+
+    public void ChangeState(IState<TOwner> nextState)
+    {
+        if(_curState != null)
+        {
+            _curState.Exit();
+        }
+        _curState = nextState;
+        _curState.Enter(_owner);
+    }
+
+    public void Update()
+    {
+        _curState.Update();
+    }
+
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+        _curState.OnParried(contactPoint, damage, moveLaneSpeed);
+    }
+    public void OnCollisionEnter(Collision collision)
+    {
+        _curState.OnCollisionEnter(collision);
+    }
+}
+
+public interface IEnemyState: IState<CarEnemy>
+{
+
 }
 
 

@@ -78,7 +78,6 @@ public class PlayerStatus : MonoBehaviour
     private void EarnMoney()
     {
         _curMoney++;
-        Debug.Log(_curMoney);
         OnMoneyChanged?.Invoke(_curMoney);
     }
 
