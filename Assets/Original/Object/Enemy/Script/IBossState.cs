@@ -68,6 +68,7 @@ public class DropCargoState : IBossState
 
     public void DropCargo()
     {
+        _bossEnemy.DropProjectile();
         DoCycle();
     }
 }

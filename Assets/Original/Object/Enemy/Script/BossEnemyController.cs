@@ -35,15 +35,7 @@ public class BossEnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MoveForward(_curVelocity);
         _stateMachine.Update();
-    }
-
-    private void MoveForward(float velocity)
-    {
-        _curVelocity = GlobalMovementController.Instance.GlobalVelocity;
-        Vector3 targetPosition = _rigidbody.position + (_forwardVector * _curVelocity * Time.fixedDeltaTime);
-        _rigidbody.MovePosition(targetPosition);
     }
 
     public void ChangeState(IBossState state)

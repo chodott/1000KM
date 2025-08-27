@@ -15,8 +15,8 @@ TagManager:
   - UI
   - EventTrigger
   - Player
-  - 
-  - 
+  - EnemyProjectile
+  - PlayerProjectile
   - 
   - 
   - 
