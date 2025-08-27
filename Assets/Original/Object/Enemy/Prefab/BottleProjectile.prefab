@@ -180,6 +180,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 2523151940832249414}
   _explosionEffectPrefab: {fileID: 458320537626344600, guid: b4bc86fafdaad344b970825610d77f07, type: 3}
   _LayerNameAfterParry: PlayerProjectile
+  _canParry: 1
 --- !u!1 &4262950291413168346
 GameObject:
   m_ObjectHideFlags: 0

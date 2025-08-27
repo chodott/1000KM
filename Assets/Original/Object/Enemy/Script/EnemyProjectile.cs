@@ -13,6 +13,8 @@ public class EnemyProjectile: MonoBehaviour, IParryable
     private GameObject _explosionEffectPrefab;
     [SerializeField]
     private string _LayerNameAfterParry;
+    [SerializeField]
+    private bool _canParry;
 
     private Vector3 _forwardVector = Vector3.right;
     private float _curVelocity;
@@ -33,6 +35,11 @@ public class EnemyProjectile: MonoBehaviour, IParryable
         _rigidbody.MovePosition(targetPosition);
     }
 
+    private void SpawnExplosionEffect()
+    {
+        Instantiate(_explosionEffectPrefab, transform.position, Quaternion.identity);
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
@@ -43,18 +50,25 @@ public class EnemyProjectile: MonoBehaviour, IParryable
         if(other.TryGetComponent<IDamagable>(out var damagable))
         {
             damagable.OnDamaged(1);
-            Instantiate(_explosionEffectPrefab, transform.position, Quaternion.identity);
+            SpawnExplosionEffect();
             Destroy(this.gameObject);
         }
     }
 
     public void OnParried(Vector3 contactPosition, float damage, float moveLaneSpeed)
     {
-        _isParried = true;
-        _triggerCollider.enabled = true;
-        _triggerCollider.gameObject.layer = LayerMask.NameToLayer(_LayerNameAfterParry);
-        _curVelocity = GlobalMovementController.Instance.GlobalVelocity * -1.5f;
-        _rigidbody.AddRelativeTorque(Vector3.right * 1000f, ForceMode.Force);
+        if(_canParry)
+        {
+            _isParried = true;
+            _triggerCollider.enabled = true;
+            _triggerCollider.gameObject.layer = LayerMask.NameToLayer(_LayerNameAfterParry);
+            _curVelocity = GlobalMovementController.Instance.GlobalVelocity * -1.5f;
+            _rigidbody.AddRelativeTorque(Vector3.right * 1000f, ForceMode.Force);
+        }
+        else
+        {
+            SpawnExplosionEffect();
+        }
     }
 
     public void OnAttack()
