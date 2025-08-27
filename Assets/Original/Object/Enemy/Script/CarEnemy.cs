@@ -27,7 +27,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
     private EnemyColor _color;
     private EnemyStatData _statData;
     private GameObject _originalPrefab;
-    private Vector3 _forwardVector = new Vector3(-1, 0, 0);
+    private Vector3 _forwardVector = -Vector3.right;
     private float _returnPositionX = 5f;
     private float _patternCooldownTime = 1;
     private float _patternCooldownTimer;
