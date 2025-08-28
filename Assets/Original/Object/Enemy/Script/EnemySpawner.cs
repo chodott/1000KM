@@ -26,6 +26,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private List<DifficultyTier> _difficultyTiers = new List<DifficultyTier>();
     [SerializeField]
+    private GameObject[] _bossPrefabs;
+    [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
     private Vector3 _spawnPosition;
@@ -41,7 +43,6 @@ public class EnemySpawner : MonoBehaviour
 
     #endregion
     private ObjectPool _objectPool = new ObjectPool();
-    private GameObject[] _bossPrefabs;
     private float _spawnBudget = 0f;
     private int _laneCount;
     private int _laneRange;
@@ -108,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
 
         int randomIndex = Random.Range(0, availableLanes.Count);
         int spawnLane = availableLanes[randomIndex];
-        SpawnEnemy(spawnLane);
+        //SpawnEnemy(spawnLane);
 
         return true;
 
@@ -129,6 +130,6 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnBoss()
     {
         var spawnBossPrefab = _bossPrefabs[_spawnBossIndex];
-        Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.identity);
+        Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.Euler(0, -90, 0));
     }
 }

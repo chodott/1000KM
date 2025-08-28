@@ -22,8 +22,7 @@ public class GlobalMovementController : MonoBehaviour
     private float _distanceAccumulator = 0f;
     private float _restAreaSpawnDistance = 200f;
     private float _bossSpawnDistance;
-
-
+    private bool _stopCheckDistance = false;
 
     //(Horizontal, Vertical)
     private (float, float) _targetBendSize = (3,1);
@@ -59,6 +58,12 @@ public class GlobalMovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        if(_stopCheckDistance)
+        {
+            return;
+        }
+
         float distance = GlobalVelocity * Time.fixedDeltaTime;
         TotalDistance += distance;
         _distanceAccumulator += distance;
@@ -72,6 +77,7 @@ public class GlobalMovementController : MonoBehaviour
         if(TotalDistance >= _bossSpawnDistance)
         {
             OnReachedMaxDistance?.Invoke();
+            _stopCheckDistance = true;
             _bossSpawnDistance += _bossInterval;
         }
 

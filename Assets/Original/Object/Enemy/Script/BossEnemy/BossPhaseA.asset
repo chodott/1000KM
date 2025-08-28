@@ -15,3 +15,4 @@ MonoBehaviour:
   _hpThreshold: 6
   _moveSpeed: 2
   _useProjectileRange: {x: 0, y: 0}
+  _standOffDistance: 30

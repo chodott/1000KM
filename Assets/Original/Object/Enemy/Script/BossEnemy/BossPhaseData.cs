@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
@@ -15,4 +17,8 @@ public class BossPhaseData : ScriptableObject
     [SerializeField]
     private Vector2Int _useProjectileRange = new Vector2Int();
     public Vector2Int UseProjectileRanage { get { return _useProjectileRange; } }
+
+    [SerializeField]
+    private float _standOffDistance;
+    public float StandOffDistance { get { return _standOffDistance; } }
 }

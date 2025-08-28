@@ -17,6 +17,8 @@ public class BossEnemyController : MonoBehaviour, IDamagable
     private GameObject _destroyEffectPrefab;
     [SerializeField]
     private float _maxHealthPoint = 6;
+    [SerializeField]
+    private float _velocity = 5f;
     #endregion 
 
 
@@ -24,11 +26,8 @@ public class BossEnemyController : MonoBehaviour, IDamagable
     private DropCargoState _dropCargoState = new DropCargoState();
     private BossStunState _stunState = new BossStunState();
 
-    private Vector3 _forwardVector = -Vector3.right;
-    private float _curVelocity;
-
     private float _curHealthPoint;
-    private int _curPhaseIndex;
+    private int _curPhaseIndex = -1;
 
     public LaneMover LaneMover { get { return _laneMover; } }
 
@@ -39,7 +38,6 @@ public class BossEnemyController : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _stateMachine.ChangeState(_dropCargoState);
         UpdatePhase();
     }
 
@@ -59,7 +57,24 @@ public class BossEnemyController : MonoBehaviour, IDamagable
             }
             _curPhaseIndex++;
             _laneMover.UpdateMoveLaneSpeed(nextPhase.MoveSpeed);
+
+            float mustKeepDistance = nextPhase.StandOffDistance;
+            if(Mathf.Abs(_rigidbody.position.x) > mustKeepDistance)
+            {
+                _stateMachine.ChangeState(new PaceToDistance(mustKeepDistance));
+            }
         }
+    }
+
+    public float GetDistanceToPlayer()
+    {
+        return Mathf.Abs(_rigidbody.position.x);
+    }
+
+    public void MoveToBack()
+    {
+        Vector3 nextPosition = _rigidbody.position + Vector3.right * _velocity * Time.deltaTime;
+        _rigidbody.MovePosition(nextPosition);
     }
 
     public void DropProjectile()

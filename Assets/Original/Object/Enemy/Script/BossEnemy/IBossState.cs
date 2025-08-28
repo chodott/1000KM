@@ -8,6 +8,48 @@ public interface IBossState : IState<BossEnemyController>
 
 }
 
+public class PaceToDistance : IBossState
+{
+    BossEnemyController _bossEnemy;
+    private float _keepDistance;
+
+    public PaceToDistance(float distance)
+    {
+        _keepDistance = distance;
+    }
+
+    public void Enter(BossEnemyController owner)
+    {
+        _bossEnemy = owner;
+    }
+
+    public void Exit()
+    {
+        _bossEnemy = null;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+        return;
+    }
+
+    public void Update()
+    {
+        _bossEnemy.MoveToBack();
+        if(_bossEnemy.GetDistanceToPlayer() <= _keepDistance)
+        {
+            _bossEnemy.ChangeDropState();
+        }
+        return;
+    }
+}
+
+
 public class DropCargoState : IBossState
 {
     private BossEnemyController _bossEnemy;
@@ -38,7 +80,7 @@ public class DropCargoState : IBossState
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
-        throw new System.NotImplementedException();
+        return;
     }
 
     public void Update()
