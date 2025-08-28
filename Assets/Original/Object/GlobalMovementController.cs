@@ -11,11 +11,18 @@ public class GlobalMovementController : MonoBehaviour
     [SerializeField]
     private float _maxBendSize = 6f;
 
+    [SerializeField]
+    private float _bossInterval = 1000f;
+    [SerializeField]
+    private float _restAreaInterval = 500f;
+
+
     private PlayerMovement _playerMovement;
     private float _distanceThreshold = 500f;
     private float _distanceAccumulator = 0f;
-    private float _restAreaInterval = 500f;
     private float _restAreaSpawnDistance = 200f;
+    private float _bossSpawnDistance;
+
 
 
     //(Horizontal, Vertical)
@@ -24,6 +31,7 @@ public class GlobalMovementController : MonoBehaviour
 
 
     public static GlobalMovementController Instance { get; private set; }
+    public event Action OnReachedMaxDistance;
     public float GlobalVelocity { get; private set; }
     public float TotalDistance { get; private set; }
 
@@ -37,6 +45,11 @@ public class GlobalMovementController : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        _bossSpawnDistance += _bossInterval;
     }
 
     private void OnDestroy()
@@ -54,6 +67,12 @@ public class GlobalMovementController : MonoBehaviour
         {
             _restAreaEntrance.gameObject.SetActive(true);
             _restAreaSpawnDistance += _restAreaInterval;
+        }
+
+        if(TotalDistance >= _bossSpawnDistance)
+        {
+            OnReachedMaxDistance?.Invoke();
+            _bossSpawnDistance += _bossInterval;
         }
 
         float lerpAlpha = _distanceAccumulator / _distanceThreshold;

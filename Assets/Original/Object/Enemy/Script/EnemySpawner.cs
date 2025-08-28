@@ -41,9 +41,11 @@ public class EnemySpawner : MonoBehaviour
 
     #endregion
     private ObjectPool _objectPool = new ObjectPool();
+    private GameObject[] _bossPrefabs;
     private float _spawnBudget = 0f;
     private int _laneCount;
     private int _laneRange;
+    private int _spawnBossIndex = 0;
 
     #region Monobehaviour Callbacks
     private void Start()
@@ -51,6 +53,7 @@ public class EnemySpawner : MonoBehaviour
         _laneCount = LaneSystem.Instance.LaneCount;
         _laneRange = LaneSystem.Instance.LaneRange;
         _objectPool.CreateDefaultObjects(_enemyPrefab, _defaultSpawnCount);
+        GlobalMovementController.Instance.OnReachedMaxDistance += SpawnBoss;
     }
 
     private void Update()
@@ -122,4 +125,10 @@ public class EnemySpawner : MonoBehaviour
             float velocity = GlobalMovementController.Instance.GlobalVelocity * _enemySpeedMultiplier;
             carEnemy.Init(randomColor, randomStat, spawnPosition, velocity, spawnLaneIndex);
      }
+
+    private void SpawnBoss()
+    {
+        var spawnBossPrefab = _bossPrefabs[_spawnBossIndex];
+        Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.identity);
+    }
 }
