@@ -42,11 +42,6 @@ public class EnemyProjectile: MonoBehaviour, IParryable
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer != LayerMask.NameToLayer("Enemy"))
-        {
-            return;
-        }
-
         if(other.TryGetComponent<IDamagable>(out var damagable))
         {
             damagable.OnDamaged(1);

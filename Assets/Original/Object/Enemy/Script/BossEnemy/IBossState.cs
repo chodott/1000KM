@@ -63,12 +63,13 @@ public class DropCargoState : IBossState
         _bossEnemy = bossEnemyController;
         _laneMover = _bossEnemy.LaneMover;
 
-        _laneMover.OnFinishMove += MoveLane;
+        _laneMover.OnFinishMove += ArriveLane;
         DoCycle();
     }
 
     public void Exit()
     {
+        _laneMover.OnFinishMove -= ArriveLane;
         _laneMover = null;
         _bossEnemy = null;
     }
@@ -92,28 +93,34 @@ public class DropCargoState : IBossState
         _leftMoveCount = UnityEngine.Random.Range(_moveCountRange.Item1, _moveCountRange.Item2);
         MoveLane();
     }
-    public void MoveLane()
+
+    public void ArriveLane()
     {
-        if(_leftMoveCount==0)
+        _leftMoveCount--;
+        if (_leftMoveCount == 0)
         {
             DropCargo();
+            _bossEnemy.ChangeStunState();
         }
         else
         {
-            _leftMoveCount--;
-            float direction = UnityEngine.Random.Range(0, 2) * 2 - 1;
-            bool result = _laneMover.MoveLane(direction);
-            if(result == false)
-            {
-                _laneMover.MoveLane(-direction);
-            }
+            MoveLane();
+        }
+    }
+
+    public void MoveLane()
+    {
+        float direction = UnityEngine.Random.Range(0, 2) * 2 - 1;
+        bool result = _laneMover.MoveLane(direction);
+        if(result == false)
+        {
+            _laneMover.MoveLane(-direction);
         }
     }
 
     public void DropCargo()
     {
         _bossEnemy.DropProjectile();
-        DoCycle();
     }
 }
 
@@ -126,8 +133,6 @@ public class BossStunState : IBossState
     {
         _bossEnemy = owner;
         _bossEnemy.StartCoroutine(Stun());
-
-        //Apply Effect
     }
 
     public void Exit()
