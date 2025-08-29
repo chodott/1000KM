@@ -11,6 +11,8 @@ public class PlayerParrySystem : MonoBehaviour
     [SerializeField]
     private ParryCollider _parryCollider;
     [SerializeField]
+    private HitCollider _hitCollider;
+    [SerializeField]
     private float _parryCooldownTime = 0.3f;
     [SerializeField]
     private int _spinCount = 3;
@@ -29,7 +31,8 @@ public class PlayerParrySystem : MonoBehaviour
 
     private void ParrySuccess(Collider other)
     {
-        if (other.TryGetComponent<IParryable>(out var parryable))
+        var host = other.attachedRigidbody ? other.attachedRigidbody.gameObject : other.gameObject;
+        if (host.TryGetComponent<IParryable>(out var parryable))
         {
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             Instantiate(_parryEffectPrefab, contactPoint, Quaternion.identity);
@@ -43,6 +46,7 @@ public class PlayerParrySystem : MonoBehaviour
     {
         _isParry = true;
         _parryCollider.SetActive(true);
+        _hitCollider.SetActive(false);
 
 
         float elapsedTime = 0f;
@@ -58,7 +62,7 @@ public class PlayerParrySystem : MonoBehaviour
         _isParry = false;
         transform.rotation = _baseRotation;
         _parryCollider.SetActive(false);
-
+        _hitCollider.SetActive(true);
     }
 
     public void Init(float moveLaneSpeed)

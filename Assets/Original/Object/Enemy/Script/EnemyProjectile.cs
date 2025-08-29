@@ -42,7 +42,8 @@ public class EnemyProjectile: MonoBehaviour, IParryable
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<IDamagable>(out var damagable))
+        var host = other.attachedRigidbody ? other.attachedRigidbody.gameObject : other.gameObject;
+        if (host.TryGetComponent<IDamagable>(out var damagable))
         {
             damagable.OnDamaged(1);
             SpawnExplosionEffect();
