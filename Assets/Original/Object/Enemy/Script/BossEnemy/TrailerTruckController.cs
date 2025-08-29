@@ -1,22 +1,21 @@
 
 using UnityEngine;
 
-public class CargoTruckController : BossEnemyController
+public class TrailerTruckController : BossEnemyController
 {
     [SerializeField]
     private GameObject[] _projectilePrefabs;
 
-    private StateMachine<CargoTruckController> _stateMachine;
+    private StateMachine<TrailerTruckController> _stateMachine;
     private DropCargoState _dropCargoState = new DropCargoState();
 
     private void Awake()
     {
-        _stateMachine = new StateMachine<CargoTruckController>();
+        _stateMachine = new StateMachine<TrailerTruckController>();
     }
 
     protected override void FixedUpdate()
     {
-        base.FixedUpdate();
         _stateMachine.Update();
     }
     public void DropProjectile()
@@ -46,14 +45,9 @@ public class CargoTruckController : BossEnemyController
         }
     }
 
-    public void ChangeDropState()
-    {
-        _stateMachine.ChangeState(_dropCargoState, this);
-    }
-
     public override void OnMoveShuffleEnd()
     {
-        ChangeDropState();
+       
     }
 
     public override void OnStunEnd()
@@ -64,6 +58,11 @@ public class CargoTruckController : BossEnemyController
     public override void OnMatchGapEnd()
     {
         ChangeShuffleState();
+    }
+
+    public void ChangeMatchState()
+    {
+
     }
 
     public override void ChangeStunState()

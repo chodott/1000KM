@@ -109,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
 
         int randomIndex = Random.Range(0, availableLanes.Count);
         int spawnLane = availableLanes[randomIndex];
-        //SpawnEnemy(spawnLane);
+        SpawnEnemy(spawnLane);
 
         return true;
 

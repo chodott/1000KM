@@ -96,6 +96,23 @@ public class LaneMover : MonoBehaviour
         return true;
     }
 
+    public bool MoveLane(float isRight, int count)
+    {
+        if (_isMoving)
+        {
+            return false;
+        }
+
+        int direction = Math.Sign(isRight);
+        LaneSystem.Instance.GetLastLaneIndex(direction);
+       
+        SetTargetLanePosition(direction);
+
+        AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
+        _animation.Play(playClip.name);
+        return true;
+    }
+
     public bool KnockbackLane(float isRight)
     {
         int direction = Math.Sign(isRight);

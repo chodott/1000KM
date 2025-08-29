@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class BossEnemyController : MonoBehaviour, IDamagable
+public class BossEnemyController : BaseEnemy, IDamagable
 {
     #region SerializeField
     [SerializeField]
     protected BossPhaseData[] _phaseDatas;
-    [SerializeField]
-    private Rigidbody _rigidbody;
-    [SerializeField]
-    private LaneMover _laneMover;
-    [SerializeField]
-    private BoxCollider _collider;
     [SerializeField]
     private GameObject _destroyEffectPrefab;
     [SerializeField]
@@ -23,12 +17,7 @@ public class BossEnemyController : MonoBehaviour, IDamagable
     protected MoveShuffleState _moveShuffleState = new MoveShuffleState();
     protected BossStunState _stunState = new BossStunState();
 
-    protected float _curHealthPoint;
     protected int _curPhaseIndex = -1;
-
-    public LaneMover LaneMover { get { return _laneMover; } }
-    public Rigidbody Rb { get { return _rigidbody; } }
-
 
     private void OnEnable()
     {
@@ -44,15 +33,20 @@ public class BossEnemyController : MonoBehaviour, IDamagable
     {
     }
 
-    public float GetDistanceToPlayer()
+    public float GetXDistanceToPlayer()
     {
-        return Mathf.Abs(_rigidbody.position.x);
+        return Mathf.Abs(Rb.position.x);
+    }
+
+    public float GetZOffsetToPlayer()
+    {
+        return Rb.position.z;
     }
 
     public void MoveToBack()
     {
-        Vector3 nextPosition = _rigidbody.position + Vector3.right * _velocity * Time.fixedDeltaTime;
-        _rigidbody.MovePosition(nextPosition);
+        Vector3 nextPosition = Rb.position + Vector3.right * _velocity * Time.fixedDeltaTime;
+        Rb.MovePosition(nextPosition);
     }
 
     public virtual void ChangeStunState()

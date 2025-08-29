@@ -37,7 +37,7 @@ public class MatchGapState : IState<BossEnemyController>
     public void Update()
     {
         _bossEnemy.MoveToBack();
-        if(_bossEnemy.GetDistanceToPlayer() <= _keepDistance)
+        if(_bossEnemy.GetXDistanceToPlayer() <= _keepDistance)
         {
             _bossEnemy.OnMatchGapEnd();
         }

@@ -35,6 +35,12 @@ public class LaneSystem : MonoBehaviour
         return true;
     }
 
+    public int GetLastLaneIndex(int direction)
+    {
+        int lastLaneIndex = direction * _laneRange;
+        return lastLaneIndex;
+    }
+
     public float GetLanePositionZ(int index)
     {
         return index * _laneWidth;
