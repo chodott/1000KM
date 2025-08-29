@@ -3,17 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IBossState : IState<BossEnemyController>
-{
 
-}
-
-public class PaceToDistance : IBossState
+public class MatchGapState : IState<BossEnemyController>
 {
     BossEnemyController _bossEnemy;
     private float _keepDistance;
 
-    public PaceToDistance(float distance)
+    public MatchGapState(float distance)
     {
         _keepDistance = distance;
     }
@@ -43,24 +39,21 @@ public class PaceToDistance : IBossState
         _bossEnemy.MoveToBack();
         if(_bossEnemy.GetDistanceToPlayer() <= _keepDistance)
         {
-            _bossEnemy.ChangeDropState();
+            _bossEnemy.OnMatchGapEnd();
         }
         return;
     }
 }
 
-
-public class DropCargoState : IBossState
+public class MoveShuffleState : IState<BossEnemyController>
 {
     private BossEnemyController _bossEnemy;
     private LaneMover _laneMover;
-
-    private event Action _onCycleFinished;
     private (int, int) _moveCountRange = (3, 6);
     private int _leftMoveCount;
-    public void Enter(BossEnemyController bossEnemyController)
+    public void Enter(BossEnemyController owner)
     {
-        _bossEnemy = bossEnemyController;
+        _bossEnemy = owner;
         _laneMover = _bossEnemy.LaneMover;
 
         _laneMover.OnFinishMove += ArriveLane;
@@ -70,18 +63,16 @@ public class DropCargoState : IBossState
     public void Exit()
     {
         _laneMover.OnFinishMove -= ArriveLane;
-        _laneMover = null;
         _bossEnemy = null;
+        _laneMover = null;
     }
 
     public void OnCollisionEnter(Collision collision)
     {
-        throw new System.NotImplementedException();
     }
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
-        return;
     }
 
     public void Update()
@@ -99,8 +90,7 @@ public class DropCargoState : IBossState
         _leftMoveCount--;
         if (_leftMoveCount == 0)
         {
-            DropCargo();
-            _bossEnemy.ChangeStunState();
+            _bossEnemy.OnMoveShuffleEnd();
         }
         else
         {
@@ -112,20 +102,14 @@ public class DropCargoState : IBossState
     {
         float direction = UnityEngine.Random.Range(0, 2) * 2 - 1;
         bool result = _laneMover.MoveLane(direction);
-        if(result == false)
+        if (result == false)
         {
             _laneMover.MoveLane(-direction);
         }
     }
-
-    public void DropCargo()
-    {
-        _bossEnemy.DropProjectile();
-    }
 }
 
-
-public class BossStunState : IBossState
+public class BossStunState : IState<BossEnemyController>
 {
     BossEnemyController _bossEnemy;
     private Coroutine _coroutineHandle;
@@ -138,7 +122,10 @@ public class BossStunState : IBossState
 
     public void Exit()
     {
-        _bossEnemy.StopCoroutine(_coroutineHandle);
+        if(_coroutineHandle != null)
+        {
+            _bossEnemy.StopCoroutine(_coroutineHandle);
+        }
         _bossEnemy = null;
     }
 
@@ -157,8 +144,8 @@ public class BossStunState : IBossState
     IEnumerator Stun()
     {
         yield return new WaitForSeconds(_stunTime);
-
-        _bossEnemy.ChangeDropState();
         _coroutineHandle = null;
+
+        _bossEnemy.OnStunEnd();
     }
 }

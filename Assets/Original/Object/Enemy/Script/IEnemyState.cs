@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using UnityEngine;
 
-public interface IState<TOwner>
+public interface IState<in TOwner>
 {
     public void Enter(TOwner owner);
     public void Exit();
@@ -12,25 +12,16 @@ public interface IState<TOwner>
     public void OnCollisionEnter(Collision collision);
 }
 
-public class StateMachine<TOwner>
+public class StateMachine<TOwner> where TOwner : MonoBehaviour
 {
-    private TOwner _owner;
     IState<TOwner> _curState;
 
-
-    public StateMachine(TOwner owner)
+    public void ChangeState(IState<TOwner> nextState, TOwner owner)
     {
-        _owner = owner;
-    }
 
-    public void ChangeState(IState<TOwner> nextState)
-    {
-        if(_curState != null)
-        {
-            _curState.Exit();
-        }
+         _curState?.Exit();
         _curState = nextState;
-        _curState.Enter(_owner);
+        _curState.Enter(owner);
     }
 
     public void Update()

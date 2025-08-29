@@ -62,7 +62,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     void Awake()
     {
-        _stateMachine = new StateMachine<CarEnemy>(this);
+        _stateMachine = new StateMachine<CarEnemy>();
     }
     void FixedUpdate()
     {
@@ -80,7 +80,7 @@ public class CarEnemy : MonoBehaviour,IParryable, IPoolingObject
 
     public void ChangeState(IEnemyState state)
     {
-        _stateMachine.ChangeState(state);
+        _stateMachine.ChangeState(state, this);
     }
 
     private void DoPattern()
