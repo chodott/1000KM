@@ -36,6 +36,11 @@ public class BossEnemyController : MonoBehaviour, IDamagable
         _stateMachine = new StateMachine<BossEnemyController>(this);
     }
 
+    private void OnEnable()
+    {
+        _curHealthPoint = _maxHealthPoint;
+    }
+
     private void Start()
     {
         UpdatePhase();

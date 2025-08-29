@@ -128,15 +128,17 @@ public class DropCargoState : IBossState
 public class BossStunState : IBossState
 {
     BossEnemyController _bossEnemy;
+    private Coroutine _coroutineHandle;
     private float _stunTime = 2f;
     public void Enter(BossEnemyController owner)
     {
         _bossEnemy = owner;
-        _bossEnemy.StartCoroutine(Stun());
+        _coroutineHandle = _bossEnemy.StartCoroutine(Stun());
     }
 
     public void Exit()
     {
+        _bossEnemy.StopCoroutine(_coroutineHandle);
         _bossEnemy = null;
     }
 
@@ -157,5 +159,6 @@ public class BossStunState : IBossState
         yield return new WaitForSeconds(_stunTime);
 
         _bossEnemy.ChangeDropState();
+        _coroutineHandle = null;
     }
 }
