@@ -44,7 +44,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void OnEnable()
     {
-        _hitCollider.OnHitEvent += OnDamaged;
+        _hitCollider.OnHitEvent += TakeDamage;
         CarEnemy.OnRewardDropped += EarnMoney;
     }
 
@@ -81,18 +81,9 @@ public class PlayerStatus : MonoBehaviour
         OnMoneyChanged?.Invoke(_curMoney);
     }
 
-    private void OnDamaged(Collider other)
+    private void TakeDamage(float amount)
     {
-        if (other.CompareTag("Parried"))
-        {
-            return;
-        }
-
-        if (other.TryGetComponent<IParryable>(out var parryable))
-        {
-            _curHealthPoint -= _damage;
-            OnHPChanged?.Invoke(_curHealthPoint);
-            parryable.OnAttack();  
-        }
+        _curHealthPoint -= _damage;
+        OnHPChanged?.Invoke(_curHealthPoint);
     }
 }
