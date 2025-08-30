@@ -49,6 +49,7 @@ public class EnemySpawner : MonoBehaviour
     private int _laneCount;
     private int _laneRange;
     private int _spawnBossIndex = 0;
+    private bool _canSpawnDefaultEnemy = true;
 
     #region Monobehaviour Callbacks
     private void Start()
@@ -63,7 +64,7 @@ public class EnemySpawner : MonoBehaviour
     {
         DifficultyTier tier =  GetCurrentTier();
         _spawnBudget = Mathf.Min(_spawnBudget + tier.spawnRate * Time.deltaTime, _spawnBudgetLimit);
-        if(_spawnBudget < 1f)
+        if(_spawnBudget < 1f || _canSpawnDefaultEnemy == false)
         {
             return;
         }
@@ -131,8 +132,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnBoss()
     {
+        _canSpawnDefaultEnemy = false;
         var spawnBossPrefab = _bossPrefabs[_spawnBossIndex];
         GameObject spawnedBoss = Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.Euler(0, -90, 0));
+        
         if (spawnedBoss.TryGetComponent<BossEnemyController>(out var boss)) { /* »ç¿ë */ }
         {
             boss.Init(_playerTransform);

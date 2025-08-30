@@ -48,6 +48,16 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     {
         _stateMachine = new StateMachine<CarEnemy>();
     }
+
+    void OnEnable()
+    {
+        GlobalMovementController.Instance.OnReachedMaxDistance += SelfDestroy;
+    }
+
+    void OnDisable()
+    {
+        GlobalMovementController.Instance.OnReachedMaxDistance -= SelfDestroy;
+    }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -93,6 +103,12 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         Rb.angularVelocity = Vector3.zero;
         Rb.linearVelocity = Vector3.zero;
         Rb.Sleep();
+    }
+
+    private void SelfDestroy()
+    {
+        ChangeState(new DestroyedState(Vector3.up));
+        Deactivate();
     }
 
     private void Destroy(Vector3 direction)
