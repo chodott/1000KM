@@ -28,7 +28,7 @@ public class SpeedSlider : MonoBehaviour
 
     void UpdateValueText()
     {
-        speedValue.text =  Mathf.FloorToInt(sliderUI.GetCurValue()) + "km/h";
+        speedValue.text =  Mathf.FloorToInt(sliderUI.GetCurValue() * 3.6f) + "km/h";
 
         float t = slider.value / maxValue;
 
