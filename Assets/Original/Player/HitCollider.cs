@@ -1,16 +1,20 @@
 using System;
 using UnityEngine;
 
-public class HitCollider : MonoBehaviour
+public class HitCollider : MonoBehaviour, IDamagable
 {
-    public event Action<Collider> OnHitEvent;
-
     [SerializeField]
     private BoxCollider _collider;
 
-    private void OnTriggerEnter(Collider other)
+    public event Action<float> OnHitEvent;
+
+    public void SetActive(bool activate)
     {
-        OnHitEvent?.Invoke(other);
+        _collider.enabled = activate;
     }
 
+    public void OnDamaged(float amount)
+    {
+        OnHitEvent?.Invoke(amount);
+    }
 }

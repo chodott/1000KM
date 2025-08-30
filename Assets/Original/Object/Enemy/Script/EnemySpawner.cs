@@ -26,7 +26,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private List<DifficultyTier> _difficultyTiers = new List<DifficultyTier>();
     [SerializeField]
+    private GameObject[] _bossPrefabs;
+    [SerializeField]
     private GameObject _enemyPrefab;
+    [SerializeField]
+    private Transform _playerTransform;
     [SerializeField]
     private Vector3 _spawnPosition;
     [SerializeField]
@@ -44,6 +48,7 @@ public class EnemySpawner : MonoBehaviour
     private float _spawnBudget = 0f;
     private int _laneCount;
     private int _laneRange;
+    private int _spawnBossIndex = 0;
 
     #region Monobehaviour Callbacks
     private void Start()
@@ -51,6 +56,7 @@ public class EnemySpawner : MonoBehaviour
         _laneCount = LaneSystem.Instance.LaneCount;
         _laneRange = LaneSystem.Instance.LaneRange;
         _objectPool.CreateDefaultObjects(_enemyPrefab, _defaultSpawnCount);
+        GlobalMovementController.Instance.OnReachedMaxDistance += SpawnBoss;
     }
 
     private void Update()
@@ -105,7 +111,7 @@ public class EnemySpawner : MonoBehaviour
 
         int randomIndex = Random.Range(0, availableLanes.Count);
         int spawnLane = availableLanes[randomIndex];
-        SpawnEnemy(spawnLane);
+        //SpawnEnemy(spawnLane);
 
         return true;
 
@@ -122,4 +128,14 @@ public class EnemySpawner : MonoBehaviour
             float velocity = GlobalMovementController.Instance.GlobalVelocity * _enemySpeedMultiplier;
             carEnemy.Init(randomColor, randomStat, spawnPosition, velocity, spawnLaneIndex);
      }
+
+    private void SpawnBoss()
+    {
+        var spawnBossPrefab = _bossPrefabs[_spawnBossIndex];
+        GameObject spawnedBoss = Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.Euler(0, -90, 0));
+        if (spawnedBoss.TryGetComponent<BossEnemyController>(out var boss)) { /* »ç¿ë */ }
+        {
+            boss.Init(_playerTransform);
+        }
+    }
 }

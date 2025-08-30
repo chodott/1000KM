@@ -49,7 +49,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void OnEnable()
     {
-        _hitCollider.OnHitEvent += OnDamaged;
+        _hitCollider.OnHitEvent += TakeDamage;
         CarEnemy.OnRewardDropped += EarnMoney;
     }
 
@@ -135,5 +135,13 @@ public class PlayerStatus : MonoBehaviour
             _curMoney -= amount;
             return true;
         }
+        _curMoney++;
+        OnMoneyChanged?.Invoke(_curMoney);
+    }
+
+    private void TakeDamage(float amount)
+    {
+        _curHealthPoint -= _damage;
+        OnHPChanged?.Invoke(_curHealthPoint);
     }
 }
