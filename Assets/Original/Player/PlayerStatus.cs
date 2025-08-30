@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class PlayerStatus : MonoBehaviour
+public class PlayerStatus : MonoBehaviour, IDamagable
 {
     public event Action<float> OnHPChanged;
     public event Action<float> OnGasPointChanged;
@@ -23,8 +23,6 @@ public class PlayerStatus : MonoBehaviour
     private float _defaultGasEfficiency;
     [SerializeField]
     private float _toiletGainPerSec;
-    [SerializeField]
-    private float _damage = 10.0f;
     #endregion
 
     private float _gasEfficiency;
@@ -48,7 +46,6 @@ public class PlayerStatus : MonoBehaviour
 
     private void OnEnable()
     {
-        _hitCollider.OnHitEvent += TakeDamage;
         CarEnemy.OnRewardDropped += EarnMoney;
     }
 
@@ -69,26 +66,23 @@ public class PlayerStatus : MonoBehaviour
     }
     #endregion
 
-    private void OnDamaged(Collider other)
+    public bool OnDamaged(float amount)
     {
-        if (other.CompareTag("Parried"))
-        {
-            return;
-        }
-
         if (_invincibility.IsActive)
         {
             Debug.Log("Pass Damage");
-            return;
+            return false;
         }
 
-        if (other.TryGetComponent<IParryable>(out var parryable))
+        if(_hitCollider.IsActive == false)
         {
-            _curHealthPoint -= _damage;
-            _invincibility.StartInvinble();
-            OnHPChanged?.Invoke(_curHealthPoint);
-            parryable.OnAttack();
+            return false;
         }
+
+         _curHealthPoint -= amount;
+         _invincibility.StartInvinble();
+         OnHPChanged?.Invoke(_curHealthPoint);
+        return true;
     }
 
     public void UpdateStatus(PartStatus status)
@@ -133,11 +127,5 @@ public class PlayerStatus : MonoBehaviour
             _curMoney -= amount;
             return true;
         }
-    }
-
-    private void TakeDamage(float amount)
-    {
-        _curHealthPoint -= _damage;
-        OnHPChanged?.Invoke(_curHealthPoint);
     }
 }

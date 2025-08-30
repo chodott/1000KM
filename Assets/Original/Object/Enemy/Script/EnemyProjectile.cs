@@ -45,9 +45,12 @@ public class EnemyProjectile: MonoBehaviour, IParryable
         var host = other.attachedRigidbody ? other.attachedRigidbody.gameObject : other.gameObject;
         if (host.TryGetComponent<IDamagable>(out var damagable))
         {
-            damagable.OnDamaged(1);
-            SpawnExplosionEffect();
-            Destroy(this.gameObject);
+            bool result = damagable.OnDamaged(1);
+            if(result == true)
+            {
+                SpawnExplosionEffect();
+                Destroy(this.gameObject);
+            }
         }
     }
 

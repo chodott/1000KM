@@ -94,7 +94,7 @@ public class BossEnemyController : BaseEnemy, IDamagable
 
     }
 
-    public void OnDamaged(float amount)
+    public bool OnDamaged(float amount)
     {
         _curHealthPoint -= amount;
         if (_curHealthPoint < 0)
@@ -104,7 +104,8 @@ public class BossEnemyController : BaseEnemy, IDamagable
         else
         {
             UpdatePhase();
-
         }
+        return true;
+
     }
 }

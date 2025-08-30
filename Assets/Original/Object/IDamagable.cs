@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    public void OnDamaged(float amount);
+    public bool OnDamaged(float amount);
 }

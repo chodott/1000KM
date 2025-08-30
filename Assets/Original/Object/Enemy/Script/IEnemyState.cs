@@ -40,6 +40,12 @@ public class StateMachine<TOwner> where TOwner : MonoBehaviour
     {
         _curState.OnTriggerEnter(other);
     }
+
+    public void Reset()
+    {
+        _curState?.Exit();
+        _curState = null;
+    }
 }
 
 public interface IEnemyState: IState<CarEnemy>

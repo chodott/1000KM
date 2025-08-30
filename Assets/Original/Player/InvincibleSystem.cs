@@ -29,7 +29,7 @@ public class InvincibleSystem : MonoBehaviour
             _invincibleTimer += Time.unscaledDeltaTime;
             yield return null;
         }
-
+        _isActive = false;
     }
 
 }

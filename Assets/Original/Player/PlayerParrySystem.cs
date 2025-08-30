@@ -64,8 +64,9 @@ public class PlayerParrySystem : MonoBehaviour
         _isParry = false;
         transform.rotation = _baseRotation;
         _parryCollider.SetActive(false);
-        OnParryFinished?.Invoke();
         _hitCollider.SetActive(true);
+        OnParryFinished?.Invoke();
+
     }
 
     public void Init(float moveLaneSpeed)

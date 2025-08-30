@@ -8,6 +8,7 @@ public class ParryCollider : MonoBehaviour
     [SerializeField]
     private CapsuleCollider _collider;
 
+
     private void Start()
     {
         SetActive(false);

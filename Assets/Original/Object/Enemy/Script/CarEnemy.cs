@@ -248,7 +248,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     {
         gameObject.SetActive(false);
         ResetPhysics();
-        //_curState = null;
+        _stateMachine.Reset();
         OnReturned?.Invoke(OriginalPrefab,gameObject);
     }
     #endregion
