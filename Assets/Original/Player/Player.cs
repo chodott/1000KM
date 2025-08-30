@@ -31,6 +31,7 @@ public class Player : MonoBehaviour, IDamagable
     private PlayerDriveState _driveState = new PlayerDriveState();
     private PlayerParryState _parryState = new PlayerParryState();
     private NoInputState _noInputState = new NoInputState();
+    private PlayerStunState _stunState = new PlayerStunState();
 
     private InputAction _thorottleAction;
     private InputAction _moveLeftAction;
@@ -124,6 +125,11 @@ public class Player : MonoBehaviour, IDamagable
     {
         ChangeState(_noInputState);
     }
+
+    public void EnterStunState()
+    {
+        ChangeState(_stunState);
+    }
     #endregion;
 
 
@@ -131,6 +137,14 @@ public class Player : MonoBehaviour, IDamagable
     {
         _stunParticleHandler.StopStunEffect();
     }
+
+    public void StartStun()
+    {
+        _invincibility.StartInvinble();
+        _playerMovement.OnDamaged();
+        _stunParticleHandler.PlayStunEffect();
+    }
+
     public bool OnDamaged(float amount)
     {
         if (_invincibility.IsActive)
@@ -142,11 +156,9 @@ public class Player : MonoBehaviour, IDamagable
         {
             return false;
         }
-        _invincibility.StartInvinble();
         _playerStatus.OnDamaged(amount);
-        _playerMovement.OnDamaged();
-        _stunParticleHandler.PlayStunEffect();
 
+        _curState.OnDamaged();
         return true;
     }
 }

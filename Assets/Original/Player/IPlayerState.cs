@@ -5,6 +5,7 @@ public interface IPlayerState
     public void Enter(Player player);
 
     public void Exit();
+    public void OnDamaged();
 
     public void Update();
 
@@ -29,16 +30,23 @@ public class PlayerDriveState : IPlayerState
 
     public void Exit()
     {
+        _player = null;
+        _laneMover = null;
+    }
+
+    public void OnDamaged()
+    {
+        _player.EnterStunState();
     }
 
     public void OnMoveLeft(InputAction.CallbackContext context)
     {
-        _laneMover.MoveLane(-1, true);
+        _laneMover.MoveLane(-1, false);
     }
 
     public void OnMoveRight(InputAction.CallbackContext context)
     {
-        _laneMover.MoveLane(1, true);
+        _laneMover.MoveLane(1, false);
     }
 
     public void OnParry(InputAction.CallbackContext context)
@@ -75,6 +83,11 @@ public class PlayerParryState : IPlayerState
         _player = null;
     }
 
+    public void OnDamaged()
+    {
+
+    }
+
     public void OnMoveLeft(InputAction.CallbackContext context)
     {
         _laneMover.MoveLane(-1, false, true);
@@ -100,8 +113,57 @@ public class PlayerParryState : IPlayerState
     }
 }
 
+public class PlayerStunState : IPlayerState
+{
+    private Player _player;
+    private InvincibleSystem _invincibleSystem;
+    public void Enter(Player player)
+    {
+        _player = player;
+        _invincibleSystem = _player.GetComponent<InvincibleSystem>();
 
-public class NoInputState : IPlayerState
+        _player.StartStun();
+        _invincibleSystem.OnFinishedInvincible += EndStun;
+
+    }
+
+    public void Exit()
+    {
+        _invincibleSystem.OnFinishedInvincible -= EndStun;
+        _player = null;
+    }
+
+    public void OnDamaged()
+    {
+    }
+
+    public void OnMoveLeft(InputAction.CallbackContext context)
+    {
+        return;
+    }
+
+    public void OnMoveRight(InputAction.CallbackContext context)
+    {
+        return;
+    }
+
+    public void OnParry(InputAction.CallbackContext context)
+    {
+        return;
+    }
+
+    public void Update()
+    {
+        return;
+    }
+
+    private void EndStun()
+    {
+        _player.EnterDriveState();
+    }
+}
+
+    public class NoInputState : IPlayerState
 {
     public void Enter(Player player)
     {
@@ -111,6 +173,11 @@ public class NoInputState : IPlayerState
     public void Exit()
     {
         
+    }
+
+    public void OnDamaged()
+    {
+
     }
 
     public void OnMoveLeft(InputAction.CallbackContext context)
