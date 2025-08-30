@@ -35,7 +35,6 @@ public class PlayerStatus : MonoBehaviour
     private float _curToiletPoint;
 
     private int _curMoney;
-
     public int CurrentMoney;
 
     #region Monobehaviour Callbacks
@@ -55,7 +54,6 @@ public class PlayerStatus : MonoBehaviour
 
     private void OnDisable()
     {
-        _hitCollider.OnHitEvent -= OnDamaged;
         CarEnemy.OnRewardDropped -= EarnMoney;
     }
 
@@ -135,8 +133,6 @@ public class PlayerStatus : MonoBehaviour
             _curMoney -= amount;
             return true;
         }
-        _curMoney++;
-        OnMoneyChanged?.Invoke(_curMoney);
     }
 
     private void TakeDamage(float amount)

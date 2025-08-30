@@ -83,7 +83,7 @@ public class LaneMover : MonoBehaviour
         _isMoving = false;
     }
 
-    public bool MoveLane(float isRight, bool interrupt = false)
+    public bool MoveLane(float isRight, bool interrupt = false, bool skipAnim = false)
     {
         if(_isMoving && interrupt == false)
         {
@@ -99,7 +99,10 @@ public class LaneMover : MonoBehaviour
 
         SetTargetLanePosition(direction);
 
-        PlayMoveAnim(direction);
+        if(skipAnim == false)
+        {
+            PlayMoveAnim(direction);
+        }
         return true;
     }
 

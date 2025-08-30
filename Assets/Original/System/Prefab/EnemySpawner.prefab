@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8901838301769255854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9130822603908419559}
+  - component: {fileID: 4852883713661037304}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9130822603908419559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8901838301769255854}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4852883713661037304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8901838301769255854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e53af5dbb927f458510b7261ebf469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyColors: 00000000010000000200000003000000
+  _enemyStatDatas:
+  - {fileID: 11400000, guid: 09c5d4378b4bdff4b84eb4f0b8b5dc94, type: 2}
+  - {fileID: 11400000, guid: 10c37760be1873f4f989ab84d5b6b685, type: 2}
+  - {fileID: 11400000, guid: 80bbd1741c316f4408d7cb2425767381, type: 2}
+  _difficultyTiers:
+  - spawnRate: 0
+    minVelocity: 0
+    maxVelocity: 0
+    laneCooldown: 0
+  - spawnRate: 0.5
+    minVelocity: 30
+    maxVelocity: 60
+    laneCooldown: 0
+  - spawnRate: 1
+    minVelocity: 60
+    maxVelocity: 100
+    laneCooldown: 0
+  - spawnRate: 1.5
+    minVelocity: 100
+    maxVelocity: 130
+    laneCooldown: 0
+  - spawnRate: 2
+    minVelocity: 130
+    maxVelocity: 150
+    laneCooldown: 0
+  _bossPrefabs:
+  - {fileID: 5594163652849330986, guid: c17b106b74610a74a97fbc399d71b4bc, type: 3}
+  - {fileID: 0}
+  _enemyPrefab: {fileID: 2899611395792235350, guid: 918123295119ecb4a829142dbb500f76, type: 3}
+  _playerTransform: {fileID: 0}
+  _spawnPosition: {x: -300, y: 1, z: 0}
+  _checkBoxSize: {x: 3, y: 3, z: 4}
+  _enemySpeedMultiplier: 0.3
+  _defaultSpawnCount: 30
+  _spawnBudgetLimit: 8

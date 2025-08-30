@@ -77,12 +77,12 @@ public class PlayerParryState : IPlayerState
 
     public void OnMoveLeft(InputAction.CallbackContext context)
     {
-        _laneMover.MoveLane(-1, false);
+        _laneMover.MoveLane(-1, false, true);
     }
 
     public void OnMoveRight(InputAction.CallbackContext context)
     {
-        _laneMover.MoveLane(1, false);
+        _laneMover.MoveLane(1, false, true);
     }
 
     public void OnParry(InputAction.CallbackContext context)

@@ -98,7 +98,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     private void Destroy(Vector3 direction)
     {
         Collider.enabled = false;
-        OnRewardDropped?.Invoke();
+        OnRewardDropped?.Invoke(1);
         Vector3 explosionDirection = new Vector3(-direction.x, 0.3f, direction.z);
         explosionDirection.Normalize();
         ChangeState(new DestroyedState(explosionDirection));
