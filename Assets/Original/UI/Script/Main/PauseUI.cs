@@ -84,10 +84,10 @@ public class PauseUI : MonoBehaviour
         AudioListener.pause = false;
     }
 
-    public void QuitToTitle(string titleSceneName = "Title")
+    public void QuitToTitle()
     {
         Time.timeScale = 1f;
         AudioListener.pause = false;
-        SceneManager.LoadScene(titleSceneName);
+        SceneManager.LoadScene(0);
     }
 }
