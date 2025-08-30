@@ -224,6 +224,11 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         Destroy(forceDirection);
     }
 
+    public void ExcludeCollision()
+    {
+        gameObject.layer = LayerMask.NameToLayer("PlayerProjectile");
+    }
+
     public override void KnockbackToSide(Vector3 parriedDirection, float sign)
     {
         bool canMove = LaneMover.KnockbackLane(sign);

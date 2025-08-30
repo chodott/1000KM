@@ -190,6 +190,8 @@ MonoBehaviour:
   _playerParrySystem: {fileID: 2924355754974614267}
   _playerStatus: {fileID: 1790319375485075123}
   _laneMover: {fileID: 3718525976865496762}
+  _invincibility: {fileID: 4732548846945569066}
+  _hitCollider: {fileID: 8382296519919826827}
 --- !u!114 &2846672660739862426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +235,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df66ab998fd921d46b2a97434cd3cb4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _invincibility: {fileID: 4732548846945569066}
   _hitCollider: {fileID: 8382296519919826827}
   _defaultMaxGasPoint: 100
   _defaultMaxHealthPoint: 100

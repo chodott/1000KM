@@ -50,6 +50,11 @@ public class PlayerMovement : MonoBehaviour
         _drag = _defaultDrag - status.DragReduction;
     }
 
+    public void OnDamaged()
+    {
+        _velocity /= 2;
+    }
+
     public void SetMoveDirection(float value)
     {
         _keyValue = value;

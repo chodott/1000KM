@@ -105,7 +105,11 @@ public class DriveState : IEnemyState
     {
         if(other.attachedRigidbody.gameObject.TryGetComponent<IDamagable>(out var damagable))
         {
-            damagable.OnDamaged(10);
+            bool result = damagable.OnDamaged(10);
+            if (result)
+            {
+                _enemy.ExcludeCollision();
+            }
         }
     }
 

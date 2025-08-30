@@ -2,15 +2,14 @@ using System;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class PlayerStatus : MonoBehaviour, IDamagable
+public class PlayerStatus : MonoBehaviour
 {
     public event Action<float> OnHPChanged;
     public event Action<float> OnGasPointChanged;
     public event Action<float> OnToiletPointChanged;
 
     #region SerializeField
-    [SerializeField] 
-    private InvincibleSystem _invincibility;
+
     [SerializeField]
     private HitCollider _hitCollider;
     [SerializeField]
@@ -66,23 +65,10 @@ public class PlayerStatus : MonoBehaviour, IDamagable
     }
     #endregion
 
-    public bool OnDamaged(float amount)
+    public void OnDamaged(float amount)
     {
-        if (_invincibility.IsActive)
-        {
-            Debug.Log("Pass Damage");
-            return false;
-        }
-
-        if(_hitCollider.IsActive == false)
-        {
-            return false;
-        }
-
          _curHealthPoint -= amount;
-         _invincibility.StartInvinble();
          OnHPChanged?.Invoke(_curHealthPoint);
-        return true;
     }
 
     public void UpdateStatus(PartStatus status)

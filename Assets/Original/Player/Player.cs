@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamagable
 {
     #region SerializeField
     [SerializeField]
@@ -18,6 +18,10 @@ public class Player : MonoBehaviour
     private PlayerStatus _playerStatus;
     [SerializeField]
     private LaneMover _laneMover;
+    [SerializeField]
+    private InvincibleSystem _invincibility;
+    [SerializeField]
+    private HitCollider _hitCollider;
     #endregion
 
     private IPlayerState _curState;
@@ -117,4 +121,23 @@ public class Player : MonoBehaviour
         ChangeState(_noInputState);
     }
     #endregion;
+
+    public bool OnDamaged(float amount)
+    {
+        if (_invincibility.IsActive)
+        {
+            Debug.Log("Pass Damage");
+            return false;
+        }
+
+        if (_hitCollider.IsActive == false)
+        {
+            return false;
+        }
+        _invincibility.StartInvinble();
+        _playerStatus.OnDamaged(amount);
+        _playerMovement.OnDamaged();
+
+        return true;
+    }
 }
