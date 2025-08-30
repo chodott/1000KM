@@ -1,7 +1,8 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyProjectile: MonoBehaviour, IParryable
+public class EnemyProjectile: MonoBehaviour
 {
     [SerializeField]
     private Collider _collider;
@@ -13,6 +14,10 @@ public class EnemyProjectile: MonoBehaviour, IParryable
     private GameObject _explosionEffectPrefab;
     [SerializeField]
     private string _LayerNameAfterParry;
+    [SerializeField]
+    private float _lifeTime = 5f;
+    [SerializeField]
+    private float _returnPositionX = 5f;
     [SerializeField]
     private bool _canParry;
 
@@ -33,6 +38,10 @@ public class EnemyProjectile: MonoBehaviour, IParryable
 
         Vector3 targetPosition = _rigidbody.position + (_forwardVector * _curVelocity * Time.fixedDeltaTime);
         _rigidbody.MovePosition(targetPosition);
+        if(_rigidbody.position.x >= _returnPositionX)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void SpawnExplosionEffect()
@@ -63,6 +72,7 @@ public class EnemyProjectile: MonoBehaviour, IParryable
             _triggerCollider.gameObject.layer = LayerMask.NameToLayer(_LayerNameAfterParry);
             _curVelocity = GlobalMovementController.Instance.GlobalVelocity * -1.5f;
             _rigidbody.AddRelativeTorque(Vector3.right * 1000f, ForceMode.Force);
+            StartCoroutine(DestroyAfterDelay(_lifeTime));
         }
         else
         {
@@ -70,8 +80,10 @@ public class EnemyProjectile: MonoBehaviour, IParryable
             Destroy(this.gameObject);
         }
     }
-
-    public void OnAttack()
+    IEnumerator DestroyAfterDelay(float delay)
     {
+        yield return new WaitForSeconds(delay);
+        Destroy(this.gameObject);
     }
+
 }
