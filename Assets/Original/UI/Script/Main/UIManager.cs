@@ -20,8 +20,11 @@ public class UIManager : MonoBehaviour
         playerStatus.OnToiletPointChanged += UpdateToiletUI;
         playerMovement.OnSpeedChanged += UpdateSpeedUI;
 
-        _shopUI.Init(playerStatus);
+        if (_shopUI != null)
+        {
+            _shopUI.Init(playerStatus);
 
+        }
     }
 
     private void UpdateGasUI(float value)
