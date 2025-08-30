@@ -7,6 +7,7 @@ public interface IState<in TOwner>
     public void Update();
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed);
     public void OnCollisionEnter(Collision collision);
+    public void OnTriggerEnter(Collider other);
 }
 
 public class StateMachine<TOwner> where TOwner : MonoBehaviour
@@ -33,6 +34,11 @@ public class StateMachine<TOwner> where TOwner : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         _curState.OnCollisionEnter(collision);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        _curState.OnTriggerEnter(other);
     }
 }
 
@@ -89,6 +95,10 @@ public class DriveState : IEnemyState
         }
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+    }
+
     public void Update()
     {
         _enemy.CheckPatternTimer();
@@ -123,6 +133,10 @@ public class VerticalKnockbackState : IEnemyState
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
         
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
     }
 
     public void Update()
@@ -171,6 +185,10 @@ public class HorizontalKnockbackState : IEnemyState
         }
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+    }
+
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
         return;
@@ -214,6 +232,10 @@ public class DestroyedState : IEnemyState
     public void OnCollisionEnter(Collision collision)
     {
         return;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
     }
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)

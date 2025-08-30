@@ -37,7 +37,7 @@ public class LaneSystem : MonoBehaviour
 
     public int GetLastLaneIndex(int direction)
     {
-        int lastLaneIndex = direction * _laneRange;
+        int lastLaneIndex = direction < 0 ? 0 : LaneCount - 1;
         return lastLaneIndex;
     }
 

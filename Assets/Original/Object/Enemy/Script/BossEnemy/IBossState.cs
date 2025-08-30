@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class MatchGapState : IState<BossEnemyController>
 {
-    BossEnemyController _bossEnemy;
+    BossEnemyController _controller;
     private float _keepDistance;
+    private float _direction;
 
     public MatchGapState(float distance)
     {
@@ -16,18 +17,24 @@ public class MatchGapState : IState<BossEnemyController>
 
     public void Enter(BossEnemyController owner)
     {
-        _bossEnemy = owner;
+        _controller = owner;
+        float distance = _controller.GetXDistanceToPlayer();
+        _direction = distance < _keepDistance ? -1 : 1;
     }
 
     public void Exit()
     {
-        _bossEnemy = null;
+        _controller = null;
     }
 
     public void OnCollisionEnter(Collision collision)
     {
-        throw new NotImplementedException();
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+    }
+
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
@@ -36,25 +43,25 @@ public class MatchGapState : IState<BossEnemyController>
 
     public void Update()
     {
-        _bossEnemy.MoveToBack();
-        if(_bossEnemy.GetXDistanceToPlayer() <= _keepDistance)
+        _controller.MoveToForward(_direction);
+        float distance = Mathf.Abs(_controller.GetXDistanceToPlayer() - _keepDistance);
+        if(distance <= 1f)
         {
-            _bossEnemy.OnMatchGapEnd();
+            _controller.OnMatchGapEnd();
         }
-        return;
     }
 }
 
 public class MoveShuffleState : IState<BossEnemyController>
 {
-    private BossEnemyController _bossEnemy;
+    private BossEnemyController _controller;
     private LaneMover _laneMover;
     private (int, int) _moveCountRange = (3, 6);
     private int _leftMoveCount;
     public void Enter(BossEnemyController owner)
     {
-        _bossEnemy = owner;
-        _laneMover = _bossEnemy.LaneMover;
+        _controller = owner;
+        _laneMover = _controller.LaneMover;
 
         _laneMover.OnFinishMove += ArriveLane;
         DoCycle();
@@ -63,13 +70,18 @@ public class MoveShuffleState : IState<BossEnemyController>
     public void Exit()
     {
         _laneMover.OnFinishMove -= ArriveLane;
-        _bossEnemy = null;
+        _controller = null;
         _laneMover = null;
     }
 
     public void OnCollisionEnter(Collision collision)
     {
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+    }
+
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
@@ -90,7 +102,7 @@ public class MoveShuffleState : IState<BossEnemyController>
         _leftMoveCount--;
         if (_leftMoveCount == 0)
         {
-            _bossEnemy.OnMoveShuffleEnd();
+            _controller.OnMoveShuffleEnd();
         }
         else
         {
@@ -111,27 +123,31 @@ public class MoveShuffleState : IState<BossEnemyController>
 
 public class BossStunState : IState<BossEnemyController>
 {
-    BossEnemyController _bossEnemy;
+    BossEnemyController _controller;
     private Coroutine _coroutineHandle;
     private float _stunTime = 2f;
     public void Enter(BossEnemyController owner)
     {
-        _bossEnemy = owner;
-        _coroutineHandle = _bossEnemy.StartCoroutine(Stun());
+        _controller = owner;
+        _coroutineHandle = _controller.StartCoroutine(Stun());
     }
 
     public void Exit()
     {
         if(_coroutineHandle != null)
         {
-            _bossEnemy.StopCoroutine(_coroutineHandle);
+            _controller.StopCoroutine(_coroutineHandle);
         }
-        _bossEnemy = null;
+        _controller = null;
     }
 
     public void OnCollisionEnter(Collision collision)
     {
     }
+    public void OnTriggerEnter(Collider other)
+    {
+    }
+
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
@@ -146,6 +162,6 @@ public class BossStunState : IState<BossEnemyController>
         yield return new WaitForSeconds(_stunTime);
         _coroutineHandle = null;
 
-        _bossEnemy.OnStunEnd();
+        _controller.OnStunEnd();
     }
 }

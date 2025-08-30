@@ -1,30 +1,39 @@
 
 using UnityEngine;
 
-public class TrailerTruckController : BossEnemyController
+public class TrailerTruckController : BossEnemyController, IParryable
 {
     [SerializeField]
     private GameObject[] _projectilePrefabs;
 
     private StateMachine<TrailerTruckController> _stateMachine;
-    private DropCargoState _dropCargoState = new DropCargoState();
+    private ChaseState _chaseState = new ChaseState();
+    private PressState _pressState = new PressState();
+    private float GapToPlayer = 15f;
 
     private void Awake()
     {
         _stateMachine = new StateMachine<TrailerTruckController>();
     }
 
+    private void Start()
+    {
+        _stateMachine.ChangeState(new MatchGapState(15f), this);
+    }
+
     protected override void FixedUpdate()
     {
         _stateMachine.Update();
     }
-    public void DropProjectile()
+
+    public void RecoverVelocity()
     {
-        var phase = _phaseDatas[_curPhaseIndex];
-        int randomIndex = UnityEngine.Random.Range(phase.UseProjectileRanage.x, phase.UseProjectileRanage.y + 1);
-        GameObject spawnPrefab = _projectilePrefabs[randomIndex];
-        Instantiate(spawnPrefab, transform.position, transform.rotation);
+        if (_curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
+        {
+            _stateMachine.ChangeState(new MatchGapState(GapToPlayer), this);
+        }
     }
+
     public override void UpdatePhase()
     {
         if (_curPhaseIndex + 1 < _phaseDatas.Length)
@@ -47,7 +56,7 @@ public class TrailerTruckController : BossEnemyController
 
     public override void OnMoveShuffleEnd()
     {
-       
+        _stateMachine.ChangeState(_pressState, this);
     }
 
     public override void OnStunEnd()
@@ -58,6 +67,16 @@ public class TrailerTruckController : BossEnemyController
     public override void OnMatchGapEnd()
     {
         ChangeShuffleState();
+    }
+
+    public void OnPressEnd()
+    {
+        _stateMachine.ChangeState(_chaseState, this);
+    }
+
+    public void OnChaseEnd()
+    {
+        _stateMachine.ChangeState(new MatchGapState(GapToPlayer), this);
     }
 
     public void ChangeMatchState()
@@ -75,4 +94,18 @@ public class TrailerTruckController : BossEnemyController
         _stateMachine.ChangeState(_moveShuffleState, this);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        _stateMachine.OnTriggerEnter(other);
+    }
+
+    public void OnParried(Vector3 contactPosition, float damage, float moveLaneSpeed)
+    {
+        _stateMachine.OnParried(contactPosition, damage, moveLaneSpeed);
+    }
+
+    public void OnAttack()
+    {
+        throw new System.NotImplementedException();
+    }
 }

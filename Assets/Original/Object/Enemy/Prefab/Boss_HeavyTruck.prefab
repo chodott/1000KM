@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6132302195758866897}
   - component: {fileID: 2176480677199313441}
   - component: {fileID: 9028989428574720947}
-  - component: {fileID: 317552920402413729}
   m_Layer: 3
   m_Name: Mesh
   m_TagString: Untagged
@@ -109,31 +108,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2, y: 0.35, z: 1.0000002}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &317552920402413729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5186389162545101131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88995e5bb8f5d0942a6550d9da2bf4df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _phaseDatas:
-  - {fileID: 11400000, guid: 963d5e8b4efe04046a12090f5e674236, type: 2}
-  - {fileID: 11400000, guid: 200b77df0dc3fa348837244a53b53e91, type: 2}
-  - {fileID: 11400000, guid: f28c3da2ece7a1846a985ee8c676f49a, type: 2}
-  _projectilePrefabs:
-  - {fileID: 4262950291413168346, guid: 655c88ed581b05f41a3f5ed92ecda9ad, type: 3}
-  - {fileID: 4262950291413168346, guid: 50aca254f4bfedc42ab7970b5e746cb6, type: 3}
-  _rigidbody: {fileID: 6212644408650827248}
-  _laneMover: {fileID: 5263337401771505584}
-  _collider: {fileID: 9028989428574720947}
-  _destroyEffectPrefab: {fileID: 0}
-  _maxHealthPoint: 6
-  _velocity: 50
 --- !u!1 &5594163652849330986
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,6 +120,7 @@ GameObject:
   - component: {fileID: 6212644408650827248}
   - component: {fileID: 4362554442535025992}
   - component: {fileID: 5263337401771505584}
+  - component: {fileID: 7094961988284681039}
   m_Layer: 3
   m_Name: Boss_HeavyTruck
   m_TagString: Untagged
@@ -207,8 +182,8 @@ Animation:
   serializedVersion: 4
   m_Animation: {fileID: 0}
   m_Animations:
-  - {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
-  - {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
+  - {fileID: 7400000, guid: 68b41d6aa640c5a48b44a4ebea26ec11, type: 2}
+  - {fileID: 7400000, guid: 68b41d6aa640c5a48b44a4ebea26ec11, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -227,9 +202,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animation: {fileID: 4362554442535025992}
-  _moveLeftAnimation: {fileID: 7400000, guid: 9b986cfcf3f48f843be2c6e040806feb, type: 2}
-  _moveRightAnimation: {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
-  _knockbackLeftAnimation: {fileID: 0}
-  _knockbackRightAnimation: {fileID: 0}
+  _moveLeftAnimation: {fileID: 7400000, guid: 68b41d6aa640c5a48b44a4ebea26ec11, type: 2}
+  _moveRightAnimation: {fileID: 7400000, guid: 68b41d6aa640c5a48b44a4ebea26ec11, type: 2}
+  _knockbackLeftAnimation: {fileID: 7400000, guid: 1ca5e0a83564814428ca0772f877fdfc, type: 2}
+  _knockbackRightAnimation: {fileID: 7400000, guid: 30c98e59bb7f0b045a6a846bfded75ef, type: 2}
   _defaultMoveLaneSpeed: 5
   _stopDistance: 0.05
+--- !u!114 &7094961988284681039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5594163652849330986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1db7e13a160f24687ba065c9d1960b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 6212644408650827248}
+  _laneMover: {fileID: 5263337401771505584}
+  _collider: {fileID: 9028989428574720947}
+  _phaseDatas: []
+  _destroyEffectPrefab: {fileID: 0}
+  _maxHealthPoint: 6
+  _velocity: 5
+  _projectilePrefabs: []

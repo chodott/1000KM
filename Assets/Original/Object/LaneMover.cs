@@ -64,6 +64,14 @@ public class LaneMover : MonoBehaviour
         _currentLaneIndex += isRight;
         _isMoving = true;
     }
+
+    private void SetTargetLane(int index)
+    {
+        float zOffset = (index - LaneSystem.Instance.LaneCount /2) * _laneWidth;
+        _nextPositionZ = zOffset;
+        _isMoving = true;
+    }
+
     public void Init(int laneIndex)
     {
         _currentLaneIndex = laneIndex;
@@ -75,9 +83,9 @@ public class LaneMover : MonoBehaviour
         _isMoving = false;
     }
 
-    public bool MoveLane(float isRight)
+    public bool MoveLane(float isRight, bool interrupt = false)
     {
-        if(_isMoving)
+        if(_isMoving && interrupt == false)
         {
             return false;
         }
@@ -91,25 +99,7 @@ public class LaneMover : MonoBehaviour
 
         SetTargetLanePosition(direction);
 
-        AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
-        _animation.Play(playClip.name);
-        return true;
-    }
-
-    public bool MoveLane(float isRight, int count)
-    {
-        if (_isMoving)
-        {
-            return false;
-        }
-
-        int direction = Math.Sign(isRight);
-        LaneSystem.Instance.GetLastLaneIndex(direction);
-       
-        SetTargetLanePosition(direction);
-
-        AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
-        _animation.Play(playClip.name);
+        PlayMoveAnim(direction);
         return true;
     }
 
@@ -123,9 +113,20 @@ public class LaneMover : MonoBehaviour
         }
 
         SetTargetLanePosition(direction);
+        PlayKnockbackAnim(direction);
+        return true;
+    }
+
+    public void PlayMoveAnim(float direction)
+    {
+        AnimationClip playClip = direction > 0 ? _moveRightAnimation : _moveLeftAnimation;
+        _animation.Play(playClip.name);
+    }
+
+    public void PlayKnockbackAnim(float direction)
+    {
         AnimationClip playClip = direction > 0 ? _knockbackRightAnimation : _knockbackLeftAnimation;
         _animation.Play(playClip.name);
-        return true;
     }
 
     public void UpdateMoveLaneSpeed(float bonus)

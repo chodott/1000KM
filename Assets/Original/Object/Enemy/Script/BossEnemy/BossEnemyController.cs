@@ -16,6 +16,7 @@ public class BossEnemyController : BaseEnemy, IDamagable
 
     protected MoveShuffleState _moveShuffleState = new MoveShuffleState();
     protected BossStunState _stunState = new BossStunState();
+    protected Transform _targetTransform;
 
     protected int _curPhaseIndex = -1;
 
@@ -29,8 +30,18 @@ public class BossEnemyController : BaseEnemy, IDamagable
         UpdatePhase();
     }
 
+    private void Update()
+    {
+        _curVelocity = GlobalMovementController.Instance.GlobalVelocity;
+    }
+
     public virtual void UpdatePhase()
     {
+    }
+
+    public void Init(Transform playerTransform)
+    {
+        _targetTransform = playerTransform;
     }
 
     public float GetXDistanceToPlayer()
@@ -40,13 +51,23 @@ public class BossEnemyController : BaseEnemy, IDamagable
 
     public float GetZOffsetToPlayer()
     {
-        return Rb.position.z;
+        float zOffset =  _targetTransform.position.z- Rb.position.z;
+        return zOffset;
     }
 
-    public void MoveToBack()
+    public void MoveToForward(float direction)
     {
-        Vector3 nextPosition = Rb.position + Vector3.right * _velocity * Time.fixedDeltaTime;
+        Vector3 nextPosition = Rb.position + direction * Vector3.right * _velocity * Time.fixedDeltaTime;
         Rb.MovePosition(nextPosition);
+    }
+
+    public void KnockbackToSide(float direction)
+    {
+        bool canMove = LaneMover.KnockbackLane(direction);
+        if(canMove == false)
+        {
+            LaneMover.PlayKnockbackAnim(direction);
+        }
     }
 
     public virtual void ChangeStunState()

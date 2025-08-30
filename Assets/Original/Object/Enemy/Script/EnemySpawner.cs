@@ -30,6 +30,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
+    private Transform _playerTransform;
+    [SerializeField]
     private Vector3 _spawnPosition;
     [SerializeField]
     private Vector3 _checkBoxSize;
@@ -109,7 +111,7 @@ public class EnemySpawner : MonoBehaviour
 
         int randomIndex = Random.Range(0, availableLanes.Count);
         int spawnLane = availableLanes[randomIndex];
-        SpawnEnemy(spawnLane);
+        //SpawnEnemy(spawnLane);
 
         return true;
 
@@ -130,6 +132,10 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnBoss()
     {
         var spawnBossPrefab = _bossPrefabs[_spawnBossIndex];
-        Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.Euler(0, -90, 0));
+        GameObject spawnedBoss = Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.Euler(0, -90, 0));
+        if (spawnedBoss.TryGetComponent<BossEnemyController>(out var boss)) { /* »ç¿ë */ }
+        {
+            boss.Init(_playerTransform);
+        }
     }
 }

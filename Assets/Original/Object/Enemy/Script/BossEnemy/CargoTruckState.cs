@@ -17,6 +17,11 @@ public class DropCargoState : IState<CargoTruckController>
     {
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+    }
+
+
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
     }

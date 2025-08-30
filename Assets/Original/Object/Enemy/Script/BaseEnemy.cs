@@ -55,6 +55,7 @@ public class BaseEnemy : MonoBehaviour
         _curVelocity = 0f;
     }
 
+
     public void KnockbackToForward()
     {
         _curVelocity += (GlobalMovementController.Instance.GlobalVelocity * (1 + _knockbackPower));
