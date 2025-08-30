@@ -5,6 +5,7 @@ public class TitleButton : MonoBehaviour
     public GameObject obj;
     TitleObj titleObj;
 
+
     private void Start()
     {
         titleObj = GetComponent<TitleObj>();

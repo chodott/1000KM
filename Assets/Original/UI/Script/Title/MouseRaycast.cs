@@ -5,10 +5,12 @@ public class MouseRaycast : MonoBehaviour
 {
     Camera cam;
     TitleObj lastHitObj;
+    UISound uISound;
 
     void Awake()
     {
         cam = Camera.main;
+        uISound = GetComponent<UISound>();
     }
 
     void Update()
@@ -49,7 +51,11 @@ public class MouseRaycast : MonoBehaviour
 
         // 새 오브젝트로 들어감
         if (hitObj != null)
+        {
             hitObj.MouseEnter();
+            uISound.PlaySound();
+        }
+            
 
         lastHitObj = hitObj;
     }
