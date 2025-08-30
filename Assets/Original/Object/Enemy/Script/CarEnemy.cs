@@ -19,6 +19,9 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     [SerializeField]
     private GameObject _destroyEffectPrefab;
+    [SerializeField]
+    private GameObject _disapearEffectPrefab;
+
     #endregion 
 
     private StateMachine<CarEnemy> _stateMachine;
@@ -227,6 +230,8 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     public void ExcludeCollision()
     {
         gameObject.layer = LayerMask.NameToLayer("PlayerProjectile");
+        Instantiate(_disapearEffectPrefab, transform.position, Quaternion.identity);
+        Deactivate();
     }
 
     public override void KnockbackToSide(Vector3 parriedDirection, float sign)

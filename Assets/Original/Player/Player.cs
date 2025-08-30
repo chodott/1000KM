@@ -22,6 +22,8 @@ public class Player : MonoBehaviour, IDamagable
     private InvincibleSystem _invincibility;
     [SerializeField]
     private HitCollider _hitCollider;
+    [SerializeField]
+    private StunParticleHandler _stunParticleHandler;
     #endregion
 
     private IPlayerState _curState;
@@ -56,6 +58,8 @@ public class Player : MonoBehaviour, IDamagable
         _moveRightAction.performed += OnMoveRight;
         _parryAction.performed += OnParry;
         _partManager.OnChangedPartStatus += UpdateStatus;
+
+        _invincibility.OnFinishedInvincible += StopStunEffect;
     }
 
     private void OnDisable()
@@ -122,12 +126,16 @@ public class Player : MonoBehaviour, IDamagable
     }
     #endregion;
 
+
+    private void StopStunEffect()
+    {
+        _stunParticleHandler.StopStunEffect();
+    }
     public bool OnDamaged(float amount)
     {
         if (_invincibility.IsActive)
         {
-            Debug.Log("Pass Damage");
-            return false;
+            return true;
         }
 
         if (_hitCollider.IsActive == false)
@@ -137,6 +145,7 @@ public class Player : MonoBehaviour, IDamagable
         _invincibility.StartInvinble();
         _playerStatus.OnDamaged(amount);
         _playerMovement.OnDamaged();
+        _stunParticleHandler.PlayStunEffect();
 
         return true;
     }

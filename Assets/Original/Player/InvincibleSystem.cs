@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class InvincibleSystem : MonoBehaviour
 
     private float _invincibleTimer = 0f;
     private bool _isActive = false;
+
+    public event Action OnFinishedInvincible;
 
     public bool IsActive { get { return  _isActive; } }
 
@@ -30,6 +33,7 @@ public class InvincibleSystem : MonoBehaviour
             yield return null;
         }
         _isActive = false;
+        OnFinishedInvincible?.Invoke();
     }
 
 }
