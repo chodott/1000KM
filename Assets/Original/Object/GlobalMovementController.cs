@@ -18,15 +18,15 @@ public class GlobalMovementController : MonoBehaviour
 
 
     private PlayerMovement _playerMovement;
-    private float _distanceThreshold = 500f;
+    private float _distanceThreshold = 2000f;
     private float _distanceAccumulator = 0f;
     private float _restAreaSpawnDistance = 200f;
     private float _bossSpawnDistance;
     private bool _stopCheckDistance = false;
 
     //(Horizontal, Vertical)
-    private (float, float) _targetBendSize = (3,1);
-    private (float, float) _curBendSize = (3,1);
+    private (float, float) _targetBendSize = (1,1);
+    private (float, float)  _prevBendSize = (0,0);
 
 
     public static GlobalMovementController Instance { get; private set; }
@@ -49,6 +49,12 @@ public class GlobalMovementController : MonoBehaviour
     private void OnEnable()
     {
         _bossSpawnDistance += _bossInterval;
+        SetRoadRandomBend();
+    }
+
+    private void OnDisable()
+    {
+        _bossSpawnDistance -= _bossInterval;
     }
 
     private void OnDestroy()
@@ -82,13 +88,14 @@ public class GlobalMovementController : MonoBehaviour
         }
 
         float lerpAlpha = _distanceAccumulator / _distanceThreshold;
-        _curBendSize.Item1 = Mathf.Lerp(_curBendSize.Item1, _targetBendSize.Item1, lerpAlpha);
-        _curBendSize.Item2 = Mathf.Lerp(_curBendSize.Item2, _targetBendSize.Item2, lerpAlpha);
-        _curvedWorldController.bendHorizontalSize = _curBendSize.Item1;
-        _curvedWorldController.bendVerticalSize = _curBendSize.Item2;
+        float curHorizontalBend = Mathf.Lerp(_prevBendSize.Item1, _targetBendSize.Item1, lerpAlpha);
+        float curVerticalBend = Mathf.Lerp(_prevBendSize.Item2, _targetBendSize.Item2, lerpAlpha);
+        _curvedWorldController.bendHorizontalSize = curHorizontalBend;
+        _curvedWorldController.bendVerticalSize = curVerticalBend;
 
         if (_distanceAccumulator >= _distanceThreshold)
         {
+            _prevBendSize = _targetBendSize;
             SetRoadRandomBend();
             _distanceAccumulator = 0f;
         }
@@ -109,6 +116,6 @@ public class GlobalMovementController : MonoBehaviour
     private void SetRoadRandomBend()
     {
         _targetBendSize.Item1 = UnityEngine.Random.Range(-1f, 1f) * _maxBendSize;
-        _targetBendSize.Item2 = UnityEngine.Random.Range(-1f, 1f) + _maxBendSize;
+        _targetBendSize.Item2 = UnityEngine.Random.Range(-1f, 1f) * _maxBendSize;
     }
 }

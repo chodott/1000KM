@@ -67,6 +67,7 @@ public class EnemyProjectile: MonoBehaviour, IParryable
         else
         {
             SpawnExplosionEffect();
+            Destroy(this.gameObject);
         }
     }
 

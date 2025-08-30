@@ -238,9 +238,9 @@ MonoBehaviour:
   _defaultMaxGasPoint: 100
   _defaultMaxHealthPoint: 100
   _defaultMaxToiletPoint: 100
-  _defaultGasEfficiency: 1
+  _defaultGasEfficiency: 2
   _toiletGainPerSec: 1
-  _damage: 10
+  CurrentMoney: 0
 --- !u!114 &3718525976865496762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +322,7 @@ BoxCollider:
     m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 191
+    m_Bits: 1073742783
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

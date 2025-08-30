@@ -238,6 +238,11 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         _stateMachine.OnCollisionEnter(collision);
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        _stateMachine.OnTriggerEnter(other);
+    }
+
     #region PoolingObject Callbacks
     public void Activate(GameObject originalPrefab)
     {

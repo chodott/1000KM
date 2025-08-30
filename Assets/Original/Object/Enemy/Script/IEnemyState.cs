@@ -103,6 +103,10 @@ public class DriveState : IEnemyState
 
     public void OnTriggerEnter(Collider other)
     {
+        if(other.attachedRigidbody.gameObject.TryGetComponent<IDamagable>(out var damagable))
+        {
+            damagable.OnDamaged(10);
+        }
     }
 
     public void Update()

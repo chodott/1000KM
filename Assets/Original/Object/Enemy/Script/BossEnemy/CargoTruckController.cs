@@ -6,13 +6,8 @@ public class CargoTruckController : BossEnemyController
     [SerializeField]
     private GameObject[] _projectilePrefabs;
 
-    private StateMachine<CargoTruckController> _stateMachine;
+    private StateMachine<CargoTruckController> _stateMachine = new StateMachine<CargoTruckController>();
     private DropCargoState _dropCargoState = new DropCargoState();
-
-    private void Awake()
-    {
-        _stateMachine = new StateMachine<CargoTruckController>();
-    }
 
     protected override void FixedUpdate()
     {
