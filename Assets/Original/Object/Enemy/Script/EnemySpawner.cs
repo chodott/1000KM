@@ -81,7 +81,7 @@ public class EnemySpawner : MonoBehaviour
         float curPlayerSpeed = GlobalMovementController.Instance.GlobalVelocity;
         foreach(var tier in _difficultyTiers)
         {
-            if (curPlayerSpeed < tier.minVelocity || curPlayerSpeed  >= tier.maxVelocity)
+            if (curPlayerSpeed  > tier.maxVelocity)
             {
                 continue;
             }
