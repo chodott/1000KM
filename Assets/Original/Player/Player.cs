@@ -46,6 +46,8 @@ public class Player : MonoBehaviour, IDamagable
 
     private void Start()
     {
+        GlobalMovementController.Instance.OnReachedMaxDistance += ReadyToBoss;
+
         ChangeState(_driveState);
     }
     private void OnEnable()
@@ -61,7 +63,10 @@ public class Player : MonoBehaviour, IDamagable
         _partManager.OnChangedPartStatus += UpdateStatus;
 
         _invincibility.OnFinishedInvincible += StopStunEffect;
+
     }
+
+    
 
     private void OnDisable()
     {
@@ -83,6 +88,11 @@ public class Player : MonoBehaviour, IDamagable
         _laneMover.UpdateMoveLaneSpeed(status.LaneMoveSpeedBonus);
 
         _playerParrySystem.Init(_laneMover.MoveLaneSpeed);
+    }
+
+    private void ReadyToBoss()
+    {
+        _playerMovement.LockAcceleration();
     }
     #endregion
 
