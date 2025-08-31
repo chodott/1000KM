@@ -156,8 +156,8 @@ MonoBehaviour:
   _collider: {fileID: 7093453293601517522}
   _meshFilter: {fileID: 407504389598896300}
   _meshRenderer: {fileID: 1789332861490712944}
-  _destroyEffectPrefab: {fileID: 980769002882745835, guid: ab328390e3695d04681479b1e8d89955, type: 3}
-  _disapearEffectPrefab: {fileID: 3914376393998710022, guid: 236f42d0ad47ec040bd359874bbbaf88, type: 3}
+  _destroyEffectPrefab: {fileID: 980769002882745835, guid: faf0c4b10698ba648af70abb102bbfbe, type: 3}
+  _disapearEffectPrefab: {fileID: 3914376393998710022, guid: 21a95ad99248e0e4eb4a26e28c78a339, type: 3}
 --- !u!114 &-8618501305589520936
 MonoBehaviour:
   m_ObjectHideFlags: 0
