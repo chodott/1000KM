@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81092d3d01fb37e46a717495629f8e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parryEffectPrefab: {fileID: 1603737452902559102, guid: 242c0cf5c868d454eaf78de94323ebd9, type: 3}
+  _parryEffectPrefab: {fileID: 1603737452902559102, guid: 785873b9469ccc0479b3afbfa3a895f9, type: 3}
   _parryCollider: {fileID: 3748035686533080669}
   _hitCollider: {fileID: 8382296519919826827}
   _parryCooldownTime: 0.1
