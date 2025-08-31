@@ -4,14 +4,13 @@ using UnityEngine.UI;
 public class ShopButton : MonoBehaviour
 {
     private PlayerStatus _playerStatus;
-    public PartStatus partStatus;
-    public int payment;
-    Text buttonText;
+    [SerializeField] Button oilButton;
+    [SerializeField] Button repairButton;
 
     private void Start()
     {
-        buttonText = GetComponentInChildren<Text>();
-        buttonText.text = payment + " ¿ø";
+        oilButton.onClick.AddListener(OnClickOilButton);
+        repairButton.onClick.AddListener(OnClickRepairButton);
     }
 
     public void Init(PlayerStatus playerStatus)
@@ -25,6 +24,7 @@ public class ShopButton : MonoBehaviour
         if(_playerStatus.TrySpendMoney(fee) == true)
         {
             _playerStatus.RefillGas();
+            _playerStatus.CurrentMoney -= fee;
         }
     }
 
@@ -35,6 +35,7 @@ public class ShopButton : MonoBehaviour
         if (_playerStatus.TrySpendMoney(fee) == true)
         {
             _playerStatus.RefillHP(healAmount);
+            _playerStatus.CurrentMoney -= fee;
         }
     }
 
