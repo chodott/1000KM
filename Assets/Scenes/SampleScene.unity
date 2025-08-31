@@ -18767,6 +18767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopCutscene: {fileID: 1607552114}
+  bossAppear: {fileID: 1920295089}
 --- !u!1001 &1342642491
 PrefabInstance:
   m_ObjectHideFlags: 0
