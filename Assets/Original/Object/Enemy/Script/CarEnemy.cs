@@ -196,7 +196,6 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     public void TakeDamage(float damage)
     {
         _curHealthPoint -= damage;
-
     }
 
     public bool CheckDie(Vector3 parriedDirection)
@@ -215,12 +214,6 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         {
             ChangeState(DriveState);
         }
-    }
-
-    public void ApplyExplosionForce(Vector3 direction)
-    {
-        Rb.AddForce(direction * _parryPower, ForceMode.Impulse);
-        Rb.AddTorque(direction * _parryPower, ForceMode.Impulse);
     }
 
     public void SpawnDestroyEffect()

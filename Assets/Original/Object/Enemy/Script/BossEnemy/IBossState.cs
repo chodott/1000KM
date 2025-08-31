@@ -193,12 +193,16 @@ public class BossDestroyState : IState<BossEnemyController>
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
+        Vector3 explosionDirection = new Vector3(-0.4f, 0.3f, 0.1f);
+        explosionDirection.Normalize();
+        _controller.ApplyExplosionForce(explosionDirection);
+        _controller.Deactivate();
     }
 
     public void Update()
     {
         _controller.MoveToForward(1);
-        if (_controller.Rb.position.x >= 5f)
+        if (_controller.Rb.position.x >= 8f)
         {
             _controller.OnDestroyEnd();
         }

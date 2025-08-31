@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class CargoTruckController : BossEnemyController
+public class CargoTruckController : BossEnemyController, IParryable
 {
     [SerializeField]
     private GameObject[] _projectilePrefabs;
@@ -77,4 +77,8 @@ public class CargoTruckController : BossEnemyController
         _stateMachine.ChangeState(new BossDestroyState(), this);
     }
 
+    public void OnParried(Vector3 contactPosition, float damage, float moveLaneSpeed)
+    {
+        _stateMachine.OnParried(contactPosition, damage, moveLaneSpeed);
+    }
 }

@@ -131,12 +131,14 @@ public class GlobalMovementController : MonoBehaviour
 
     private void UnlockBendSize()
     {
+        ResetTargetBend();
         _stopCheckDistance = false;
     }
 
     public void LockBendSize(Vector2 bendSize, float duration)
     {
         _stopCheckDistance = true;
+        _targetBendSize = bendSize;
         StartCoroutine(LerpLockBend(_curBendSize, bendSize, duration));
     }
 

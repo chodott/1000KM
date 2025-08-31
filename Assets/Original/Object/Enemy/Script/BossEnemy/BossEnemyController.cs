@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BossEnemyController : BaseEnemy, IDamagable
@@ -13,6 +14,8 @@ public class BossEnemyController : BaseEnemy, IDamagable
     private float _defaultVelocity = 5f;
     [SerializeField]
     private float _destroyedVelocity = 3f;
+    [SerializeField]
+    private float _lifeTime = 3f;
     #endregion 
 
     public BurstAround BurstSystem { get { return _burstSystem; } }
@@ -75,6 +78,18 @@ public class BossEnemyController : BaseEnemy, IDamagable
         {
             LaneMover.PlayKnockbackAnim(direction);
         }
+    }
+
+    public void Deactivate()
+    {
+        _burstSystem.Stop();
+        StartCoroutine(DestroyAfterDelay(_lifeTime));
+    }
+
+    IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        OnDestroyEnd();
     }
 
     public virtual void ChangeStunState()

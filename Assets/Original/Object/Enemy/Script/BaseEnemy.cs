@@ -55,6 +55,12 @@ public class BaseEnemy : MonoBehaviour
         _curVelocity = 0f;
     }
 
+    public void ApplyExplosionForce(Vector3 direction)
+    {
+        Rb.AddForce(direction * _parryPower, ForceMode.Impulse);
+        Rb.AddTorque(direction * _parryPower, ForceMode.Impulse);
+    }
+
 
     public void KnockbackToForward()
     {
