@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,8 @@ public class SliderUI : MonoBehaviour
     public void UpdateValue(float value)
     {
         _curValue = value;
-        slider.value = _curValue;
+        StopAllCoroutines();
+        StartCoroutine(SmoothChange());
     }
 
     public float GetMaxValue()
@@ -28,5 +30,21 @@ public class SliderUI : MonoBehaviour
     public float GetCurValue()
     {
         return _curValue;
+    }
+
+    IEnumerator SmoothChange()
+    {
+        float startValue = slider.value;
+        float time = 0f;
+        float duration = 0.3f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            slider.value = Mathf.Lerp(startValue, _curValue, time / duration);
+            yield return null;
+        }
+
+        slider.value = _curValue;
     }
 }
