@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BossEnemyController : BaseEnemy, IDamagable
@@ -6,12 +7,18 @@ public class BossEnemyController : BaseEnemy, IDamagable
     [SerializeField]
     protected BossPhaseData[] _phaseDatas;
     [SerializeField]
-    private GameObject _destroyEffectPrefab;
+    private BurstAround _burstSystem;
     [SerializeField]
     private float _maxHealthPoint = 6;
     [SerializeField]
-    private float _velocity = 5f;
+    private float _defaultVelocity = 5f;
+    [SerializeField]
+    private float _destroyedVelocity = 3f;
+    [SerializeField]
+    private float _lifeTime = 3f;
     #endregion 
+
+    public BurstAround BurstSystem { get { return _burstSystem; } }
 
 
     protected MoveShuffleState _moveShuffleState = new MoveShuffleState();
@@ -20,6 +27,8 @@ public class BossEnemyController : BaseEnemy, IDamagable
 
     protected int _curPhaseIndex = -1;
 
+    private float _velocity;
+
     private void OnEnable()
     {
         _curHealthPoint = _maxHealthPoint;
@@ -27,6 +36,7 @@ public class BossEnemyController : BaseEnemy, IDamagable
 
     private void Start()
     {
+        _velocity = _defaultVelocity;
         UpdatePhase();
     }
 
@@ -70,11 +80,26 @@ public class BossEnemyController : BaseEnemy, IDamagable
         }
     }
 
+    public void Deactivate()
+    {
+        _burstSystem.Stop();
+        StartCoroutine(DestroyAfterDelay(_lifeTime));
+    }
+
+    IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        OnDestroyEnd();
+    }
+
     public virtual void ChangeStunState()
     {
     }
 
     public virtual void ChangeShuffleState()
+    {
+    }
+    public virtual void ChangeDestroyState()
     {
     }
 
@@ -88,18 +113,24 @@ public class BossEnemyController : BaseEnemy, IDamagable
 
     }
 
-
     public virtual void OnStunEnd()
     {
 
     }
 
+    public void OnDestroyEnd()
+    {
+        GameEvents.RaiseBossDefeated();
+        Destroy(gameObject);
+    }
+
     public bool OnDamaged(float amount)
     {
         _curHealthPoint -= amount;
-        if (_curHealthPoint < 0)
+        if (_curHealthPoint <= 0)
         {
-            GameEvents.RaiseBossDefeated();
+            _velocity = _destroyedVelocity;
+            ChangeDestroyState();
         }
         else
         {
