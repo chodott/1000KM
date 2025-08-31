@@ -46,6 +46,7 @@ public class CargoTruckController : BossEnemyController
         _stateMachine.ChangeState(_dropCargoState, this);
     }
 
+
     public override void OnMoveShuffleEnd()
     {
         ChangeDropState();
@@ -69,6 +70,11 @@ public class CargoTruckController : BossEnemyController
     public override void ChangeShuffleState()
     {
         _stateMachine.ChangeState(_moveShuffleState, this);
+    }
+
+    public override void ChangeDestroyState()
+    {
+        _stateMachine.ChangeState(new BossDestroyState(), this);
     }
 
 }

@@ -165,3 +165,42 @@ public class BossStunState : IState<BossEnemyController>
         _controller.OnStunEnd();
     }
 }
+
+
+public class BossDestroyState : IState<BossEnemyController>
+{
+    BossEnemyController _controller;
+    public void Enter(BossEnemyController owner)
+    {
+        _controller = owner;
+        _controller.BurstSystem.Play();
+    }
+
+    public void Exit()
+    {
+        GameEvents.RaiseBossDefeated();
+        _controller = null;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+
+    }
+
+    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+    }
+
+    public void Update()
+    {
+        _controller.MoveToForward(1);
+        if (_controller.Rb.position.x >= 5f)
+        {
+            _controller.OnDestroyEnd();
+        }
+    }
+}
