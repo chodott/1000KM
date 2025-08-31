@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -61,7 +62,12 @@ public class Player : MonoBehaviour, IDamagable
         _partManager.OnChangedPartStatus += UpdateStatus;
 
         _invincibility.OnFinishedInvincible += StopStunEffect;
+
+        GameEvents.OnPhaseChanged += OnPhaseChanged;
+
     }
+
+
 
     private void OnDisable()
     {
@@ -84,6 +90,20 @@ public class Player : MonoBehaviour, IDamagable
 
         _playerParrySystem.Init(_laneMover.MoveLaneSpeed);
     }
+
+    private void OnPhaseChanged(GamePhase phase, PhaseData data)
+    {
+        switch(phase)
+        {
+            case GamePhase.Normal:
+                _playerMovement.UnlockAcceleration();
+                break;
+            case GamePhase.BossIntro:
+                _playerMovement.LockAcceleration(data.lockVelocity, data.duration);
+                break;
+        }
+    }
+
     #endregion
 
     #region PlayerInput Callbacks

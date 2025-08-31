@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 51344941055568798}
   - component: {fileID: 3748035686533080669}
   - component: {fileID: 4907325186825650830}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: ParryCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

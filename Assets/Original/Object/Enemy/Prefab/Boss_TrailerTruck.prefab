@@ -753,7 +753,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f28c3da2ece7a1846a985ee8c676f49a, type: 2}
   _destroyEffectPrefab: {fileID: 0}
   _maxHealthPoint: 6
-  _velocity: 5
+  _velocity: 30
   _projectilePrefabs:
   - {fileID: 4262950291413168346, guid: 655c88ed581b05f41a3f5ed92ecda9ad, type: 3}
   - {fileID: 4262950291413168346, guid: 50aca254f4bfedc42ab7970b5e746cb6, type: 3}

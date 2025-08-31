@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyProjectile: MonoBehaviour
+public class EnemyProjectile: MonoBehaviour, IParryable
 {
     [SerializeField]
     private Collider _collider;

@@ -99,7 +99,7 @@ public class BossEnemyController : BaseEnemy, IDamagable
         _curHealthPoint -= amount;
         if (_curHealthPoint < 0)
         {
-
+            GameEvents.RaiseBossDefeated();
         }
         else
         {
