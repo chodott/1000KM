@@ -178,8 +178,10 @@ MonoBehaviour:
   _collider: {fileID: 2548128925154609649}
   _triggerCollider: {fileID: 6641685501652527385}
   _rigidbody: {fileID: 2523151940832249414}
-  _explosionEffectPrefab: {fileID: 458320537626344600, guid: b4bc86fafdaad344b970825610d77f07, type: 3}
+  _explosionEffectPrefab: {fileID: 458320537626344600, guid: dae7a487a19d6714ab0bc68e26bbdf3a, type: 3}
   _LayerNameAfterParry: PlayerProjectile
+  _lifeTime: 5
+  _returnPositionX: 5
   _canParry: 1
 --- !u!1 &4262950291413168346
 GameObject:
