@@ -756,6 +756,7 @@ MonoBehaviour:
   _maxHealthPoint: 1
   _defaultVelocity: 20
   _destroyedVelocity: 5
+  _lifeTime: 3
   _projectilePrefabs:
   - {fileID: 4262950291413168346, guid: 655c88ed581b05f41a3f5ed92ecda9ad, type: 3}
   - {fileID: 4262950291413168346, guid: 50aca254f4bfedc42ab7970b5e746cb6, type: 3}
@@ -771,7 +772,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d77d6704cdef32429c932e44331d191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  burstPrefab: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
+  burstPrefab: {fileID: 725748389856807714, guid: f66047d2858b98341994d863a05507df, type: 3}
   burstCount: 30
   radiusRange: {x: 3, y: 3}
   intervalRange: {x: 0.5, y: 1}
