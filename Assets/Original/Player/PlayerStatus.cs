@@ -97,6 +97,12 @@ public class PlayerStatus : MonoBehaviour
         OnHPChanged?.Invoke(_curHealthPoint);
     }
 
+    public void RefillToilet()
+    {
+        _curToiletPoint = 0;
+        OnToiletPointChanged?.Invoke(_curToiletPoint);
+    }
+
     public void EarnMoney(int amount)
     {
         _curMoney += amount;

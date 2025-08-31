@@ -6,6 +6,6 @@ public class TitleWheel : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(rotationSpeed * Time.deltaTime);
+        transform.Rotate(rotationSpeed * Time.unscaledDeltaTime);
     }
 }

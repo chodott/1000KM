@@ -3,12 +3,14 @@ using UnityEngine.UI;
 
 public class ShopButton : MonoBehaviour
 {
+    AudioSource buttoClickSound;
     private PlayerStatus _playerStatus;
     [SerializeField] Button oilButton;
     [SerializeField] Button repairButton;
 
     private void Start()
     {
+        buttoClickSound = GetComponent<AudioSource>();
         oilButton.onClick.AddListener(OnClickOilButton);
         repairButton.onClick.AddListener(OnClickRepairButton);
     }
@@ -25,6 +27,7 @@ public class ShopButton : MonoBehaviour
         {
             _playerStatus.RefillGas();
             _playerStatus.CurrentMoney -= fee;
+            buttoClickSound.Play();
         }
     }
 
@@ -36,6 +39,7 @@ public class ShopButton : MonoBehaviour
         {
             _playerStatus.RefillHP(healAmount);
             _playerStatus.CurrentMoney -= fee;
+            buttoClickSound.Play();
         }
     }
 
