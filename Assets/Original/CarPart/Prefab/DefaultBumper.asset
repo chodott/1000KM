@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _partType: 1
   _accelerationBonus: 0
-  _maxHpBonus: 30
+  _maxHpBonus: 10
   _laneMoveSpeedBonus: 0
   _gasEfficiencyBonus: 0
   _dragReduction: 0
