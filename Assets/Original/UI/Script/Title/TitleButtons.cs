@@ -42,7 +42,7 @@ public class TitleButtons : MonoBehaviour
 
     void Exit()
     {
-        EditorApplication.isPlaying = false;
-        //Application.Quit();
+        //EditorApplication.isPlaying = false;
+        Application.Quit();
     }
 }
