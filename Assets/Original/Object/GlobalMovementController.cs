@@ -12,8 +12,7 @@ public class GlobalMovementController : MonoBehaviour
     [SerializeField]
     private float _maxBendSize = 6f;
 
-    [SerializeField]
-    private float _bossInterval = 1000f;
+
     [SerializeField]
     private float _restAreaInterval = 500f;
 
@@ -22,18 +21,15 @@ public class GlobalMovementController : MonoBehaviour
     private float _distanceThreshold = 2000f;
     private float _distanceAccumulator = 0f;
     private float _restAreaSpawnDistance = 200f;
-    private float _bossSpawnDistance;
     private bool _stopCheckDistance = false;
 
     //(Horizontal, Vertical)
-    private (float, float) _targetBendSize = (1,1);
-    private (float, float)  _prevBendSize = (0,0);
-    private (float, float) _curBendSize;
-    private (float, float) _lockBendSize = (0,0);
+    private Vector2 _targetBendSize = new Vector2(1, 1);
+    private Vector2 _prevBendSize = new Vector2(0, 0);
+    private Vector2 _curBendSize;
 
 
     public static GlobalMovementController Instance { get; private set; }
-    public event Action OnReachedMaxDistance;
     public float GlobalVelocity { get; private set; }
     public float TotalDistance { get; private set; }
 
@@ -51,13 +47,8 @@ public class GlobalMovementController : MonoBehaviour
 
     private void OnEnable()
     {
-        _bossSpawnDistance += _bossInterval;
+        GameEvents.OnPhaseChanged += OnPhaseChanged;
         SetRoadRandomBend();
-    }
-
-    private void OnDisable()
-    {
-        _bossSpawnDistance -= _bossInterval;
     }
 
     private void OnDestroy()
@@ -67,12 +58,6 @@ public class GlobalMovementController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        if(_stopCheckDistance)
-        {
-            return;
-        }
-
         float distance = GlobalVelocity * Time.fixedDeltaTime;
         TotalDistance += distance;
         _distanceAccumulator += distance;
@@ -83,25 +68,19 @@ public class GlobalMovementController : MonoBehaviour
             _restAreaSpawnDistance += _restAreaInterval;
         }
 
-        if(TotalDistance >= _bossSpawnDistance)
+        if (_stopCheckDistance)
         {
-            OnReachedMaxDistance?.Invoke();
-            _stopCheckDistance = true;
-            _bossSpawnDistance += _bossInterval;
-            LerpBendToLock();
+            return;
         }
-
         float lerpAlpha = _distanceAccumulator / _distanceThreshold;
-        float curHorizontalBend = Mathf.Lerp(_prevBendSize.Item1, _targetBendSize.Item1, lerpAlpha);
-        float curVerticalBend = Mathf.Lerp(_prevBendSize.Item2, _targetBendSize.Item2, lerpAlpha);
-        _curBendSize = (curHorizontalBend, curVerticalBend);
+        float curHorizontalBend = Mathf.Lerp(_prevBendSize.x, _targetBendSize.x, lerpAlpha);
+        float curVerticalBend = Mathf.Lerp(_prevBendSize.y, _targetBendSize.y, lerpAlpha);
+        _curBendSize = new Vector2(curHorizontalBend, curVerticalBend);
         ApplyBend(_curBendSize);
 
         if (_distanceAccumulator >= _distanceThreshold)
         {
-            _prevBendSize = _targetBendSize;
-            SetRoadRandomBend();
-            _distanceAccumulator = 0f;
+            ResetTargetBend();
         }
     }
     #endregion
@@ -119,22 +98,49 @@ public class GlobalMovementController : MonoBehaviour
 
     private void SetRoadRandomBend()
     {
-        _targetBendSize.Item1 = UnityEngine.Random.Range(-1f, 1f) * _maxBendSize;
-        _targetBendSize.Item2 = UnityEngine.Random.Range(-1f, 1f) * _maxBendSize;
+        _targetBendSize.x = UnityEngine.Random.Range(-1f, 1f) * _maxBendSize;
+        _targetBendSize.y = UnityEngine.Random.Range(-1f, 1f) * _maxBendSize;
     }
 
-    private void ApplyBend((float,float) curBendSize)
+    private void ApplyBend(Vector2 curBendSize)
     {
-        _curvedWorldController.bendHorizontalSize = curBendSize.Item1;
-        _curvedWorldController.bendVerticalSize = curBendSize.Item2;
+        _curvedWorldController.bendHorizontalSize = curBendSize.x;
+        _curvedWorldController.bendVerticalSize = curBendSize.y;
     }
 
-    public void LerpBendToLock(float duration = 5f)
+    private void OnPhaseChanged(GamePhase phase, PhaseData data)
     {
-        StartCoroutine(LerpLockBend(_curBendSize, _lockBendSize, duration));
+        switch (phase)
+        {
+            case GamePhase.BossIntro:
+                LockBendSize(data.mapBendSize, data.duration);
+                break;
+
+            case GamePhase.Normal:
+                UnlockBendSize();
+                break;
+        }
     }
 
-    IEnumerator LerpLockBend((float, float) from, (float, float) to, float duration)
+    private void ResetTargetBend()
+    {
+        _prevBendSize = _targetBendSize;
+        SetRoadRandomBend();
+        _distanceAccumulator = 0f;
+    }
+
+    private void UnlockBendSize()
+    {
+        _stopCheckDistance = false;
+    }
+
+    public void LockBendSize(Vector2 bendSize, float duration)
+    {
+        _stopCheckDistance = true;
+        StartCoroutine(LerpLockBend(_curBendSize, bendSize, duration));
+    }
+
+    IEnumerator LerpLockBend(Vector2 from, Vector2 to, float duration)
     {
         float t = 0f;
         while (t < duration)
@@ -143,9 +149,9 @@ public class GlobalMovementController : MonoBehaviour
             // 스무스스텝(원하면 u 그대로 쓰면 선형)
             u = u * u * (3f - 2f * u);
 
-            float x = Mathf.Lerp(from.Item1, to.Item1, u);
-            float y = Mathf.Lerp(from.Item2, to.Item2, u);
-            _curBendSize = (x, y);
+            float x = Mathf.Lerp(from.x, to.x, u);
+            float y = Mathf.Lerp(from.y, to.y, u);
+            _curBendSize = new Vector2( x, y);
 
             ApplyBend(_curBendSize); // 필요한 곳(셰이더/머티리얼/시스템)에 반영
             t += Time.deltaTime;

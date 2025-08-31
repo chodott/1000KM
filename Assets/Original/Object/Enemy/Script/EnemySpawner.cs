@@ -57,7 +57,22 @@ public class EnemySpawner : MonoBehaviour
         _laneCount = LaneSystem.Instance.LaneCount;
         _laneRange = LaneSystem.Instance.LaneRange;
         _objectPool.CreateDefaultObjects(_enemyPrefab, _defaultSpawnCount);
-        GlobalMovementController.Instance.OnReachedMaxDistance += SpawnBoss;
+
+        GameEvents.OnPhaseChanged += OnPhaseChanged;
+    }
+
+    private void OnPhaseChanged(GamePhase phase, PhaseData data)
+    {
+        switch(phase)
+        {
+            case GamePhase.BossIntro:
+                SpawnBoss();
+                break;
+
+            case GamePhase.Normal:
+                _canSpawnDefaultEnemy = true;
+                break;
+}
     }
 
     private void Update()

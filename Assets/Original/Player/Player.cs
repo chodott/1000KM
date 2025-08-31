@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -46,8 +47,6 @@ public class Player : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        GlobalMovementController.Instance.OnReachedMaxDistance += ReadyToBoss;
-
         ChangeState(_driveState);
     }
     private void OnEnable()
@@ -64,9 +63,11 @@ public class Player : MonoBehaviour, IDamagable
 
         _invincibility.OnFinishedInvincible += StopStunEffect;
 
+        GameEvents.OnPhaseChanged += OnPhaseChanged;
+
     }
 
-    
+
 
     private void OnDisable()
     {
@@ -90,10 +91,19 @@ public class Player : MonoBehaviour, IDamagable
         _playerParrySystem.Init(_laneMover.MoveLaneSpeed);
     }
 
-    private void ReadyToBoss()
+    private void OnPhaseChanged(GamePhase phase, PhaseData data)
     {
-        _playerMovement.LockAcceleration();
+        switch(phase)
+        {
+            case GamePhase.Normal:
+                _playerMovement.UnlockAcceleration();
+                break;
+            case GamePhase.BossIntro:
+                _playerMovement.LockAcceleration(data.lockVelocity, data.duration);
+                break;
+        }
     }
+
     #endregion
 
     #region PlayerInput Callbacks

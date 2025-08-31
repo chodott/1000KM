@@ -8,8 +8,6 @@ public class PlayerMovement : MonoBehaviour
     private float _defaultAcceleration = 5.0f;
     [SerializeField]
     private float _defaultDrag = 1.5f;
-    [SerializeField]
-    private float _lockVelocity = 80f;
 
     private float _acceleration;
     private float _velocity;
@@ -89,10 +87,15 @@ public class PlayerMovement : MonoBehaviour
         _keyValue = value;
 ;    }
 
-    public void LockAcceleration()
+    public void LockAcceleration(float lockVelocity, float duration)
     {
         _isLockInput = true;
-        StartCoroutine(LerpLockVelocity(_velocity, _lockVelocity, 5f));
+        StartCoroutine(LerpLockVelocity(_velocity, lockVelocity, duration));
+    }
+
+    public void UnlockAcceleration()
+    {
+        _isLockInput = false;
     }
 
 }

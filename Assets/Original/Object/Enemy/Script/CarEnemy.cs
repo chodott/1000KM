@@ -54,13 +54,16 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     void OnEnable()
     {
-        GlobalMovementController.Instance.OnReachedMaxDistance += SelfDestroy;
+        GameEvents.OnPhaseChanged += OnPhaseChanged;
     }
 
     void OnDisable()
     {
-        GlobalMovementController.Instance.OnReachedMaxDistance -= SelfDestroy;
+        GameEvents.OnPhaseChanged -= OnPhaseChanged;
     }
+
+
+
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -108,12 +111,6 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         Rb.Sleep();
     }
 
-    private void SelfDestroy()
-    {
-        ChangeState(new DestroyedState(Vector3.up));
-        Deactivate();
-    }
-
     private void Destroy(Vector3 direction)
     {
         Collider.enabled = false;
@@ -122,6 +119,17 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         explosionDirection.Normalize();
         ChangeState(new DestroyedState(explosionDirection));
         StartCoroutine(DestroyAfterDelay(1f));
+    }
+
+    private void OnPhaseChanged(GamePhase phase, PhaseData data)
+    {
+        switch (phase)
+        {
+            case GamePhase.BossIntro:
+                ChangeState(new DestroyedState(Vector3.up));
+                Deactivate();
+                break;
+        }
     }
 
 
