@@ -5,6 +5,7 @@ public class CutSceneManager : MonoBehaviour
     public static CutSceneManager instance;
 
     public GameObject shopCutscene;
+    public GameObject bossAppear;
 
     void Awake()
     {
@@ -19,5 +20,10 @@ public class CutSceneManager : MonoBehaviour
     public void EnableShop()
     {
         shopCutscene.SetActive(true);
+    }
+
+    public void EnableBoss()
+    {
+        bossAppear.SetActive(true);
     }
 }
