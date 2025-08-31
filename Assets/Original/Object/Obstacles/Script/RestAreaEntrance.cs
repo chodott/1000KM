@@ -39,6 +39,7 @@ public class RestAreaEntrance : MonoBehaviour
         {
             player.EnterNoInputState();
         }
+        CutSceneManager.instance.EnableShop();
     }
     private void Activate()
     {

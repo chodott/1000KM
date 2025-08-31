@@ -7,13 +7,13 @@ public class ShopSelectUI : MonoBehaviour
 
     private void OnEnable()
     {
-        prevTimeScale = Time.timeScale;
+        //prevTimeScale = Time.timeScale;
         Time.timeScale = 0f;
     }
 
     public void OnclickExitShopButton()
     {
         ps.RefillToilet();
-        Time.timeScale = prevTimeScale;
+        Time.timeScale = 1;
     }
 }

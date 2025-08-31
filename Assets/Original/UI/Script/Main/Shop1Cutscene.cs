@@ -31,6 +31,9 @@ public class Shop1Cutscene : MonoBehaviour
                 objectToDisable[i].SetActive(false);
             }
         }
+
+        director.timeUpdateMode = DirectorUpdateMode.UnscaledGameTime;
+        Time.timeScale = 0f;
     }
 
     void OnDisable()
