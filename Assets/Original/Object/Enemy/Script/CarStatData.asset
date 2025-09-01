@@ -25,3 +25,4 @@ MonoBehaviour:
   _name: Car
   _healthPoint: 1
   _velocity: 3
+  _reward: 10

@@ -25,3 +25,4 @@ MonoBehaviour:
   _name: Truck
   _healthPoint: 2
   _velocity: 3
+  _reward: 15

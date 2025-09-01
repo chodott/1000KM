@@ -54,22 +54,32 @@ MonoBehaviour:
     minVelocity: 0
     maxVelocity: 0
     laneCooldown: 0
+    spawnColorRange: {x: 0, y: 0}
+    spawnStatRange: {x: 0, y: 0}
   - spawnRate: 0.5
     minVelocity: 30
     maxVelocity: 60
     laneCooldown: 0
+    spawnColorRange: {x: 0, y: 0}
+    spawnStatRange: {x: 0, y: 1}
   - spawnRate: 1
     minVelocity: 60
     maxVelocity: 100
     laneCooldown: 0
+    spawnColorRange: {x: 0, y: 2}
+    spawnStatRange: {x: 0, y: 0}
   - spawnRate: 1.5
     minVelocity: 100
-    maxVelocity: 130
-    laneCooldown: 0
-  - spawnRate: 2
-    minVelocity: 130
     maxVelocity: 150
     laneCooldown: 0
+    spawnColorRange: {x: 0, y: 2}
+    spawnStatRange: {x: 0, y: 2}
+  - spawnRate: 2
+    minVelocity: 150
+    maxVelocity: 200
+    laneCooldown: 0
+    spawnColorRange: {x: 0, y: 4}
+    spawnStatRange: {x: 0, y: 3}
   _bossPrefabs:
   - {fileID: 5594163652849330986, guid: c17b106b74610a74a97fbc399d71b4bc, type: 3}
   - {fileID: 0}

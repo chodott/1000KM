@@ -25,3 +25,4 @@ MonoBehaviour:
   _name: Bus
   _healthPoint: 3
   _velocity: 1
+  _reward: 20

@@ -1,21 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ListRandom
-{
-    public static T GetRandom<T>(this List<T> list, int range)
-    {
-        if (list == null || list.Count == 0)
-        {
-            Debug.LogWarning("List is Empty");
-            return default;
-        }
-
-        int randomIndex = Random.Range(0, range-1);
-        return list[randomIndex];
-    }
-}
-
 public class EnemySpawner : MonoBehaviour
 {
     #region SerializeField
@@ -45,6 +30,7 @@ public class EnemySpawner : MonoBehaviour
 
     #endregion
     private ObjectPool _objectPool = new ObjectPool();
+    private DifficultyTier _curTier;
     private float _spawnBudget = 0f;
     private int _laneCount;
     private int _laneRange;
@@ -63,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnPhaseChanged(GamePhase phase, PhaseData data)
     {
-        switch(phase)
+        switch (phase)
         {
             case GamePhase.BossIntro:
                 SpawnBoss();
@@ -72,7 +58,7 @@ public class EnemySpawner : MonoBehaviour
             case GamePhase.Normal:
                 _canSpawnDefaultEnemy = true;
                 break;
-}
+        }
     }
 
     private void Update()
@@ -82,9 +68,9 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        DifficultyTier tier =  GetCurrentTier();
-        _spawnBudget = Mathf.Min(_spawnBudget + tier.spawnRate * Time.deltaTime, _spawnBudgetLimit);
-        if(_spawnBudget < 1f) 
+        _curTier = GetCurrentTier();
+        _spawnBudget = Mathf.Min(_spawnBudget + _curTier.spawnRate * Time.deltaTime, _spawnBudgetLimit);
+        if (_spawnBudget < 1f)
         {
             return;
         }
@@ -99,9 +85,9 @@ public class EnemySpawner : MonoBehaviour
     private DifficultyTier GetCurrentTier()
     {
         float curPlayerSpeed = GlobalMovementController.Instance.GlobalVelocity;
-        foreach(var tier in _difficultyTiers)
+        foreach (var tier in _difficultyTiers)
         {
-            if (curPlayerSpeed  > tier.maxVelocity)
+            if (curPlayerSpeed > tier.maxVelocity)
             {
                 continue;
             }
@@ -125,7 +111,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        if(availableLanes.Count <= 0)
+        if (availableLanes.Count <= 0)
         {
             return false;
         }
@@ -140,22 +126,26 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(int spawnLaneIndex)
     {
-            float spawnPositionZ = LaneSystem.Instance.GetLanePositionZ(spawnLaneIndex);
-            Vector3 spawnPosition = new Vector3(_spawnPosition.x, _spawnPosition.y, spawnPositionZ);
-            GameObject carObject = _objectPool.GetObject(_enemyPrefab);
-            CarEnemy carEnemy = carObject.GetComponent<CarEnemy>();
-            var randomColor = _enemyColors.GetRandom(4);
-            var randomStat = _enemyStatDatas.GetRandom(3);
-            float velocity = GlobalMovementController.Instance.GlobalVelocity * _enemySpeedMultiplier;
-            carEnemy.Init(randomColor, randomStat, spawnPosition, velocity, spawnLaneIndex);
-     }
+        float spawnPositionZ = LaneSystem.Instance.GetLanePositionZ(spawnLaneIndex);
+        Vector3 spawnPosition = new Vector3(_spawnPosition.x, _spawnPosition.y, spawnPositionZ);
+        GameObject carObject = _objectPool.GetObject(_enemyPrefab);
+        CarEnemy carEnemy = carObject.GetComponent<CarEnemy>();
+
+        int colorIndex = Random.Range(_curTier.spawnColorRange.x, _curTier.spawnColorRange.y+1);
+        int statIndex = Random.Range(_curTier.spawnStatRange.x, _curTier.spawnStatRange.y+1);
+        var randomColor = _enemyColors[colorIndex];
+        var randomStat = _enemyStatDatas[statIndex];
+
+        float velocity = GlobalMovementController.Instance.GlobalVelocity * _enemySpeedMultiplier;
+        carEnemy.Init(randomColor, randomStat, spawnPosition, velocity, spawnLaneIndex);
+    }
 
     private void SpawnBoss()
     {
         _canSpawnDefaultEnemy = false;
         var spawnBossPrefab = _bossPrefabs[_spawnBossIndex];
         GameObject spawnedBoss = Instantiate(spawnBossPrefab, _spawnPosition, Quaternion.Euler(0, -90, 0));
-        
+
         if (spawnedBoss.TryGetComponent<BossEnemyController>(out var boss)) { /* »ç¿ë */ }
         {
             boss.Init(_playerTransform);

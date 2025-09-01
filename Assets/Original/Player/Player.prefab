@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be7e65cc34dce474f91c786dbc926aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultAcceleration: 5
+  _defaultAcceleration: 1
   _defaultDrag: 1
 --- !u!114 &2924355754974614267
 MonoBehaviour:
@@ -241,9 +241,8 @@ MonoBehaviour:
   _defaultMaxGasPoint: 100
   _defaultMaxHealthPoint: 100
   _defaultMaxToiletPoint: 100
-  _defaultGasEfficiency: 2
-  _toiletGainPerSec: 1
-  CurrentMoney: 0
+  _defaultGasEfficiency: 0.5
+  _toiletGainPerSec: 0.3
 --- !u!114 &3718525976865496762
 MonoBehaviour:
   m_ObjectHideFlags: 0
