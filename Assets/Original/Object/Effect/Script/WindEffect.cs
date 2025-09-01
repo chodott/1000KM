@@ -22,19 +22,26 @@ public class WindEffect : MonoBehaviour
     private void OnEnable()
     {
         var particleRenderer = _particleSystem.GetComponent<ParticleSystemRenderer>();
-        particleRenderer.lengthScale = 0.2f;
     }
 
     private void Update()
     {
 
         float curVelocity = GlobalMovementController.Instance.GlobalVelocity;
-        float lerpAlpha = Mathf.InverseLerp(_minApplyVelocity, _maxApplyVelocity, curVelocity);
-
         var emission = _particleSystem.emission;
-        emission.rateOverTime = Mathf.Lerp(_minRateOverTime, _maxRateOverTime, lerpAlpha);
         var mainMoudle = _particleSystem.main;
-        mainMoudle.startSpeed = Mathf.Lerp(_minStartSpeed, _maxStartSpeed, lerpAlpha);
+
+        float curRateOverTime = 0;
+        float curStartSpeed = 0;
+        if (curVelocity >= _minStartSpeed)
+        {
+            float lerpAlpha = Mathf.InverseLerp(_minApplyVelocity, _maxApplyVelocity, curVelocity);
+            curRateOverTime =  Mathf.Lerp(_minRateOverTime, _maxRateOverTime, lerpAlpha);
+            curStartSpeed = Mathf.Lerp(_minStartSpeed, _maxStartSpeed, lerpAlpha);
+        }
+
+        emission.rateOverTime = curRateOverTime;
+        mainMoudle.startSpeed = curStartSpeed;
     }
 
 }
