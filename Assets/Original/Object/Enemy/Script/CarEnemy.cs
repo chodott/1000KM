@@ -211,7 +211,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void RecoverVelocity()
     {
-        if (_curVelocity <= _maxVelocity) 
+        if (_curVelocity <= GlobalMovementController.Instance.GlobalVelocity) 
         {
             ChangeState(DriveState);
         }

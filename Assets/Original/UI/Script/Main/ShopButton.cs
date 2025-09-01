@@ -42,10 +42,9 @@ public class ShopButton : MonoBehaviour
     public void OnClickRepairButton()
     {
         int fee = 100;
-        float healAmount = 100f;
         if (_playerStatus.TrySpendMoney(fee) == true)
         {
-            _playerStatus.RefillHP(healAmount);
+            _playerStatus.RefillHP();
             buttoClickSound.Play();
         }
     }

@@ -97,7 +97,7 @@ public class PlayerStatus : MonoBehaviour
 
     public void RefillHP(float amount)
     {
-        _curHealthPoint += amount;
+        _curHealthPoint = _maxHealthPoint;
         OnHPChanged?.Invoke(_curHealthPoint);
     }
 
