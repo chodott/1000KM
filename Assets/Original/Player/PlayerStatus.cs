@@ -32,7 +32,7 @@ public class PlayerStatus : MonoBehaviour
     private float _curToiletPoint;
 
     private int _curMoney;
-    public int CurrentMoney;
+    public int CurrentMoney { get { return _curMoney; } }
 
     #region Monobehaviour Callbacks
     private void Start()

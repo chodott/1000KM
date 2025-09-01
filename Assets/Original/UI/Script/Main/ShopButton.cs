@@ -35,7 +35,6 @@ public class ShopButton : MonoBehaviour
         if(_playerStatus.TrySpendMoney(fee) == true)
         {
             _playerStatus.RefillGas();
-            _playerStatus.CurrentMoney -= fee;
             buttoClickSound.Play();
         }
     }
@@ -47,7 +46,6 @@ public class ShopButton : MonoBehaviour
         if (_playerStatus.TrySpendMoney(fee) == true)
         {
             _playerStatus.RefillHP(healAmount);
-            _playerStatus.CurrentMoney -= fee;
             buttoClickSound.Play();
         }
     }
@@ -57,7 +55,6 @@ public class ShopButton : MonoBehaviour
         int fee = 200;
         if (_playerStatus.TrySpendMoney(fee) == true)
         {
-            _playerStatus.CurrentMoney -= fee;
             buttoClickSound.Play();
             partsButtons[i].GetComponent<PartsButton>().AddStatus();
         }

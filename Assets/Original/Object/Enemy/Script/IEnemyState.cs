@@ -261,6 +261,4 @@ public class DestroyedState : IEnemyState
     {
         _enemy.CheckOutInRange();
     }
-
-
 }
