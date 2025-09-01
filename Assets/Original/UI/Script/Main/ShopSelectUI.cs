@@ -3,7 +3,7 @@ using UnityEngine;
 public class ShopSelectUI : MonoBehaviour
 {
     [SerializeField] PlayerStatus ps;
-    private float prevTimeScale;
+    [SerializeField] GameObject resumeText;
 
     private void OnEnable()
     {
@@ -14,6 +14,6 @@ public class ShopSelectUI : MonoBehaviour
     public void OnclickExitShopButton()
     {
         ps.RefillToilet();
-        Time.timeScale = 1;
+        resumeText.SetActive(true);
     }
 }
