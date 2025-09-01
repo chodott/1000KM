@@ -7,11 +7,12 @@ public enum GamePhase
 {
     Shop,
     BossIntro,
-    Normal
+    Normal,
+    GameOver
 }
 
 [System.Serializable]
-public struct PhaseData
+public class PhaseData
 {
     public float lockVelocity;
     public float duration;
@@ -23,7 +24,7 @@ public static class GameEvents
     public static event Action<GamePhase, PhaseData> OnPhaseChanged;
     public static event Action OnBossDefeated;
 
-    public static void SetPhase(GamePhase phase, PhaseData phaseData)
+    public static void SetPhase(GamePhase phase, PhaseData phaseData = null)
     {
         OnPhaseChanged?.Invoke(phase, phaseData);
     }

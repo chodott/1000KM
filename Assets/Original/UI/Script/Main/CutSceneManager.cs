@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CutSceneManager : MonoBehaviour
@@ -6,6 +7,7 @@ public class CutSceneManager : MonoBehaviour
 
     public GameObject shopCutscene;
     public GameObject bossAppear;
+    public GameObject gameOverUI;
 
     void Awake()
     {
@@ -17,6 +19,21 @@ public class CutSceneManager : MonoBehaviour
         instance = this;
     }
 
+    private void OnEnable()
+    {
+        GameEvents.OnPhaseChanged += OnPhaseChanged;
+    }
+
+    private void OnPhaseChanged(GamePhase phase, PhaseData data)
+    {
+        switch(phase)
+        {
+            case GamePhase.GameOver:
+                EnableGameOver();
+                break;
+        }
+    }
+
     public void EnableShop()
     {
         shopCutscene.SetActive(true);
@@ -26,4 +43,10 @@ public class CutSceneManager : MonoBehaviour
     {
         bossAppear.SetActive(true);
     }
+
+    public void EnableGameOver()
+    {
+        gameOverUI.SetActive(true);
+    }
+
 }

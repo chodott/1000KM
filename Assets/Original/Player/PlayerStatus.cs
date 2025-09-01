@@ -68,6 +68,10 @@ public class PlayerStatus : MonoBehaviour
     public void OnDamaged(float amount)
     {
          _curHealthPoint -= amount;
+        if(_curHealthPoint <= 0)
+        {
+            GameEvents.SetPhase(GamePhase.GameOver);
+        }
          OnHPChanged?.Invoke(_curHealthPoint);
     }
 
