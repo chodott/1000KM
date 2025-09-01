@@ -36,6 +36,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
     public event Action<GameObject, GameObject> OnReturned;
+    public float Velocity { get {return _curVelocity; } }
 
     public enum EnemyColor
     {
@@ -114,7 +115,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     private void Destroy(Vector3 direction)
     {
         Collider.enabled = false;
-        OnRewardDropped?.Invoke(1);
+        OnRewardDropped?.Invoke(_statData.Reward);
         Vector3 explosionDirection = new Vector3(-direction.x, 0.3f, direction.z);
         explosionDirection.Normalize();
         ChangeState(new DestroyedState(explosionDirection));
@@ -210,7 +211,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void RecoverVelocity()
     {
-        if (_curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
+        if (_curVelocity <= _maxVelocity) 
         {
             ChangeState(DriveState);
         }
@@ -226,6 +227,24 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         Vector3 forceDirection = Rb.position - collision.rigidbody.position;
         forceDirection.Normalize();
         Destroy(forceDirection);
+    }
+
+    public void ShareVelocity(CarEnemy otherCar)
+    {
+        if (otherCar.Rb.position.x< Rb.position.x)
+        {
+            return;
+        }
+
+        float backCarVelocity = otherCar.Velocity;
+        otherCar.UpdateVelocity(Velocity);
+        UpdateVelocity(backCarVelocity);
+    }
+
+    public void UpdateVelocity(float newVelocity)
+    {
+        _maxVelocity = newVelocity;
+        _curVelocity = newVelocity;
     }
 
     public void ExcludeCollision()

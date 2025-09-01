@@ -60,8 +60,8 @@ public class DriveState : IEnemyState
     public void Enter(CarEnemy enemy)
     {
         _enemy = enemy;
-        _enemy.gameObject.tag = "Default";
         _enemy.LaneMover.UpdateMoveLaneSpeed(0f);
+        _enemy.gameObject.layer = LayerMask.NameToLayer("Enemy");
 
     }
 
@@ -73,7 +73,7 @@ public class DriveState : IEnemyState
 
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Parried"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
         {
             _enemy.ApplyAccident(collision);
         }
@@ -91,7 +91,7 @@ public class DriveState : IEnemyState
         {
             return;
         }
-        if (angle >= 80.0f)
+        if (angle >= 85.0f)
         {
             _enemy.ChangeState(new VerticalKnockbackState());
         }
@@ -127,7 +127,7 @@ public class VerticalKnockbackState : IEnemyState
     public void Enter(CarEnemy enemy)
     {
         _enemy = enemy;
-        _enemy.gameObject.tag = "Parried";
+        _enemy.gameObject.layer = LayerMask.NameToLayer("PlayerProjectile");
         _enemy.KnockbackToForward();
     }
 
@@ -138,9 +138,18 @@ public class VerticalKnockbackState : IEnemyState
 
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Parried"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
         {
             _enemy.ApplyAccident(collision);
+        }
+
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            if (collision.gameObject.TryGetComponent<CarEnemy>(out var otherCar))
+            {
+
+                otherCar.ShareVelocity(otherCar);
+            }
         }
     }
 
@@ -176,7 +185,7 @@ public class HorizontalKnockbackState : IEnemyState
     public void Enter(CarEnemy enemy)
     {
         _enemy = enemy;
-        _enemy.gameObject.tag = "Parried";
+        _enemy.gameObject.layer = LayerMask.NameToLayer("Enemy");
         _laneMover = enemy.LaneMover;
         _laneMover.UpdateMoveLaneSpeed(_knockbackSpeed);
         _laneMover.OnFinishMove += EndKnockback;
@@ -193,7 +202,7 @@ public class HorizontalKnockbackState : IEnemyState
 
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Parried"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
         {
             _enemy.ApplyAccident(collision);
         }
