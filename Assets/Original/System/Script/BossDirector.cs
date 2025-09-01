@@ -20,6 +20,7 @@ public class BossDirector : MonoBehaviour
         {
             GameEvents.SetPhase(GamePhase.BossIntro, _bossPhaseData);
             _bossSpawnDistance = float.PositiveInfinity;
+            CutSceneManager.instance.EnableBoss();
         }
     }
 

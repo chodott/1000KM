@@ -60,18 +60,19 @@ public class GlobalMovementController : MonoBehaviour
     {
         float distance = GlobalVelocity * Time.fixedDeltaTime;
         TotalDistance += distance;
-        _distanceAccumulator += distance;
-
-        if(TotalDistance >= _restAreaSpawnDistance)
-        {
-            _restAreaEntrance.gameObject.SetActive(true);
-            _restAreaSpawnDistance += _restAreaInterval;
-        }
 
         if (_stopCheckDistance)
         {
             return;
         }
+        _distanceAccumulator += distance;
+
+        if (TotalDistance >= _restAreaSpawnDistance)
+        {
+            _restAreaEntrance.gameObject.SetActive(true);
+            _restAreaSpawnDistance += _restAreaInterval;
+        }
+
         float lerpAlpha = _distanceAccumulator / _distanceThreshold;
         float curHorizontalBend = Mathf.Lerp(_prevBendSize.x, _targetBendSize.x, lerpAlpha);
         float curVerticalBend = Mathf.Lerp(_prevBendSize.y, _targetBendSize.y, lerpAlpha);
@@ -124,9 +125,10 @@ public class GlobalMovementController : MonoBehaviour
 
     private void ResetTargetBend()
     {
-        _prevBendSize = _targetBendSize;
-        SetRoadRandomBend();
+        _prevBendSize = _curBendSize;
         _distanceAccumulator = 0f;
+
+        SetRoadRandomBend();
     }
 
     private void UnlockBendSize()
@@ -148,20 +150,18 @@ public class GlobalMovementController : MonoBehaviour
         while (t < duration)
         {
             float u = t / duration;
-            // 스무스스텝(원하면 u 그대로 쓰면 선형)
             u = u * u * (3f - 2f * u);
 
             float x = Mathf.Lerp(from.x, to.x, u);
             float y = Mathf.Lerp(from.y, to.y, u);
             _curBendSize = new Vector2( x, y);
 
-            ApplyBend(_curBendSize); // 필요한 곳(셰이더/머티리얼/시스템)에 반영
+            ApplyBend(_curBendSize); 
             t += Time.deltaTime;
             yield return null;
         }
 
         _curBendSize = to;
         ApplyBend(to);
-        _prevBendSize = to; // 다음 보간의 시작점 갱신
     }
 }

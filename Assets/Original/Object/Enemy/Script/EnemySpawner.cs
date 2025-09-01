@@ -77,9 +77,14 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+        if (_canSpawnDefaultEnemy == false)
+        {
+            return;
+        }
+
         DifficultyTier tier =  GetCurrentTier();
         _spawnBudget = Mathf.Min(_spawnBudget + tier.spawnRate * Time.deltaTime, _spawnBudgetLimit);
-        if(_spawnBudget < 1f || _canSpawnDefaultEnemy == false)
+        if(_spawnBudget < 1f) 
         {
             return;
         }
