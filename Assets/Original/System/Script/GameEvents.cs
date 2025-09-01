@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum GamePhase
 {
-    Cutscene,
+    Shop,
     BossIntro,
     Normal
 }

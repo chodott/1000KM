@@ -95,6 +95,9 @@ public class Player : MonoBehaviour, IDamagable
     {
         switch(phase)
         {
+            case GamePhase.Shop:
+                EnterDriveState();
+                break;
             case GamePhase.Normal:
                 _playerMovement.UnlockAcceleration();
                 break;

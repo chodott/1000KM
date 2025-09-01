@@ -38,8 +38,9 @@ public class RestAreaEntrance : MonoBehaviour
         if(other.TryGetComponent<Player>(out Player player))
         {
             player.EnterNoInputState();
+            CutSceneManager.instance.EnableShop();
+            Deactivate();
         }
-        CutSceneManager.instance.EnableShop();
     }
     private void Activate()
     {

@@ -167,7 +167,7 @@ public class PlayerStunState : IPlayerState
 {
     public void Enter(Player player)
     {
-        
+        GameEvents.SetPhase(GamePhase.Shop, new PhaseData());
     }
 
     public void Exit()
