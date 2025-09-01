@@ -41,4 +41,8 @@ public class EnemyStatData : ScriptableObject
     private float _velocity;
     public float Velocity { get { return _velocity; } }
 
+    [SerializeField]
+    private int _reward;
+    public int Reward { get { return _reward; } }
+
 }
