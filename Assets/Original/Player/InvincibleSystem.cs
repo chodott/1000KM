@@ -33,6 +33,7 @@ public class InvincibleSystem : MonoBehaviour
             yield return null;
         }
         _isActive = false;
+        _invincibleTimer = 0f;
         OnFinishedInvincible?.Invoke();
     }
 
