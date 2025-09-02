@@ -4,6 +4,7 @@ public class ShopSelectUI : MonoBehaviour
 {
     [SerializeField] PlayerStatus ps;
     [SerializeField] GameObject resumeText;
+    [SerializeField] AudioHoldCrossfade ac;
 
     private void OnEnable()
     {
@@ -15,5 +16,6 @@ public class ShopSelectUI : MonoBehaviour
     {
         ps.RefillToilet();
         resumeText.SetActive(true);
+        ac.ResumeFromHold();
     }
 }

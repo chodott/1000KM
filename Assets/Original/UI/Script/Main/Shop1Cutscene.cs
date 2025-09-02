@@ -7,6 +7,7 @@ public class Shop1Cutscene : MonoBehaviour
     public GameObject[] objectToDisable;
     public GameObject[] objectToActivate;
     public bool evaluateFirstFrame = true;
+    public AudioHoldCrossfade ac;
 
     void Reset()
     {
@@ -15,6 +16,7 @@ public class Shop1Cutscene : MonoBehaviour
 
     void OnEnable()
     {
+        if(ac!=null) ac.BeginHold();
         if (director == null) director = GetComponent<PlayableDirector>();
         if (director == null || director.playableAsset == null) return;
 
