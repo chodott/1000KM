@@ -16,5 +16,5 @@ MonoBehaviour:
   _accelerationBonus: 0
   _maxHpBonus: 0
   _laneMoveSpeedBonus: 0
-  _gasEfficiencyBonus: 1
+  _gasEfficiencyBonus: 0.5
   _dragReduction: 0

@@ -1,6 +1,4 @@
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.Sqlite;
+
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BossPhaseSO", menuName = "Scriptable Objects/BossPhaseSO")]

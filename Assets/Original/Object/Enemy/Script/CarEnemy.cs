@@ -125,6 +125,13 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         StartCoroutine(DestroyAfterDelay(1f));
     }
 
+    private void DestroyInPlace()
+    {
+        Collider.enabled = false;
+        SpawnDestroyEffect();
+        Deactivate();
+    }
+
     private void OnPhaseChanged(GamePhase phase, PhaseData data)
     {
         switch (phase)
@@ -235,9 +242,15 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void ApplyAccident(Collision collision)
     {
-        Vector3 forceDirection = Rb.position - collision.rigidbody.position;
-        forceDirection.Normalize();
-        Destroy(forceDirection);
+        if(Rb.position.x < -120f)
+        {
+            Deactivate();
+            return;
+        }
+        else
+        {
+            DestroyInPlace();
+        }
     }
 
     public void ShareVelocity(CarEnemy otherCar)
@@ -298,6 +311,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     public void Deactivate()
     {
         gameObject.SetActive(false);
+        LaneMover.StopLaneMove();
         ResetPhysics();
         _stateMachine.Reset();
         OnReturned?.Invoke(OriginalPrefab,gameObject);

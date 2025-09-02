@@ -753,7 +753,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 200b77df0dc3fa348837244a53b53e91, type: 2}
   - {fileID: 11400000, guid: f28c3da2ece7a1846a985ee8c676f49a, type: 2}
   _burstSystem: {fileID: 7846314749505493036}
-  _maxHealthPoint: 1
+  _maxHealthPoint: 6
   _defaultVelocity: 20
   _destroyedVelocity: 5
   _lifeTime: 3

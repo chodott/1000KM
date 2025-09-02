@@ -250,8 +250,6 @@ public class DestroyedState : IEnemyState
         _enemy.ResetVelocity();
         _enemy.ApplyExplosionForce(_explosionDirection);
         _enemy.SpawnDestroyEffect();
-        enemy.LaneMover.StopLaneMove();
-
     }
 
     public void Exit()

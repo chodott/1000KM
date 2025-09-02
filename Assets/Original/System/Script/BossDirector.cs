@@ -12,6 +12,7 @@ public class BossDirector : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnBossDefeated += OnBossDefeated;
+        _bossSpawnDistance = _bossInterval;
     }
 
     private void FixedUpdate()
