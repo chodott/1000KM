@@ -22,20 +22,24 @@ public class PlayerDriveState : IPlayerState
 {
     private Player _player;
     private LaneMover _laneMover;
+    private PlayerMovement _playerMovement;
     public void Enter(Player player)
     {
         _player = player;
         _laneMover = player.LaneMover;
+        _playerMovement = player.PlayerMovement;
     }
 
     public void Exit()
     {
         _player = null;
         _laneMover = null;
+        _playerMovement = null;
     }
 
     public void OnDamaged()
     {
+        _playerMovement.OnDamaged();
         _player.EnterStunState();
     }
 
@@ -117,19 +121,24 @@ public class PlayerStunState : IPlayerState
 {
     private Player _player;
     private InvincibleSystem _invincibleSystem;
+    private PlayerMovement _playerMovement;
     public void Enter(Player player)
     {
         _player = player;
+        _playerMovement = _player.PlayerMovement;
         _invincibleSystem = _player.GetComponent<InvincibleSystem>();
 
         _player.StartStun();
         _invincibleSystem.OnFinishedInvincible += EndStun;
-
+        _playerMovement.LockAcceleration();
     }
 
     public void Exit()
     {
         _invincibleSystem.OnFinishedInvincible -= EndStun;
+        _playerMovement.UnlockAcceleration();
+        _playerMovement = null;
+        _invincibleSystem = null;
         _player = null;
     }
 

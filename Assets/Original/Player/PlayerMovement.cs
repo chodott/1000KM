@@ -16,6 +16,13 @@ public class PlayerMovement : MonoBehaviour
     private bool _isLockInput = false;
 
     public event Action<float> OnSpeedChanged;
+    public float Velocity { get { return _velocity; } 
+        private set 
+        {
+            _velocity = value;
+            OnSpeedChanged?.Invoke(_velocity); 
+        }
+    }
 
     private void Update()
     {
@@ -31,24 +38,23 @@ public class PlayerMovement : MonoBehaviour
 
         if (_keyValue > 0f)
         {
-            _velocity += _acceleration * Time.deltaTime;
+            Velocity += _acceleration * Time.deltaTime;
         }
 
         else if (_keyValue < 0f)
         {
-            _velocity -= _acceleration * Time.deltaTime;
+            Velocity -= _acceleration * Time.deltaTime;
         }
 
         else
         {
-            _velocity -= _drag * Time.deltaTime;
+            Velocity -= _drag * Time.deltaTime;
         }
 
         if(_velocity <=0f)
         {
-            _velocity = 0f;
+            Velocity = 0f;
         }
-            OnSpeedChanged?.Invoke(_velocity);
     }
 
     IEnumerator LerpLockVelocity(float from, float to, float duration)
@@ -56,14 +62,13 @@ public class PlayerMovement : MonoBehaviour
         float totalDist = Mathf.Abs(to - from);
         float speedPerSec = (duration > 0f) ? (totalDist / duration) : float.PositiveInfinity;
 
-        _velocity = from;
-        while (!Mathf.Approximately(_velocity, to))
+        Velocity = from;
+        while (!Mathf.Approximately(Velocity, to))
         {
-            _velocity = Mathf.MoveTowards(_velocity, to, speedPerSec * Time.deltaTime);
-            OnSpeedChanged?.Invoke(_velocity);
+            Velocity = Mathf.MoveTowards(Velocity, to, speedPerSec * Time.deltaTime);
             yield return null;
         }
-        _velocity = to;
+        Velocity = to;
     }
 
     public void UpdateStatus(PartStatus status)
@@ -79,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        _velocity /= 2;
+        Velocity /= 2;
     }
 
     public void SetMoveDirection(float value)
@@ -91,6 +96,11 @@ public class PlayerMovement : MonoBehaviour
     {
         _isLockInput = true;
         StartCoroutine(LerpLockVelocity(_velocity, lockVelocity, duration));
+    }
+
+    public void LockAcceleration()
+    {
+        _isLockInput = true;
     }
 
     public void UnlockAcceleration()

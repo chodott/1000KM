@@ -41,6 +41,7 @@ public class Player : MonoBehaviour, IDamagable
 
     public PlayerStatus Status { get {return _playerStatus; } }
     public PlayerParrySystem ParrySystem { get { return _playerParrySystem; } }
+    public PlayerMovement PlayerMovement { get { return _playerMovement; } }    
     public LaneMover LaneMover { get { return _laneMover; } }
 
     #region Monobehavour Callbacks
@@ -164,7 +165,6 @@ public class Player : MonoBehaviour, IDamagable
     public void StartStun()
     {
         _invincibility.StartInvinble();
-        _playerMovement.OnDamaged();
         _stunParticleHandler.PlayStunEffect();
     }
 
