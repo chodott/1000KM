@@ -21,6 +21,8 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     private GameObject _destroyEffectPrefab;
     [SerializeField]
     private GameObject _disapearEffectPrefab;
+    [SerializeField]
+    private Vector3 _laneChangeCheckSize;
 
     #endregion 
 
@@ -32,6 +34,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     private float _returnPositionX = 5f;
     private float _patternCooldownTime = 1;
     private float _patternCooldownTimer;
+    private float _patternStartPositionX = -100f;
 
     public GameObject OriginalPrefab { get { return _originalPrefab; }}
 
@@ -102,7 +105,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
                 break;
         }
 
-        LaneMover.CheckAndMoveLane(transform.position, _statData.ColliderSize, direction);
+        LaneMover.CheckAndMoveLane(transform.position, _laneChangeCheckSize, direction);
     }
 
     private void ResetPhysics()
@@ -161,6 +164,9 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         transform.position = position;
         transform.rotation = statData.SpawnRotation;
         transform.localScale = statData.Scale;
+
+        Rb.linearVelocity = Vector3.zero;
+        Rb.angularVelocity = Vector3.zero;
         Rb.WakeUp();
 
         ChangeState(DriveState);
@@ -178,6 +184,11 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void CheckPatternTimer()
     {
+        if(_patternStartPositionX > Rb.position.x)
+        {
+            return;
+        }
+
         if (_patternCooldownTimer > _patternCooldownTime)
         {
             DoPattern();
@@ -265,6 +276,11 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void OnCollisionEnter(Collision collision)
     {
+        if(collision == null)
+        {
+            return;
+        }
+
         _stateMachine.OnCollisionEnter(collision);
     }
 

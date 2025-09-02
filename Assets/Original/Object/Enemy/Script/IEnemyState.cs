@@ -33,6 +33,10 @@ public class StateMachine<TOwner> where TOwner : MonoBehaviour
     }
     public void OnCollisionEnter(Collision collision)
     {
+        if(_curState == null)
+        {
+            return;
+        }    
         _curState.OnCollisionEnter(collision);
     }
 
@@ -268,6 +272,6 @@ public class DestroyedState : IEnemyState
 
     public void Update()
     {
-        _enemy.CheckOutInRange();
+  
     }
 }

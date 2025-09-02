@@ -140,7 +140,7 @@ public class LaneMover : MonoBehaviour
     public void CheckAndMoveLane(Vector3 position, Vector3 colliderSize, float isRight)
     {
         Vector3 checkPosition = new Vector3(position.x, position.y, position.z + _laneWidth * isRight);
-       if( Physics.CheckBox(checkPosition, colliderSize, Quaternion.Euler(0,-90f,0), LayerMask.GetMask("Enemy")))
+       if( Physics.CheckBox(checkPosition, colliderSize, Quaternion.Euler(0,0,0), LayerMask.GetMask("Enemy")))
         {
             return;
         }

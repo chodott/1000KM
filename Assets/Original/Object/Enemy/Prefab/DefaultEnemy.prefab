@@ -158,6 +158,7 @@ MonoBehaviour:
   _meshRenderer: {fileID: 1789332861490712944}
   _destroyEffectPrefab: {fileID: 980769002882745835, guid: faf0c4b10698ba648af70abb102bbfbe, type: 3}
   _disapearEffectPrefab: {fileID: 3914376393998710022, guid: 21a95ad99248e0e4eb4a26e28c78a339, type: 3}
+  _laneChangeCheckSize: {x: 7, y: 2, z: 2}
 --- !u!114 &-8618501305589520936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +176,7 @@ MonoBehaviour:
   _moveRightAnimation: {fileID: 7400000, guid: a6e64bdfc6ca2754f92bce0b5b6e620f, type: 2}
   _knockbackLeftAnimation: {fileID: 7400000, guid: 1ca5e0a83564814428ca0772f877fdfc, type: 2}
   _knockbackRightAnimation: {fileID: 7400000, guid: 30c98e59bb7f0b045a6a846bfded75ef, type: 2}
-  _defaultMoveLaneSpeed: 3
+  _defaultMoveLaneSpeed: 5
   _stopDistance: 0.05
 --- !u!111 &5116840457679394179
 Animation:

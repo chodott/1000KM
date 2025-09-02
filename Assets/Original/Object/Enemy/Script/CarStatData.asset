@@ -20,7 +20,7 @@ MonoBehaviour:
   _mesh: {fileID: -2432090755550338912, guid: 8ed2be3b486df934693bbd3975e81c33, type: 3}
   _rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
   _scale: {x: 2, y: 2, z: 2}
-  _colliderSize: {x: 0.8, y: 0.8, z: 1}
+  _colliderSize: {x: 0.8, y: 0.5, z: 1}
   _colliderCenter: {x: 0, y: 0, z: 0}
   _name: Car
   _healthPoint: 1
