@@ -81,6 +81,18 @@ public class DriveState : IEnemyState
         {
             _enemy.ApplyAccident(collision);
         }
+
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            if (collision.gameObject.TryGetComponent<CarEnemy>(out var otherCar))
+            {
+                if(otherCar.Velocity >  _enemy.Velocity) 
+                {
+                    return;
+                }
+                otherCar.ApplyAccident(collision);
+            }
+        }
     }
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
@@ -145,15 +157,6 @@ public class VerticalKnockbackState : IEnemyState
         if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
         {
             _enemy.ApplyAccident(collision);
-        }
-
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            if (collision.gameObject.TryGetComponent<CarEnemy>(out var otherCar))
-            {
-
-                otherCar.ShareVelocity(otherCar);
-            }
         }
     }
 
