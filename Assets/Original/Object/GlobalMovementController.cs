@@ -20,8 +20,9 @@ public class GlobalMovementController : MonoBehaviour
     private PlayerMovement _playerMovement;
     private float _distanceThreshold = 2000f;
     private float _distanceAccumulator = 0f;
-    private float _restAreaSpawnDistance = 200f;
+    private float _restAreaSpawnDistance;
     private bool _stopCheckDistance = false;
+    private bool _restActive = false;
 
     //(Horizontal, Vertical)
     private Vector2 _targetBendSize = new Vector2(1, 1);
@@ -48,29 +49,41 @@ public class GlobalMovementController : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnPhaseChanged += OnPhaseChanged;
+        _restAreaEntrance.OnDeactivated += OnRestDeactivated;
         SetRoadRandomBend();
+        _restAreaSpawnDistance += _restAreaInterval;
     }
 
     private void OnDestroy()
     {
         _playerMovement.OnSpeedChanged -= HandleVelocityChanged;
+        _restAreaEntrance.OnDeactivated -= OnRestDeactivated;
+
     }
 
     private void FixedUpdate()
     {
-        float distance = GlobalVelocity * Time.fixedDeltaTime;
-        TotalDistance += distance;
 
         if (_stopCheckDistance)
         {
             return;
         }
+
+        float distance = GlobalVelocity * Time.fixedDeltaTime;
+        TotalDistance += distance;
         _distanceAccumulator += distance;
 
-        if (TotalDistance >= _restAreaSpawnDistance)
+        if (TotalDistance >= _restAreaSpawnDistance + _restAreaEntrance.SpawnPosX)
         {
-            _restAreaEntrance.gameObject.SetActive(true);
-            _restAreaSpawnDistance += _restAreaInterval;
+            if(_restActive == false)
+            {
+                _restActive = true;
+                _restAreaEntrance.Activate();
+            }
+            else if(_restActive && TotalDistance >= _restAreaSpawnDistance)
+            {
+                _restAreaSpawnDistance += _restAreaInterval;
+            }
         }
 
         float lerpAlpha = _distanceAccumulator / _distanceThreshold;
@@ -109,6 +122,11 @@ public class GlobalMovementController : MonoBehaviour
         _curvedWorldController.bendVerticalSize = curBendSize.y;
     }
 
+    private void OnRestDeactivated()
+    {
+        { _restActive = false; };
+    }
+
     private void OnPhaseChanged(GamePhase phase, PhaseData data)
     {
         switch (phase)
@@ -137,13 +155,6 @@ public class GlobalMovementController : MonoBehaviour
         _stopCheckDistance = false;
     }
 
-    public void LockBendSize(Vector2 bendSize, float duration)
-    {
-        _stopCheckDistance = true;
-        _targetBendSize = bendSize;
-        StartCoroutine(LerpLockBend(_curBendSize, bendSize, duration));
-    }
-
     IEnumerator LerpLockBend(Vector2 from, Vector2 to, float duration)
     {
         float t = 0f;
@@ -154,9 +165,9 @@ public class GlobalMovementController : MonoBehaviour
 
             float x = Mathf.Lerp(from.x, to.x, u);
             float y = Mathf.Lerp(from.y, to.y, u);
-            _curBendSize = new Vector2( x, y);
+            _curBendSize = new Vector2(x, y);
 
-            ApplyBend(_curBendSize); 
+            ApplyBend(_curBendSize);
             t += Time.deltaTime;
             yield return null;
         }
@@ -164,4 +175,18 @@ public class GlobalMovementController : MonoBehaviour
         _curBendSize = to;
         ApplyBend(to);
     }
+
+    public void LockBendSize(Vector2 bendSize, float duration)
+    {
+        _stopCheckDistance = true;
+        _targetBendSize = bendSize;
+        StartCoroutine(LerpLockBend(_curBendSize, bendSize, duration));
+    }
+
+    public float GetDistanceToRest()
+    {
+        float distance = _restAreaSpawnDistance - TotalDistance;
+        return distance;
+    }
+
 }

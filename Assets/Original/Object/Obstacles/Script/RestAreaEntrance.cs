@@ -12,14 +12,11 @@ public class RestAreaEntrance : MonoBehaviour
 
     private float _returnPosX;
 
+    public event Action OnDeactivated;
+    public float SpawnPosX { get { return _spawnPosition.x; } }
     private void Awake()
     {
         _returnPosX = _boxCollider.size.x / 2 + _deactivatePosX;
-    }
-
-    private void OnEnable()
-    {
-        Activate();
     }
 
     private void Update()
@@ -42,14 +39,16 @@ public class RestAreaEntrance : MonoBehaviour
             Deactivate();
         }
     }
-    private void Activate()
+    public void Activate()
     {
+        gameObject.SetActive(true);
         _boxCollider.enabled = true;
         transform.position = _spawnPosition;
     }
 
     private void Deactivate()
     {
+        OnDeactivated?.Invoke();
         gameObject.SetActive(false);
     }
 }

@@ -9,6 +9,8 @@ public class BossDirector : MonoBehaviour
     private float _bossSpawnDistance = 1000f;
 
 
+
+
     private void OnEnable()
     {
         GameEvents.OnBossDefeated += OnBossDefeated;
@@ -20,7 +22,7 @@ public class BossDirector : MonoBehaviour
         if (_bossSpawnDistance <= GlobalMovementController.Instance.TotalDistance)
         {
             GameEvents.SetPhase(GamePhase.BossIntro, _bossPhaseData);
-            _bossSpawnDistance = float.PositiveInfinity;
+            _bossSpawnDistance += _bossInterval;
             CutSceneManager.instance.EnableBoss();
         }
     }
@@ -29,5 +31,11 @@ public class BossDirector : MonoBehaviour
     {
         GameEvents.SetPhase(GamePhase.Normal, new PhaseData());
         _bossSpawnDistance = GlobalMovementController.Instance.TotalDistance + _bossInterval;
+    }
+
+    public float GetDistanceToBoss()
+    {
+        float distance = _bossSpawnDistance - GlobalMovementController.Instance.TotalDistance;
+        return distance;
     }
 }
