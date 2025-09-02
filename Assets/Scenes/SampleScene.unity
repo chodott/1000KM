@@ -3818,6 +3818,54 @@ PrefabInstance:
       propertyPath: '_bossPrefabs.Array.data[1]'
       value: 
       objectReference: {fileID: 5594163652849330986, guid: c511e9986528ee54cacad4fd65767932, type: 3}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[1].maxVelocity
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[1].minVelocity
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[2].maxVelocity
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[2].minVelocity
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[3].maxVelocity
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[3].minVelocity
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[4].maxVelocity
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[4].minVelocity
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[1].spawnStatRange.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[2].spawnStatRange.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[4].spawnStatRange.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _difficultyTiers.Array.data[4].spawnColorRange.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8901838301769255854, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
@@ -5701,6 +5749,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5827,6 +5876,24 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3395dc17f0bef5442a4eade00ccd12a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCam: {fileID: 330585545}
+  minFOV: 60
+  maxFOV: 80
+  lerpSpeed: 5
+  maxSpeed: 150
+  minSpeed: 40
 --- !u!1 &359676709
 GameObject:
   m_ObjectHideFlags: 0
