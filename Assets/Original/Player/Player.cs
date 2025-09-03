@@ -38,6 +38,7 @@ public class Player : MonoBehaviour, IDamagable
     private InputAction _moveLeftAction;
     private InputAction _moveRightAction;
     private InputAction _parryAction;
+    private InputAction _immortalAction;
 
     public PlayerStatus Status { get {return _playerStatus; } }
     public PlayerParrySystem ParrySystem { get { return _playerParrySystem; } }
@@ -56,10 +57,13 @@ public class Player : MonoBehaviour, IDamagable
         _moveLeftAction = _playerInput.actions["MoveLeft"];
         _moveRightAction = _playerInput.actions["MoveRight"];
         _parryAction = _playerInput.actions["Parry"];
+        _immortalAction = _playerInput.actions["TurnOnImmortal"];
 
         _moveLeftAction.performed += OnMoveLeft;
         _moveRightAction.performed += OnMoveRight;
         _parryAction.performed += OnParry;
+        _immortalAction.performed += ActivateImmortality;
+
         _partManager.OnChangedPartStatus += UpdateStatus;
 
         _invincibility.OnFinishedInvincible += StopStunEffect;
@@ -124,6 +128,11 @@ public class Player : MonoBehaviour, IDamagable
     private void OnMoveRight(InputAction.CallbackContext context)
     {
         _curState.OnMoveRight(context);
+    }
+
+    private void ActivateImmortality(InputAction.CallbackContext context)
+    {
+        _playerStatus.ActivateImmortality();
     }
     #endregion
 

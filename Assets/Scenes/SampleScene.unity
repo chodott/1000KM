@@ -1236,6 +1236,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63630923}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &66077032 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5737861949448409543, guid: ed3611c8767008a45b906ac2c50a8df0, type: 3}
+  m_PrefabInstance: {fileID: 3598901769734306670}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &69583493
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3815,6 +3820,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1292784143}
     - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      propertyPath: _spawnPosition.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852883713661037304, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
       propertyPath: '_bossPrefabs.Array.data[1]'
       value: 
       objectReference: {fileID: 5594163652849330986, guid: c511e9986528ee54cacad4fd65767932, type: 3}
@@ -3913,8 +3922,33 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8901838301769255854, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 219524662}
   m_SourcePrefab: {fileID: 100100000, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+--- !u!1 &219524661 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8901838301769255854, guid: ee064a5bff13a9341b73fc5886e3bb4b, type: 3}
+  m_PrefabInstance: {fileID: 219524660}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &219524662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219524661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4612286f0b6da8e41b124abfcf1fda64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bossPhaseData:
+    lockVelocity: 50
+    duration: 5
+    mapBendSize: {x: 0, y: 0}
+  _bossInterval: 12000
 --- !u!1 &236296794
 GameObject:
   m_ObjectHideFlags: 0
@@ -8952,6 +8986,14 @@ PrefabInstance:
     - target: {fileID: 1790319375485075123, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: CurrentMoney
       value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1790319375485075123, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: _toiletGainPerSec
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1790319375485075123, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: _defaultGasEfficiency
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2924355754974614267, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: _spinCount
@@ -20348,8 +20390,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _curvedWorldController: {fileID: 124595727}
   _restAreaEntrance: {fileID: 317100218}
-  _maxBendSize: 6
-  _restAreaInterval: 500
+  _maxBendSize: 3
+  _restAreaInterval: 5000
 --- !u!4 &1394344626
 Transform:
   m_ObjectHideFlags: 0
@@ -24378,7 +24420,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   finalText: {fileID: 1960653290}
   restText: {fileID: 1411895803}
-  gc: {fileID: 1394344625}
+  globalMovementController: {fileID: 1394344625}
+  bossDirector: {fileID: 219524662}
 --- !u!1 &1648423882
 GameObject:
   m_ObjectHideFlags: 0
@@ -31225,7 +31268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5859379825254310176, guid: 1b164c362fbbda94d9ec7ea914e64a52, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -32821,7 +32864,7 @@ PrefabInstance:
     - target: {fileID: 1676424354848477740, guid: afa6cf82360fdf14da6a6db0851ca123, type: 3}
       propertyPath: 'chunks.Array.data[4]'
       value: 
-      objectReference: {fileID: 545508924}
+      objectReference: {fileID: 66077032}
     - target: {fileID: 4150706547020209553, guid: afa6cf82360fdf14da6a6db0851ca123, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

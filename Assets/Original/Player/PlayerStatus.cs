@@ -6,6 +6,7 @@ public class PlayerStatus : MonoBehaviour
     public event Action<float> OnHPChanged;
     public event Action<float> OnGasPointChanged;
     public event Action<float> OnToiletPointChanged;
+    public event Action<bool> OnImmortality;
 
     #region SerializeField
 
@@ -31,6 +32,7 @@ public class PlayerStatus : MonoBehaviour
     private float _curToiletPoint;
 
     private int _curMoney;
+    private bool _isImmortal = false;
     public int CurrentMoney { get { return _curMoney; } }
 
     #region Monobehaviour Callbacks
@@ -67,7 +69,7 @@ public class PlayerStatus : MonoBehaviour
     public void OnDamaged(float amount)
     {
          _curHealthPoint -= amount;
-        if(_curHealthPoint <= 0)
+        if(_curHealthPoint <= 0 && _isImmortal == false)
         {
             GameEvents.SetPhase(GamePhase.GameOver);
         }
@@ -122,5 +124,11 @@ public class PlayerStatus : MonoBehaviour
             _curMoney -= amount;
             return true;
         }
+    }
+
+    public void ActivateImmortality()
+    {
+        _isImmortal =  !_isImmortal;
+        OnImmortality?.Invoke(_isImmortal);
     }
 }
