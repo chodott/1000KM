@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerStatus : MonoBehaviour
@@ -22,7 +23,17 @@ public class PlayerStatus : MonoBehaviour
     private float _defaultGasEfficiency;
     [SerializeField]
     private float _toiletGainPerSec;
+
+    [SerializeField]
+    private float _toiletDamagePerSec;
+    [SerializeField]
+    private float _gasDamagePerSec;
     #endregion
+
+    Coroutine _gasDamageCoroutine;
+    Coroutine _toiletDamageCoroutine;
+
+
 
     private float _gasEfficiency;
     private float _maxHealthPoint;
@@ -56,13 +67,30 @@ public class PlayerStatus : MonoBehaviour
 
     private void Update()
     {
-        UseGas(_gasEfficiency * Time.deltaTime);
+        UseGas(Time.deltaTime);
+        ChargeToiletGauge(Time.deltaTime);
 
-        if(_curToiletPoint < _defaultMaxToiletPoint)
+    }
+
+    private void ChargeToiletGauge(float deltaTime)
+    {
+        if (_curToiletPoint < _defaultMaxToiletPoint)
         {
-            _curToiletPoint += (_toiletGainPerSec * Time.deltaTime);
+            _curToiletPoint += (_toiletGainPerSec * deltaTime);
             OnToiletPointChanged?.Invoke(_curToiletPoint);
+
+            if(_toiletDamageCoroutine != null)
+            {
+                StopCoroutine(_toiletDamageCoroutine);
+                _toiletDamageCoroutine = null;
+            }
         }
+
+        else if(_curToiletPoint > _defaultMaxToiletPoint && _toiletDamageCoroutine == null)
+        {
+            _toiletDamageCoroutine = StartCoroutine(TakeDamageOverToiletGauge());
+        }
+
     }
     #endregion
 
@@ -84,10 +112,22 @@ public class PlayerStatus : MonoBehaviour
         OnHPChanged?.Invoke(_curHealthPoint);
     }
 
-    public void UseGas(float amount)
+    public void UseGas(float deltaTime)
     {
-        _curGasPoint -= amount;
-        OnGasPointChanged?.Invoke(_curGasPoint);
+        if(_curGasPoint <=0 && _gasDamageCoroutine == null)
+        {
+            _gasDamageCoroutine = StartCoroutine(TakeDamageOverUsedGas());
+        }
+        else if(_curGasPoint >0)
+        {
+            _curGasPoint -= _gasEfficiency * deltaTime;
+            OnGasPointChanged?.Invoke(_curGasPoint);
+            if(_gasDamageCoroutine != null)
+            {
+                StopCoroutine(_gasDamageCoroutine);
+                _gasDamageCoroutine = null;
+            }
+        }
     }
 
     public void RefillGas()
@@ -130,5 +170,23 @@ public class PlayerStatus : MonoBehaviour
     {
         _isImmortal =  !_isImmortal;
         OnImmortality?.Invoke(_isImmortal);
+    }
+
+    private IEnumerator TakeDamageOverUsedGas()
+    {
+        while (true)
+        {
+            OnDamaged(_gasDamagePerSec);
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private IEnumerator TakeDamageOverToiletGauge()
+    {
+        while (true)
+        {
+            OnDamaged(_toiletDamagePerSec); 
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

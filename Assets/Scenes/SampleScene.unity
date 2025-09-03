@@ -8988,8 +8988,16 @@ PrefabInstance:
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1790319375485075123, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: _gasDamagePerSec
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1790319375485075123, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: _toiletGainPerSec
-      value: 0.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1790319375485075123, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
+      propertyPath: _toiletDamagePerSec
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1790319375485075123, guid: 30d6a8d132267164a9679900c216ef03, type: 3}
       propertyPath: _defaultGasEfficiency
