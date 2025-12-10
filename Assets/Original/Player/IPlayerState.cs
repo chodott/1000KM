@@ -1,33 +1,17 @@
 using UnityEngine.InputSystem;
 
-public interface IPlayerState
-{
-    public void Enter(Player player);
-
-    public void Exit();
-    public void OnDamaged();
-
-    public void Update();
-
-    #region PlayerInput Callbacks
-    public void OnParry(InputAction.CallbackContext context);
-    public void OnMoveLeft(InputAction.CallbackContext context);
-    public void OnMoveRight(InputAction.CallbackContext context);
-    #endregion
-}
-
-
-
-public class PlayerDriveState : IPlayerState
+public class PlayerDriveState : IState<Player>
 {
     private Player _player;
     private LaneMover _laneMover;
     private PlayerMovement _playerMovement;
+    private PlayerStatus _playerStatus;
     public void Enter(Player player)
     {
         _player = player;
         _laneMover = player.LaneMover;
         _playerMovement = player.PlayerMovement;
+        _playerStatus = player.Status;
     }
 
     public void Exit()
@@ -35,36 +19,42 @@ public class PlayerDriveState : IPlayerState
         _player = null;
         _laneMover = null;
         _playerMovement = null;
+        _playerStatus = null;
     }
 
-    public void OnDamaged()
+    public void HandleEvent(StateEventType eventType)
     {
-        _playerMovement.OnDamaged();
-        _player.EnterStunState();
-    }
+        switch (eventType)
+        {
+            case StateEventType.OnDamaged:
+                _playerMovement.OnDamaged();
+                _player.EnterStunState();
+                break;
 
-    public void OnMoveLeft(InputAction.CallbackContext context)
-    {
-        _laneMover.MoveLane(-1, false);
-    }
+            case StateEventType.OnMoveLeft:
+                _laneMover.MoveLane(-1, false);
+                break;
 
-    public void OnMoveRight(InputAction.CallbackContext context)
-    {
-        _laneMover.MoveLane(1, false);
-    }
+            case StateEventType.OnMoveRight:
+                _laneMover.MoveLane(1, false);
+                break;
 
-    public void OnParry(InputAction.CallbackContext context)
-    {
-        _player.EnterParryState();
+            case StateEventType.OnParried:
+                _player.EnterParryState();
+                break;
+
+
+            default:
+                break;
+        }
     }
 
     public void Update()
     {
-        
     }
 }
 
-public class PlayerParryState : IPlayerState
+public class PlayerParryState : IState<Player>
 {
     private Player _player;
     private PlayerParrySystem _playerParrySystem;
@@ -87,37 +77,30 @@ public class PlayerParryState : IPlayerState
         _player = null;
     }
 
-    public void OnDamaged()
+    public void HandleEvent(StateEventType eventType)
     {
+        switch (eventType)
+        {
+            case StateEventType.OnMoveLeft:
+                _laneMover.MoveLane(-1, false, true);
+                break;
 
-    }
-
-    public void OnMoveLeft(InputAction.CallbackContext context)
-    {
-        _laneMover.MoveLane(-1, false, true);
-    }
-
-    public void OnMoveRight(InputAction.CallbackContext context)
-    {
-        _laneMover.MoveLane(1, false, true);
-    }
-
-    public void OnParry(InputAction.CallbackContext context)
-    {
-        return;
+            case StateEventType.OnMoveRight:
+                break;
+        }
     }
 
     public void Update()
     {
-    }
 
+    }
     private void EndParry()
     {
         _player.EnterDriveState();
     }
 }
 
-public class PlayerStunState : IPlayerState
+public class PlayerStunState : IState<Player>
 {
     private Player _player;
     private InvincibleSystem _invincibleSystem;
@@ -142,23 +125,8 @@ public class PlayerStunState : IPlayerState
         _player = null;
     }
 
-    public void OnDamaged()
+    public void HandleEvent(StateEventType eventType)
     {
-    }
-
-    public void OnMoveLeft(InputAction.CallbackContext context)
-    {
-        return;
-    }
-
-    public void OnMoveRight(InputAction.CallbackContext context)
-    {
-        return;
-    }
-
-    public void OnParry(InputAction.CallbackContext context)
-    {
-        return;
     }
 
     public void Update()
@@ -172,7 +140,7 @@ public class PlayerStunState : IPlayerState
     }
 }
 
-    public class NoInputState : IPlayerState
+public class NoInputState : IState<Player>
 {
     public void Enter(Player player)
     {
@@ -181,29 +149,12 @@ public class PlayerStunState : IPlayerState
 
     public void Exit()
     {
-        
+
     }
 
-    public void OnDamaged()
+    public void HandleEvent(StateEventType eventType)
     {
-
     }
-
-    public void OnMoveLeft(InputAction.CallbackContext context)
-    {
-        return;
-    }
-
-    public void OnMoveRight(InputAction.CallbackContext context)
-    {
-        return;
-    }
-
-    public void OnParry(InputAction.CallbackContext context)
-    {
-        return;
-    }
-
     public void Update()
     {
         return;

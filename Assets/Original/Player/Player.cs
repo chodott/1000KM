@@ -27,7 +27,7 @@ public class Player : MonoBehaviour, IDamagable
     private StunParticleHandler _stunParticleHandler;
     #endregion
 
-    private IPlayerState _curState;
+    private IState<Player> _curState;
 
     private PlayerDriveState _driveState = new PlayerDriveState();
     private PlayerParryState _parryState = new PlayerParryState();
@@ -189,8 +189,7 @@ public class Player : MonoBehaviour, IDamagable
             return false;
         }
         _playerStatus.OnDamaged(amount);
-
-        _curState.OnDamaged();
+        _curState.HandleEvent(StateEventType.OnDamaged);
         return true;
     }
 }

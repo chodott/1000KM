@@ -1,13 +1,16 @@
 using UnityEngine;
 
+public enum StateEventType
+{
+    OnParried
+}
+
 public interface IState<in TOwner>
 {
     public void Enter(TOwner owner);
     public void Exit();
     public void Update();
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed);
-    public void OnCollisionEnter(Collision collision);
-    public void OnTriggerEnter(Collider other);
+    public void HandleEvent(StateEventType eventType);
 }
 
 public class StateMachine<TOwner> where TOwner : MonoBehaviour
