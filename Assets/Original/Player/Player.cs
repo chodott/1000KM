@@ -27,8 +27,7 @@ public class Player : MonoBehaviour, IDamagable
     private StunParticleHandler _stunParticleHandler;
     #endregion
 
-    private IState<Player> _curState;
-
+    private StateMachine<Player> _stateMachine;
     private PlayerDriveState _driveState = new PlayerDriveState();
     private PlayerParryState _parryState = new PlayerParryState();
     private NoInputState _noInputState = new NoInputState();
@@ -49,6 +48,7 @@ public class Player : MonoBehaviour, IDamagable
 
     private void Start()
     {
+        _stateMachine = new StateMachine<Player>();
         ChangeState(_driveState);
     }
     private void OnEnable()
@@ -117,17 +117,17 @@ public class Player : MonoBehaviour, IDamagable
     #region PlayerInput Callbacks
     private void OnParry(InputAction.CallbackContext context)
     {
-        _curState.OnParry(context);
+        _stateMachine.GenerateStateEvent(new ParriedEvent());
     }
 
     private void OnMoveLeft(InputAction.CallbackContext context)
     {
-        _curState.OnMoveLeft(context);
+        _stateMachine.GenerateStateEvent(new InputMoveEvent(-1));
     }
 
     private void OnMoveRight(InputAction.CallbackContext context)
     {
-        _curState.OnMoveRight(context);
+        _stateMachine.GenerateStateEvent(new InputMoveEvent(1));
     }
 
     private void ActivateImmortality(InputAction.CallbackContext context)
@@ -137,14 +137,9 @@ public class Player : MonoBehaviour, IDamagable
     #endregion
 
     #region State Switching
-    private void ChangeState(IPlayerState state)
+    private void ChangeState(IState<Player> state)
     {
-        if(_curState != null)
-        {
-            _curState.Exit();
-        }
-        _curState = state;
-        _curState.Enter(this);
+        _stateMachine.ChangeState(state, this);
     }
     public void EnterDriveState()
     {
@@ -189,7 +184,7 @@ public class Player : MonoBehaviour, IDamagable
             return false;
         }
         _playerStatus.OnDamaged(amount);
-        _curState.HandleEvent(StateEventType.OnDamaged);
+        _stateMachine.GenerateStateEvent(new OnDamagedEvent());
         return true;
     }
 }

@@ -1,3 +1,4 @@
+using System.Reflection;
 using UnityEngine.InputSystem;
 
 public class PlayerDriveState : IState<Player>
@@ -22,24 +23,20 @@ public class PlayerDriveState : IState<Player>
         _playerStatus = null;
     }
 
-    public void HandleEvent(StateEventType eventType)
+    public void HandleEvent(StateEvent eventType)
     {
         switch (eventType)
         {
-            case StateEventType.OnDamaged:
+            case OnDamagedEvent:
                 _playerMovement.OnDamaged();
                 _player.EnterStunState();
                 break;
 
-            case StateEventType.OnMoveLeft:
-                _laneMover.MoveLane(-1, false);
+            case InputMoveEvent inputEvent:
+                _laneMover.MoveLane(inputEvent.IsRight, false);
                 break;
 
-            case StateEventType.OnMoveRight:
-                _laneMover.MoveLane(1, false);
-                break;
-
-            case StateEventType.OnParried:
+            case ParriedEvent:
                 _player.EnterParryState();
                 break;
 
@@ -77,15 +74,14 @@ public class PlayerParryState : IState<Player>
         _player = null;
     }
 
-    public void HandleEvent(StateEventType eventType)
+    public void HandleEvent(StateEvent eventType)
     {
         switch (eventType)
         {
-            case StateEventType.OnMoveLeft:
-                _laneMover.MoveLane(-1, false, true);
+            case InputMoveEvent moveEvent:
+                _laneMover.MoveLane(moveEvent.IsRight, false, true);
                 break;
-
-            case StateEventType.OnMoveRight:
+            default:
                 break;
         }
     }
@@ -125,7 +121,7 @@ public class PlayerStunState : IState<Player>
         _player = null;
     }
 
-    public void HandleEvent(StateEventType eventType)
+    public void HandleEvent(StateEvent eventType)
     {
     }
 
@@ -152,7 +148,7 @@ public class NoInputState : IState<Player>
 
     }
 
-    public void HandleEvent(StateEventType eventType)
+    public void HandleEvent(StateEvent eventType)
     {
     }
     public void Update()

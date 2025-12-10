@@ -1,8 +1,36 @@
 using UnityEngine;
 
-public enum StateEventType
+
+abstract public class StateEvent 
 {
-    OnParried
+    
+}
+
+sealed class ParriedEvent: StateEvent
+{
+
+}
+
+sealed class InputMoveEvent : StateEvent
+{
+    public int IsRight { get; }
+    public InputMoveEvent(int isRight) => IsRight = isRight;
+}
+
+sealed class OnDamagedEvent:StateEvent
+{
+}
+
+sealed class OnCollisionEvent : StateEvent
+{
+    public Collision Collision { get; }
+    public OnCollisionEvent(Collision collision) => Collision = collision;
+}
+
+sealed class OnTriggerEvent : StateEvent
+{
+    public Collider Collider { get;}
+    public OnTriggerEvent(Collider collider) => Collider = collider;
 }
 
 public interface IState<in TOwner>
@@ -10,7 +38,7 @@ public interface IState<in TOwner>
     public void Enter(TOwner owner);
     public void Exit();
     public void Update();
-    public void HandleEvent(StateEventType eventType);
+    public void HandleEvent(StateEvent stateEvent);
 }
 
 public class StateMachine<TOwner> where TOwner : MonoBehaviour
@@ -19,8 +47,7 @@ public class StateMachine<TOwner> where TOwner : MonoBehaviour
 
     public void ChangeState(IState<TOwner> nextState, TOwner owner)
     {
-
-         _curState?.Exit();
+        _curState?.Exit();
         _curState = nextState;
         _curState.Enter(owner);
     }
@@ -30,22 +57,9 @@ public class StateMachine<TOwner> where TOwner : MonoBehaviour
         _curState.Update();
     }
 
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    public void GenerateStateEvent(StateEvent stateEvent)
     {
-        _curState.OnParried(contactPoint, damage, moveLaneSpeed);
-    }
-    public void OnCollisionEnter(Collision collision)
-    {
-        if(_curState == null)
-        {
-            return;
-        }    
-        _curState.OnCollisionEnter(collision);
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        _curState.OnTriggerEnter(other);
+        _curState.HandleEvent(stateEvent);
     }
 
     public void Reset()
@@ -55,13 +69,7 @@ public class StateMachine<TOwner> where TOwner : MonoBehaviour
     }
 }
 
-public interface IEnemyState: IState<CarEnemy>
-{
-
-}
-
-
-public class DriveState : IEnemyState
+public class DriveState : IState<CarEnemy>
 {
     private CarEnemy _enemy;
     public void Enter(CarEnemy enemy)
@@ -89,7 +97,7 @@ public class DriveState : IEnemyState
         {
             if (collision.gameObject.TryGetComponent<CarEnemy>(out var otherCar))
             {
-                if(otherCar.Velocity >  _enemy.Velocity) 
+                if (otherCar.Velocity > _enemy.Velocity)
                 {
                     return;
                 }
@@ -106,7 +114,7 @@ public class DriveState : IEnemyState
         float angle = Vector3.Angle(parriedDirection, Vector3.back * sign);
         _enemy.TakeDamage(damage);
         bool isDead = _enemy.CheckDie(parriedDirection);
-        if(isDead)
+        if (isDead)
         {
             return;
         }
@@ -122,7 +130,7 @@ public class DriveState : IEnemyState
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.attachedRigidbody.gameObject.TryGetComponent<IDamagable>(out var damagable))
+        if (other.attachedRigidbody.gameObject.TryGetComponent<IDamagable>(out var damagable))
         {
             bool result = damagable.OnDamaged(10);
             if (result)
@@ -140,7 +148,7 @@ public class DriveState : IEnemyState
     }
 }
 
-public class VerticalKnockbackState : IEnemyState
+public class VerticalKnockbackState : IState<CarEnemy>
 {
     private CarEnemy _enemy;
     public void Enter(CarEnemy enemy)
@@ -165,7 +173,7 @@ public class VerticalKnockbackState : IEnemyState
 
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
-        
+
     }
 
     public void OnTriggerEnter(Collider other)
@@ -179,7 +187,7 @@ public class VerticalKnockbackState : IEnemyState
     }
 }
 
-public class HorizontalKnockbackState : IEnemyState
+public class HorizontalKnockbackState : IState<CarEnemy>
 {
     private CarEnemy _enemy;
     private LaneMover _laneMover;
@@ -238,7 +246,7 @@ public class HorizontalKnockbackState : IEnemyState
     }
 }
 
-public class DestroyedState : IEnemyState
+public class DestroyedState : IState<CarEnemy>
 {
     private CarEnemy _enemy;
     private Vector3 _explosionDirection;
@@ -276,6 +284,6 @@ public class DestroyedState : IEnemyState
 
     public void Update()
     {
-  
+
     }
 }
