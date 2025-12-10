@@ -36,10 +36,10 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     private float _patternCooldownTimer;
     private float _patternStartPositionX = -100f;
 
-    public GameObject OriginalPrefab { get { return _originalPrefab; }}
+    public GameObject OriginalPrefab { get { return _originalPrefab; } }
 
     public event Action<GameObject, GameObject> OnReturned;
-    public float Velocity { get {return _curVelocity; } }
+    public float Velocity { get { return _curVelocity; } }
 
     public enum EnemyColor
     {
@@ -76,7 +76,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     }
     #endregion  
 
-    public void ChangeState(IEnemyState state)
+    public void ChangeState(IState<CarEnemy> state)
     {
         _stateMachine.ChangeState(state, this);
     }
@@ -84,17 +84,17 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     private void DoPattern()
     {
         int direction;
-        switch(_color)
+        switch (_color)
         {
             case EnemyColor.White:
                 direction = 0;
                 break;
 
-             case EnemyColor.Blue:
+            case EnemyColor.Blue:
                 direction = -1;
                 break;
 
-             case EnemyColor.Red:
+            case EnemyColor.Red:
                 direction = 1;
                 break;
             case EnemyColor.Yellow:
@@ -191,7 +191,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void CheckPatternTimer()
     {
-        if(_patternStartPositionX > Rb.position.x)
+        if (_patternStartPositionX > Rb.position.x)
         {
             return;
         }
@@ -219,7 +219,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public bool CheckDie(Vector3 parriedDirection)
     {
-        if(_curHealthPoint <= 0f)
+        if (_curHealthPoint <= 0f)
         {
             Destroy(parriedDirection);
             return true;
@@ -229,7 +229,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void RecoverVelocity()
     {
-        if (_curVelocity <= GlobalMovementController.Instance.GlobalVelocity) 
+        if (_curVelocity <= GlobalMovementController.Instance.GlobalVelocity)
         {
             ChangeState(DriveState);
         }
@@ -242,7 +242,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void ApplyAccident(Collision collision)
     {
-        if(Rb.position.x < -120f)
+        if (Rb.position.x < -120f)
         {
             Deactivate();
             return;
@@ -255,7 +255,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void ShareVelocity(CarEnemy otherCar)
     {
-        if (otherCar.Rb.position.x< Rb.position.x)
+        if (otherCar.Rb.position.x < Rb.position.x)
         {
             return;
         }
@@ -289,12 +289,20 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void OnCollisionEnter(Collision collision)
     {
-        if(collision == null)
+        if (collision == null)
         {
             return;
         }
 
-        _stateMachine.OnCollisionEnter(collision);
+        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
+        {
+            _stateMachine.GenerateStateEvent(new ProjectileHitEvent(collision));
+        }
+
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            _stateMachine.GenerateStateEvent(new CarCollisionEvent(collision));
+        }
     }
 
     public void OnTriggerEnter(Collider other)
@@ -314,7 +322,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
         LaneMover.StopLaneMove();
         ResetPhysics();
         _stateMachine.Reset();
-        OnReturned?.Invoke(OriginalPrefab,gameObject);
+        OnReturned?.Invoke(OriginalPrefab, gameObject);
     }
     #endregion
 

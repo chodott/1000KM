@@ -1,14 +1,22 @@
 using UnityEngine;
 
 
-abstract public class StateEvent 
+abstract public class StateEvent
 {
-    
+
 }
 
-sealed class ParriedEvent: StateEvent
+sealed class ParriedEvent : StateEvent
 {
-
+    public Vector3 ContactPoint { get; }
+    public float Damage { get; }
+    public float MoveLaneSpeed { get; }
+    public ParriedEvent(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    {
+        ContactPoint = contactPoint;
+        Damage = damage;
+        MoveLaneSpeed = moveLaneSpeed;
+    }
 }
 
 sealed class InputMoveEvent : StateEvent
@@ -17,20 +25,27 @@ sealed class InputMoveEvent : StateEvent
     public InputMoveEvent(int isRight) => IsRight = isRight;
 }
 
-sealed class OnDamagedEvent:StateEvent
+sealed class OnDamagedEvent : StateEvent
 {
 }
 
-sealed class OnCollisionEvent : StateEvent
+
+sealed class ProjectileHitEvent : StateEvent
 {
     public Collision Collision { get; }
-    public OnCollisionEvent(Collision collision) => Collision = collision;
+    public ProjectileHitEvent(Collision collision) => Collision = collision;
 }
 
-sealed class OnTriggerEvent : StateEvent
+sealed class CarCollisionEvent : StateEvent
 {
-    public Collider Collider { get;}
-    public OnTriggerEvent(Collider collider) => Collider = collider;
+    public Collision Collision { get; }
+    public CarCollisionEvent(Collision collision) => Collision = collision;
+}
+
+sealed class OnTriggerEnterEvent : StateEvent
+{
+    public Collider Collider { get; }
+    public OnTriggerEnterEvent(Collider collider) => Collider = collider;
 }
 
 public interface IState<in TOwner>
@@ -86,57 +101,56 @@ public class DriveState : IState<CarEnemy>
         _enemy = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void HandleEvent(StateEvent stateEvent)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
+        switch (stateEvent)
         {
-            _enemy.ApplyAccident(collision);
-        }
+            case ProjectileHitEvent projectileHitEvent:
+                _enemy.ApplyAccident(projectileHitEvent.Collision);
+                break;
 
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            if (collision.gameObject.TryGetComponent<CarEnemy>(out var otherCar))
-            {
-                if (otherCar.Velocity > _enemy.Velocity)
+            case CarCollisionEvent carCollisionEvent:
+                Collision collision = carCollisionEvent.Collision;
+                if (collision.gameObject.TryGetComponent<CarEnemy>(out var otherCar))
+                {
+                    if (otherCar.Velocity > _enemy.Velocity)
+                    {
+                        return;
+                    }
+                    otherCar.ApplyAccident(collision);
+                }
+                break;
+
+            case ParriedEvent parriedEvent:
+                _enemy.TakeDamage(parriedEvent.Damage);
+                Vector3 parriedDirection = (parriedEvent.ContactPoint - _enemy.transform.position).normalized;
+                float sign = Mathf.Sign(_enemy.transform.position.z - parriedEvent.ContactPoint.z);
+                float angle = Vector3.Angle(parriedDirection, Vector3.back * sign);
+                bool isDead = _enemy.CheckDie(parriedDirection);
+                if (isDead)
                 {
                     return;
                 }
-                otherCar.ApplyAccident(collision);
-            }
-        }
-    }
+                if (angle >= 85.0f)
+                {
+                    _enemy.ChangeState(new VerticalKnockbackState());
+                }
+                else
+                {
+                    _enemy.ChangeState(new HorizontalKnockbackState(parriedDirection, parriedEvent.MoveLaneSpeed, sign));
+                }
+                break;
 
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-        Vector3 parriedDirection = (contactPoint - _enemy.transform.position).normalized;
-
-        float sign = Mathf.Sign(_enemy.transform.position.z - contactPoint.z);
-        float angle = Vector3.Angle(parriedDirection, Vector3.back * sign);
-        _enemy.TakeDamage(damage);
-        bool isDead = _enemy.CheckDie(parriedDirection);
-        if (isDead)
-        {
-            return;
-        }
-        if (angle >= 85.0f)
-        {
-            _enemy.ChangeState(new VerticalKnockbackState());
-        }
-        else
-        {
-            _enemy.ChangeState(new HorizontalKnockbackState(parriedDirection, moveLaneSpeed, sign));
-        }
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.attachedRigidbody.gameObject.TryGetComponent<IDamagable>(out var damagable))
-        {
-            bool result = damagable.OnDamaged(10);
-            if (result)
-            {
-                _enemy.ExcludeCollision();
-            }
+            case OnTriggerEnterEvent triggerEnterEvent:
+                if (triggerEnterEvent.Collider.attachedRigidbody.gameObject.TryGetComponent<IDamagable>(out var damagable))
+                {
+                    bool result = damagable.OnDamaged(10);
+                    if (result)
+                    {
+                        _enemy.ExcludeCollision();
+                    }
+                }
+                break;
         }
     }
 
@@ -163,21 +177,14 @@ public class VerticalKnockbackState : IState<CarEnemy>
         _enemy = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void HandleEvent(StateEvent stateEvent)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
+        switch (stateEvent)
         {
-            _enemy.ApplyAccident(collision);
+            case ProjectileHitEvent projectileHitEvent:
+                _enemy.ApplyAccident(projectileHitEvent.Collision);
+                break;
         }
-    }
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
     }
 
     public void Update()
@@ -218,21 +225,14 @@ public class HorizontalKnockbackState : IState<CarEnemy>
         _enemy = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void HandleEvent(StateEvent stateEvent)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerProjectile"))
+        switch (stateEvent)
         {
-            _enemy.ApplyAccident(collision);
+            case ProjectileHitEvent projectileHitEvent:
+                _enemy.ApplyAccident(projectileHitEvent.Collision);
+                break;
         }
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-    }
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-        return;
     }
 
     public void Update()
@@ -246,44 +246,34 @@ public class HorizontalKnockbackState : IState<CarEnemy>
     }
 }
 
-public class DestroyedState : IState<CarEnemy>
-{
-    private CarEnemy _enemy;
-    private Vector3 _explosionDirection;
+    public class DestroyedState : IState<CarEnemy>
+    {
+        private CarEnemy _enemy;
+        private Vector3 _explosionDirection;
 
-    public DestroyedState(Vector3 explosionDirection)
-    {
-        _explosionDirection = explosionDirection;
-    }
-    public void Enter(CarEnemy enemy)
-    {
-        _enemy = enemy;
-        _enemy.ResetVelocity();
-        _enemy.ApplyExplosionForce(_explosionDirection);
-        _enemy.SpawnDestroyEffect();
-    }
+        public DestroyedState(Vector3 explosionDirection)
+        {
+            _explosionDirection = explosionDirection;
+        }
+        public void Enter(CarEnemy enemy)
+        {
+            _enemy = enemy;
+            _enemy.ResetVelocity();
+            _enemy.ApplyExplosionForce(_explosionDirection);
+            _enemy.SpawnDestroyEffect();
+        }
 
-    public void Exit()
-    {
-        _enemy = null;
-    }
+        public void Exit()
+        {
+            _enemy = null;
+        }
 
-    public void OnCollisionEnter(Collision collision)
+    public void HandleEvent(StateEvent stateEvent)
     {
-        return;
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-    }
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-        return;
     }
 
     public void Update()
-    {
+        {
 
+        }
     }
-}
