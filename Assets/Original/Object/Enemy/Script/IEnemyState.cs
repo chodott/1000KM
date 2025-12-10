@@ -19,6 +19,11 @@ sealed class ParriedEvent : StateEvent
     }
 }
 
+sealed class InputParryEvent: StateEvent
+{
+
+}
+
 sealed class InputMoveEvent : StateEvent
 {
     public int IsRight { get; }

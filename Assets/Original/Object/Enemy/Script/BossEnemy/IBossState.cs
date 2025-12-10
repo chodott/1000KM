@@ -27,18 +27,8 @@ public class MatchGapState : IState<BossEnemyController>
         _controller = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void HandleEvent(StateEvent stateEvent)
     {
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-    }
-
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-        return;
     }
 
     public void Update()
@@ -74,16 +64,7 @@ public class MoveShuffleState : IState<BossEnemyController>
         _laneMover = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-    }
-
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    public void HandleEvent(StateEvent stateEvent)
     {
     }
 
@@ -119,6 +100,7 @@ public class MoveShuffleState : IState<BossEnemyController>
             _laneMover.MoveLane(-direction);
         }
     }
+
 }
 
 public class BossStunState : IState<BossEnemyController>
@@ -141,15 +123,7 @@ public class BossStunState : IState<BossEnemyController>
         _controller = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-    }
-    public void OnTriggerEnter(Collider other)
-    {
-    }
-
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    public void HandleEvent(StateEvent stateEvent)
     {
     }
 
@@ -182,21 +156,17 @@ public class BossDestroyState : IState<BossEnemyController>
         _controller = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void HandleEvent(StateEvent stateEvent)
     {
-
-    }
-    public void OnTriggerEnter(Collider other)
-    {
-
-    }
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-        Vector3 explosionDirection = new Vector3(-0.4f, 0.3f, 0.1f);
-        explosionDirection.Normalize();
-        _controller.ApplyExplosionForce(explosionDirection);
-        _controller.Deactivate();
+        switch (stateEvent)
+        {
+            case ParriedEvent parriedEvent:
+                Vector3 explosionDirection = new Vector3(-0.4f, 0.3f, 0.1f);
+                explosionDirection.Normalize();
+                _controller.ApplyExplosionForce(explosionDirection);
+                _controller.Deactivate();
+                break;
+        }
     }
 
     public void Update()
@@ -207,4 +177,6 @@ public class BossDestroyState : IState<BossEnemyController>
             _controller.OnDestroyEnd();
         }
     }
+
+
 }
