@@ -117,7 +117,7 @@ public class Player : MonoBehaviour, IDamagable
     #region PlayerInput Callbacks
     private void OnParry(InputAction.CallbackContext context)
     {
-        _stateMachine.GenerateStateEvent(new ParriedEvent());
+        _stateMachine.GenerateStateEvent(new InputParryEvent());
     }
 
     private void OnMoveLeft(InputAction.CallbackContext context)
