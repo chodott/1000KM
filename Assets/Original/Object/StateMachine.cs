@@ -21,12 +21,12 @@ public class StateMachine<TOwner> where TOwner : MonoBehaviour
 
     public void Update()
     {
-        _curState.Update();
+        _curState?.Update();
     }
 
     public void GenerateStateEvent(StateEvent stateEvent)
     {
-        _curState.HandleEvent(stateEvent);
+        _curState?.HandleEvent(stateEvent);
     }
 
     public void Reset()

@@ -307,7 +307,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
 
     public void OnTriggerEnter(Collider other)
     {
-        _stateMachine.OnTriggerEnter(other);
+        _stateMachine.GenerateStateEvent(new OnTriggerEnterEvent(other));
     }
 
     #region PoolingObject Callbacks
@@ -329,7 +329,7 @@ public class CarEnemy : BaseEnemy, IPoolingObject, IParryable
     #region IParyable Callbacks
     public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
     {
-        _stateMachine.OnParried(contactPoint, damage, moveLaneSpeed);
+        _stateMachine.GenerateStateEvent(new ParriedEvent(contactPoint, damage, moveLaneSpeed));
     }
 
     public void OnAttack()

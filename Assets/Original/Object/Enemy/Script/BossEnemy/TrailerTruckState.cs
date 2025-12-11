@@ -18,29 +18,22 @@ public class PressState : IState<TrailerTruckController>
         _controller = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        _controller.ChangeMatchState();
-
-    }
-
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-
-        return;
-    }
-
     public void Update()
     {
         _controller.MoveToForward(1);
         if (_controller.GetXDistanceToPlayer() <= _keepDistance)
         {
             _controller.OnPressEnd();
+        }
+    }
+
+    public void HandleEvent(StateEvent stateEvent)
+    {
+        switch (stateEvent)
+        {
+            case OnTriggerEnterEvent:
+                _controller.ChangeMatchState();
+                break;
         }
     }
 }
@@ -67,19 +60,20 @@ public class ChaseState : IState<TrailerTruckController>
         _controller = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void HandleEvent(StateEvent stateEvent)
     {
-    }
+        switch (stateEvent)
+        {
+            case OnTriggerEnterEvent:
+                _isHit = true;
+                _controller.LaneMover.MoveLane(_direction * -1, true);
+                break;
 
-    public void OnTriggerEnter(Collider other)
-    {
-        _isHit = true;
-        _controller.LaneMover.MoveLane(_direction * -1, true);
-    }
+            case ParriedEvent:
+                _controller.KnockbackToSide(_direction * -1);
 
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-        _controller.KnockbackToSide(_direction * -1);
+                break;
+        }
     }
 
     public void Update()
@@ -88,7 +82,7 @@ public class ChaseState : IState<TrailerTruckController>
 
     public void ArriveLane()
     {
-        if(_isHit)
+        if (_isHit)
         {
             _controller.OnChaseEnd();
 
@@ -117,18 +111,6 @@ public class SideKnockbackState : IState<TrailerTruckController>
     {
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-    }
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
-    {
-    }
-
     public void Update()
     {
     }
@@ -136,6 +118,10 @@ public class SideKnockbackState : IState<TrailerTruckController>
     public void ArriveLane()
     {
         _controller.ChangeMatchState();
+    }
+
+    public void HandleEvent(StateEvent stateEvent)
+    {
     }
 }
 
@@ -153,15 +139,7 @@ public class ForwardKnockbackState : IState<TrailerTruckController>
         _controller = null;
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-    }
-
-    public void OnParried(Vector3 contactPoint, float damage, float moveLaneSpeed)
+    public void HandleEvent(StateEvent stateEvent)
     {
     }
 

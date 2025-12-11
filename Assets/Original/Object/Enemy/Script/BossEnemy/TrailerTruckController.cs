@@ -96,12 +96,12 @@ public class TrailerTruckController : BossEnemyController, IParryable
 
     private void OnTriggerEnter(Collider other)
     {
-        _stateMachine.OnTriggerEnter(other);
+        _stateMachine.GenerateStateEvent(new OnTriggerEnterEvent(other));
     }
 
     public void OnParried(Vector3 contactPosition, float damage, float moveLaneSpeed)
     {
-        _stateMachine.OnParried(contactPosition, damage, moveLaneSpeed);
+        _stateMachine.GenerateStateEvent(new ParriedEvent(contactPosition, damage, moveLaneSpeed));
     }
 
     public void OnAttack()

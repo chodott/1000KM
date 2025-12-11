@@ -79,6 +79,6 @@ public class CargoTruckController : BossEnemyController, IParryable
 
     public void OnParried(Vector3 contactPosition, float damage, float moveLaneSpeed)
     {
-        _stateMachine.OnParried(contactPosition, damage, moveLaneSpeed);
+        _stateMachine.GenerateStateEvent(new ParriedEvent(contactPosition, damage, moveLaneSpeed));
     }
 }

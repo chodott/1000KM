@@ -36,7 +36,7 @@ public class PlayerDriveState : IState<Player>
                 _laneMover.MoveLane(inputEvent.IsRight, false);
                 break;
 
-            case ParriedEvent:
+            case InputParryEvent:
                 _player.EnterParryState();
                 break;
 
